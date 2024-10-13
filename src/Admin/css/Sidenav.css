@@ -1,0 +1,72 @@
+/* #nav{
+    width: 100% ;
+    float: left;
+    
+}
+.collapse{
+    margin-top: 2em;
+}
+.navb{
+    border-width:  0px 1px 0px 0px;
+    
+    
+    width: 300px;
+    margin: 0px;
+}
+ul{
+    padding: 2em;
+    background-color: transparent;
+}
+li{
+    padding: 1em
+}
+li a{
+    color: #1d1b1b;
+    text-decoration: none;
+    font-size: 17px ;
+}
+.icon{
+    margin-right: 15px;
+}
+
+@media screen and (max-width: 900px) {
+    .nav{
+        float: right;
+        
+    }
+    .navbar-toggler{
+        margin-top: 1em;
+    }
+    .collapse{
+        margin-top: 1em;
+    }
+    .navbar-nav{
+        margin-top: 2em;
+    }
+} */
+
+/* Sidenav.css */
+
+.nav-link {
+    transition: all 0.3s ease;
+  }
+  
+  .nav-link:hover {
+    background-color: #ffff !important; /* Change background color to white */
+    color: black !important; /* Change text color to black */
+  }
+  
+  .nav-link:hover i {
+    color: black !important; /* Change icon color to black */
+  }
+  
+  .nav-link:hover span {
+    color: black !important; /* Change span color to black */
+  }
+  
+  /* Ensure the dropdown item links also have a hover effect */
+  .dropdown-item:hover {
+    background-color: white !important; /* Change dropdown item background */
+    color: black !important; /* Change dropdown item text color */
+  }
+  

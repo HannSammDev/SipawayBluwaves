@@ -1,0 +1,42 @@
+/* .navv {
+    height: 75px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+nav img {
+    width: 50px;
+}
+
+.container-fluid span {
+    color: #333;
+    font-weight: 700;
+}
+
+form {
+    margin-left: 7em;
+}
+
+i {
+    width: 50px;
+}
+
+@media screen and (max-width: 900px) {
+    .navv {
+        /* Add your styles here */
+    }
+
+    form {
+        margin-left: 0px;
+    }
+
+    .profile {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profile span {
+        text-align: center;
+    }
+} */

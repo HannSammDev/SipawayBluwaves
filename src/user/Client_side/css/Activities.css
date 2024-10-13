@@ -1,0 +1,8 @@
+.kard{
+    background-color: rgb(108, 200, 243) !important;
+}
+.kard:hover{
+    size: 50em;
+    background-color: rgb(228, 221, 223) !important;
+    transition: 1s;
+}
