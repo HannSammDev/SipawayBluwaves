@@ -73,6 +73,7 @@ export const Guest = () => {
         checkInDate,
         checkOutDate,
         specialCode,
+        cottagename,
         cottagePrice: cottage.price,
         fiftyPercentPrice: cottage.price * 0.5,
         paymentMethod: "GCash",
@@ -80,7 +81,21 @@ export const Guest = () => {
         guestDetails
       });
 
-      console.log("Reservation added with ID: ", reservationRef.id);
+      const pendingRef = await addDoc(collection(textDB,"Peding"), {
+        cottageId: cottage.id,
+        guests,
+        checkInDate,
+        checkOutDate,
+        specialCode,
+        cottagename,
+        cottagePrice: cottage.price,
+        fiftyPercentPrice: cottage.price * 0.5,
+        paymentMethod: "GCash",
+        availability: "Pending",
+        guestDetails
+      });
+
+      console.log("Reservation added with ID: ", reservationRef.id,  pendingRef.id);
 
       const cottageRef = doc(textDB, "cottages", cottage.id);
       await updateDoc(cottageRef, {

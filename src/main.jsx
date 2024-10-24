@@ -5,8 +5,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./index.css";
 import Layout from "./ClientLayout";
-// import Testimonials from "./user/Client_side/Testimonial";
-// import TestimonialPage from "./Testimonaillink";
+
 import Login from "./user/Client_side/Login";
 import { Register } from "./user/Client_side/Register";
 // import { Day_use } from "./user/Client_side/DayUseAvailability";
@@ -22,7 +21,7 @@ import { Side_nav } from "./Admin/Side_Nav";
 import { Dashboard } from "./Admin/Dashboard/dashborad";
 import { Admin_layout } from "./AdminLayout";
 import { Addrooms } from "./Admin/RoomManagement/Addrooms";
-// import { RoomDetails } from "./Admin/RoomManagement/RoomsDetails";
+import { RoomDetails } from "./Admin/RoomManagement/RoomsDetails";
 import OccupiedRooms from "./Admin/Reservation_Management/RoomOccupied";
 import { Admin_Login } from "./Admin/Login/Login";
 import { EditRoom } from "./Admin/RoomManagement/EditRoom";
@@ -41,6 +40,7 @@ import AdminActivityForm from "./Admin/Manage_activities/AddActivity";
 import { EditCottage } from "./Admin/CottageManagement/Editicottage";
 import { Check_in } from "./Admin/RoomManagement/Checkin";
 import { Guest_List } from "./Admin/GuestM/GuestL";
+import Reservation from "./Admin/Reservation_Management/reservations";
 
 // import ReservationConfirmation from "./user/Client_side/Userdashboard";
 
@@ -75,7 +75,7 @@ const App = () => (
         <Route path="/dash" element={<Dashboard/>}/>
         {/* Room Management */}
         <Route path="/addroom" element={<Addrooms/>}/>
-        {/* <Route path="/roomsdetails" element={<RoomDetails/>} /> */}
+        <Route path="/roomsdetails" element={<RoomDetails/>} />
         <Route path="/occupied" element={<OccupiedRooms/>} />
         <Route path="/editroom/:id" element={<EditRoom/>} />
         <Route path="/rooms" element={<Available_rooms/>} />
@@ -92,6 +92,8 @@ const App = () => (
         
         {/* Activities */}
         <Route path="/activityF" element={<AdminActivityForm/>} />
+        {/* Reservation */}
+        <Route path="/reservatioms" element={<Reservation/>} />
 
         {/* ---------------- */}
         <Route path="/radmin" element={Registeradmin} />

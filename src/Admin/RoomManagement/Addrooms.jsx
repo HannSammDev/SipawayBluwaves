@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import { fileDB, textDB } from "../../firebase";
 import { v4 } from "uuid";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -95,17 +96,17 @@ export const Addrooms = () => {
     <>
       <div className="container my-3">
         <div
-          className="card "
+          // className="card "
           style={{
-            backgroundColor: "#f5f5f5",
-            boxShadow: "0px 5px 20px rgba(0, 0, 0, 0.2)",
+            backgroundColor: "white",
+            // boxShadow: "0px 5px 20px rgba(0, 0, 0, 0.2)",
           }}
         >
-          <div className="card-header bg-none text-white">
+          {/* <div className="card-header bg-none text-white">
             <h5 className="mb-0 text-dark">
               <i className="bi bi-pencil-square"></i> Add Room
             </h5>
-          </div>
+          </div> */}
           <div className="card-body">
             <form onSubmit={handleSubmit}>
               {files.map((file, index) => (

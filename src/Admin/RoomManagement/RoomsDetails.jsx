@@ -61,7 +61,7 @@ export const RoomDetails = () => {
         </div>
       )}
       <div
-        className="table table-responsive"
+        className="table table-responsive col-md-4"
         style={{
           boxShadow: "0px 0px 10px 5px rgba(0, 0, 0, 0.1)",
           padding: "1em",
@@ -69,41 +69,31 @@ export const RoomDetails = () => {
           backgroundColor: "#f5f5f5",
         }}
       >
-        <a className="btn btn-primary mb-3" href="/addroom">
-          Add Room
+        <a className="btn btn-primary btn-sm mb-3" href="/addroom">
+          Add Reservstion
         </a>
-        <table className="table table-striped">
+        <table className="table table-striped col-md-2">
           <thead>
             <tr>
-              <th scope="col">#</th>
-              <th scope="col">Room_Name</th>
-              <th scope="col">Description</th>
-              <th scope="col">Amenities</th>
-              <th scope="col">Price</th>
-              <th scope="col">Images</th>
-              <th scope="col">Actions</th>
+              <th className="w-10" scope="col">#</th>
+              <th className="w-10" className="" scope="col">Room_Name</th>
+              {/* <th className="w-10" scope="col">Description</th> */}
+              {/* <th className="w-10" scope="col">Amenities</th> */}
+              {/* <th className="w-10" scope="col">Price</th> */}
+              {/* <th className="w-10" scope="col">Images</th> */}
+              <th className="w-10" scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
             {rooms.map((room, index) => (
               <tr key={room.id}>
                 <th scope="row">{index + 1} </th>
-                <td>{room.roomname}</td>
-                <td>{room.description}</td>
-                <td>
-                  <ul>
-                    {room.amenities.split(",").map((amenity, i) => (
-                      <li key={i}>{amenity}</li>
-                    ))}
-                  </ul>
-                </td>
-                <td>₱ {room.price}</td>
-                <td style={{ maxWidth: "200px" }}>
-                  <div
+                <td>{room.roomname}
+                <div
                     id={`roomCarousel${index}`}
                     className="carousel slide"
                     data-bs-ride="carousel"
-                    style={{ width: "100%", height: "auto" }}
+                    style={{ width: "20%", height: "auto" }}
                   >
                     <div className="carousel-inner">
                       {room.images.map((image, i) => (
@@ -145,6 +135,62 @@ export const RoomDetails = () => {
                     </button>
                   </div>
                 </td>
+                {/* <td>{room.description}</td> */}
+                {/* <td>
+                  <ul>
+                    {room.amenities.split(",").map((amenity, i) => (
+                      <li key={i}>{amenity}</li>
+                    ))}
+                  </ul>
+                </td> */}
+                {/* <td>₱ {room.price}</td> */}
+                {/* <td style={{ maxWidth: "200px" }}>
+                  <div
+                    id={`roomCarousel${index}`}
+                    className="carousel slide"
+                    data-bs-ride="carousel"
+                    style={{ width: "30%", height: "auto" }}
+                  >
+                    <div className="carousel-inner">
+                      {room.images.map((image, i) => (
+                        <div
+                          key={i}
+                          className={`carousel-item ${i === 0 ? "active" : ""}`}
+                        >
+                          <img
+                            src={image}
+                            className="d-block w-100"
+                            alt={`Room Image ${i + 1}`}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                    <button
+                      className="carousel-control-prev"
+                      type="button"
+                      data-bs-target={`#roomCarousel${index}`}
+                      data-bs-slide="prev"
+                    >
+                      <span
+                        className="carousel-control-prev-icon"
+                        aria-hidden="true"
+                      ></span>
+                      <span className="visually-hidden">Previous</span>
+                    </button>
+                    <button
+                      className="carousel-control-next"
+                      type="button"
+                      data-bs-target={`#roomCarousel${index}`}
+                      data-bs-slide="next"
+                    >
+                      <span
+                        className="carousel-control-next-icon"
+                        aria-hidden="true"
+                      ></span>
+                      <span className="visually-hidden">Next</span>
+                    </button>
+                  </div>
+                </td> */}
                 <td>
                   <div className="btn-group" role="group">
                     <button
@@ -152,12 +198,13 @@ export const RoomDetails = () => {
                       className="btn"
                       onClick={() => handleDelete(room.id)}
                     >
-                      <FontAwesomeIcon
+                      {/* <FontAwesomeIcon
                         icon={faTrashAlt}
                         style={{ color: "red" }}
-                      />
+                      /> */}
+                      <FontAwesomeIcon icon={faEye}/>
                     </button>
-                    <button
+                    {/* <button
                       type="button"
                       className="btn"
                       onClick={() => handleEdit(room.id)}
@@ -166,8 +213,8 @@ export const RoomDetails = () => {
                         icon={faEdit}
                         style={{ color: "#FFA500" }}
                       />
-                    </button>
-                    <div className="btn-group">
+                    </button> */}
+                    {/* <div className="btn-group">
                       <button
                         type="button"
                         className="btn btn-lg dropdown-toggle"
@@ -194,7 +241,7 @@ export const RoomDetails = () => {
                           </a>
                         </li>
                       </ul>
-                    </div>
+                    </div> */}
                   </div>
                 </td>
               </tr>

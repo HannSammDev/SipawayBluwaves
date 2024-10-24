@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { Addrooms } from "./Addrooms";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 import {
   collection,
   getDocs,
@@ -22,6 +25,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 export const Available_rooms = () => {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  // --------------------------------
   const [rooms, setRooms] = useState([]);
   const navigate = useNavigate();
   const [reservations, setReservations] = useState([]);
@@ -244,9 +253,12 @@ export const Available_rooms = () => {
         >
           <div className="d-flex justify-content-between align-items-center">
             <h4>Rooms</h4>
-            <a className="btn btn-dark" href="/addroom">
+            {/* <a className="btn btn-dark" href="/addroom">
               <FontAwesomeIcon icon={faPlus} /> Add
-            </a>
+            </a> */}
+            <Button variant="dark" onClick={handleShow}>
+              Add
+            </Button>
           </div>
         </div>
         <div
@@ -257,6 +269,19 @@ export const Available_rooms = () => {
             borderRadius: "10px",
           }}
         >
+          <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>
+                {" "}
+                <h5 className="mb-0 text-dark">
+                  <i className="bi bi-pencil-square"></i> Add Room
+                </h5>
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Addrooms />
+            </Modal.Body>
+          </Modal>
           <table
             className="table table-striped"
             style={{ backgroundColor: "#f5f5f5" }}
@@ -372,6 +397,7 @@ export const Available_rooms = () => {
                           style={{ color: "#FFA500" }}
                         />
                       </button>
+
                       <button
                         className="btn "
                         data-bs-toggle="modal"

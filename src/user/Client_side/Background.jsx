@@ -93,17 +93,7 @@ function Background() {
             </div>
           </div>
         </div>
-        {/* Resort Text */}
-        {/* <div className="resort-text"> */}
-        {/* <h1 className="titolo" style={{ fontSize: "60px", fontWeight: 900 }}> */}
-        {/* BLUE WAVES RESORT */}
-        {/* </h1> */}
-        {/* <h4 className="sipaway" style={{ fontWeight: 900 }}> */}
-        {/* at Brgy. Ermita Sipaway Island Negros Occidental */}
-        {/* </h4> */}
-        {/* </div> */}
-
-        {/* Entrance Buttons */}
+       
         <div
           className="entrances position-absolute top-0 start-0 border border-dark p-4 text-center"
           style={{

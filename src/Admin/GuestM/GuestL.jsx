@@ -5,12 +5,18 @@ import {
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { Table, Button, Modal, Form, Pagination } from "react-bootstrap";
 import { textDB } from "../../firebase";
 
-export const Guest_List = () => {
+export const Guest_List = ({ guestDataId }) => {
   const [guests, setGuests] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [currentGuest, setCurrentGuest] = useState(null);
@@ -111,6 +117,19 @@ export const Guest_List = () => {
     }
   };
 
+  // Delete Guest
+
+  const handleDelete = async (guestDataId) => {
+    try {
+      const guestDocRef = doc(textDB, "guestData", guestDataId);
+
+      await deleteDoc(guestDocRef);
+
+      console.log("Guest Deleted");
+    } catch (error) {
+      console.log("Not Deleted", error);
+    }
+  };
   // Filter guests based on search term
   const filteredGuests = guests.filter((guest) =>
     guest.guestName.toLowerCase().includes(searchTerm.toLowerCase())
@@ -177,8 +196,14 @@ export const Guest_List = () => {
             onChange={handleSearch}
           />
         </div>
-        <div style={{boxShadow: "0px 0px 10px 5px rgba(0, 0, 0, 0.1)",padding: "8px",borderRadius:'10px'}}>
-          <Table striped hover responsive >
+        <div
+          style={{
+            boxShadow: "0px 0px 10px 5px rgba(0, 0, 0, 0.1)",
+            padding: "8px",
+            borderRadius: "10px",
+          }}
+        >
+          <Table striped hover responsive>
             <thead>
               <tr>
                 <th>#</th>
@@ -226,7 +251,7 @@ export const Guest_List = () => {
                       )}
                     </td>
                     <td>
-                      <Button variant="" size="sm" className="mr-2">
+                      <Button variant="" size="sm" className="mr-2" onClick={()=> handleDelete(guest.id)}> 
                         <FontAwesomeIcon
                           style={{ color: "red" }}
                           icon={faTrashAlt}

@@ -68,7 +68,8 @@ export const GuestInfo = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const reservationRef = await addDoc(collection(textDB, "reservations"), {
+      
+      const reservationRef = await addDoc(collection(textDB,"reservations"), {
         roomId: room.id,
         roomname: room.roomname,
         guests,
@@ -83,7 +84,23 @@ export const GuestInfo = () => {
         guestDetails
       });
 
-      console.log("Reservation added with ID: ", reservationRef.id);
+      const pendingRef = await addDoc(collection(textDB,"Peding"), {
+        roomId: room.id,
+        roomname: room.roomname,
+        guests,
+        checkInDate,
+        checkOutDate,
+        specialCode,
+        roomPrice: room.price,
+        fiftyPercentPrice: room.price * 0.5,
+        balance: room.price * 0.5,
+        paymentMethod: "GCash",
+        availability: "Pending",
+        guestDetails
+      });
+
+
+      console.log("Reservation added with ID: ", reservationRef.id, pendingRef.id);
 
       const roomRef = doc(textDB, "rooms", room.id);
       await updateDoc(roomRef, {

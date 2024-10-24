@@ -204,7 +204,7 @@ export const Dashboard = () => {
                 // background: "linear-gradient(135deg, #e2eafc 0%, #fef6f9 100%)",
                 boxShadow: "0px 5px 20px rgba(0, 0, 0, 0.2)",
               }}
-            >
+            > 
               <Line data={data} options={options} />
             </div>
           </div>
