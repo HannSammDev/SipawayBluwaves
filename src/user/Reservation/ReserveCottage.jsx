@@ -29,7 +29,7 @@ export const Guest = () => {
     city: "",
     state: "",
     zip: "",
-    country: ""
+    country: "",
   });
 
   useEffect(() => {
@@ -69,33 +69,39 @@ export const Guest = () => {
     try {
       const reservationRef = await addDoc(collection(textDB, "reservations"), {
         cottageId: cottage.id,
+        cottagename: cottage.cottagename,
         guests,
         checkInDate,
         checkOutDate,
         specialCode,
-        cottagename,
         cottagePrice: cottage.price,
         fiftyPercentPrice: cottage.price * 0.5,
+        balance: cottage.price * 0.5,
         paymentMethod: "GCash",
-        availability: "Pending",
-        guestDetails
+
+        guestDetails,
       });
 
-      const pendingRef = await addDoc(collection(textDB,"Peding"), {
+      const pendingRef = await addDoc(collection(textDB, "Peding"), {
         cottageId: cottage.id,
+        cottagename: cottage.cottagename,
         guests,
         checkInDate,
         checkOutDate,
         specialCode,
-        cottagename,
         cottagePrice: cottage.price,
         fiftyPercentPrice: cottage.price * 0.5,
+        balance: cottage.price * 0.5,
         paymentMethod: "GCash",
         availability: "Pending",
-        guestDetails
+        guestDetails,
       });
 
-      console.log("Reservation added with ID: ", reservationRef.id,  pendingRef.id);
+      console.log(
+        "Reservation added with ID: ",
+        reservationRef.id,
+        pendingRef.id
+      );
 
       const cottageRef = doc(textDB, "cottages", cottage.id);
       await updateDoc(cottageRef, {
@@ -316,7 +322,7 @@ export const Guest = () => {
                       <input
                         type="text"
                         className="form-control"
-                        placeholder="State/Province"
+                        placeholder="State"
                         name="state"
                         value={guestDetails.state}
                         onChange={handleChange}
@@ -331,7 +337,7 @@ export const Guest = () => {
                       <input
                         type="text"
                         className="form-control"
-                        placeholder="Postal/ZIP Code"
+                        placeholder="Zip Code"
                         name="zip"
                         value={guestDetails.zip}
                         onChange={handleChange}
@@ -351,11 +357,22 @@ export const Guest = () => {
                     </div>
                   </div>
                 </div>
+                <div className="mb-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Special Code (if any)"
+                    name="specialCode"
+                    value={specialCode}
+                    onChange={(e) => setSpecialCode(e.target.value)}
+                  />
+                </div>
                 <button
                   type="submit"
-                  className="btn btn-primary btn-sm col-md-3"
+                  className="btn btn-primary w-100"
+                  style={{ marginTop: "1em" }}
                 >
-                  Pay with Gcash
+                  Confirm Reservation
                 </button>
               </div>
             </form>

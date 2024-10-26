@@ -16,7 +16,7 @@ import React, { useState, useEffect } from "react";
 import { Table, Button, Modal, Form, Pagination } from "react-bootstrap";
 import { textDB } from "../../firebase";
 
-export const Guest_List = ({ guestDataId }) => {
+export const Guest_List = () => {
   const [guests, setGuests] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [currentGuest, setCurrentGuest] = useState(null);
@@ -37,10 +37,10 @@ export const Guest_List = ({ guestDataId }) => {
         id: doc.id,
         ...doc.data(),
       }));
-      console.log("Fetched Guest", guestList);
+      console.log("Fetched Guests", guestList);
       setGuests(guestList);
     } catch (error) {
-      console.log("Error Fetching Guest", error);
+      console.log("Error Fetching Guests", error);
     }
   };
 
@@ -118,47 +118,37 @@ export const Guest_List = ({ guestDataId }) => {
   };
 
   // Delete Guest
-
   const handleDelete = async (guestDataId) => {
     try {
       const guestDocRef = doc(textDB, "guestData", guestDataId);
-
       await deleteDoc(guestDocRef);
 
+      setGuests((prevGuests) => prevGuests.filter((guest) => guest.id !== guestDataId));
       console.log("Guest Deleted");
     } catch (error) {
       console.log("Not Deleted", error);
     }
   };
+
   // Filter guests based on search term
-  const filteredGuests = guests.filter((guest) =>
-    guest.guestName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredGuests = guests.filter((guest) => {
+    const fullName = `${guest.guestDetails?.firstname || ""} ${guest.guestDetails?.lastname || ""}`;
+    return fullName.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
   // Calculate the current page guests
   const indexOfLastGuest = currentPage * guestsPerPage;
   const indexOfFirstGuest = indexOfLastGuest - guestsPerPage;
-  const currentGuests = filteredGuests.slice(
-    indexOfFirstGuest,
-    indexOfLastGuest
-  );
+  const currentGuests = filteredGuests.slice(indexOfFirstGuest, indexOfLastGuest);
 
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   // Pagination component
   const paginationItems = [];
-  for (
-    let number = 1;
-    number <= Math.ceil(filteredGuests.length / guestsPerPage);
-    number++
-  ) {
+  for (let number = 1; number <= Math.ceil(filteredGuests.length / guestsPerPage); number++) {
     paginationItems.push(
-      <Pagination.Item
-        key={number}
-        active={number === currentPage}
-        onClick={() => paginate(number)}
-      >
+      <Pagination.Item key={number} active={number === currentPage} onClick={() => paginate(number)}>
         {number}
       </Pagination.Item>
     );
@@ -166,22 +156,10 @@ export const Guest_List = ({ guestDataId }) => {
 
   return (
     <>
-      <div
-        className="container mt-4"
-        // style={{
-
-        // }}
-      >
-        <div
-          className="d-flex justify-content-between mb-4"
-          style={{
-            borderRadius: "10px",
-            boxShadow: "0px 0px 10px 5px rgba(0, 0, 0, 0.1)",
-            padding: "8px",
-          }}
-        >
+      <div className="container mt-4">
+        <div className="d-flex justify-content-between mb-4" style={{ borderRadius: "10px", boxShadow: "0px 0px 10px 5px rgba(0, 0, 0, 0.1)", padding: "8px" }}>
           <h5>
-            <a href="" className="btn btn-link">
+            <a href="#" className="btn btn-link">
               <FontAwesomeIcon icon={faPlus} />
             </a>
             Guest List
@@ -196,13 +174,7 @@ export const Guest_List = ({ guestDataId }) => {
             onChange={handleSearch}
           />
         </div>
-        <div
-          style={{
-            boxShadow: "0px 0px 10px 5px rgba(0, 0, 0, 0.1)",
-            padding: "8px",
-            borderRadius: "10px",
-          }}
-        >
+        <div style={{ boxShadow: "0px 0px 10px 5px rgba(0, 0, 0, 0.1)", padding: "8px", borderRadius: "10px" }}>
           <Table striped hover responsive>
             <thead>
               <tr>
@@ -223,21 +195,18 @@ export const Guest_List = ({ guestDataId }) => {
                   <tr key={guest.id}>
                     <td>{indexOfFirstGuest + index + 1}</td>
                     <td>
-                      <span className="fw-bold me-2">{guest.guestName}</span>
+                      <span className="fw-bold me-2">{guest.guestDetails?.firstname} {guest.guestDetails?.lastname}</span>
                       {"|| "}
-                      <span className="text-muted">{guest.guests}</span>
+                      <span className="text-muted">{guest.guests.adults} Adults, {guest.guests.children} Children</span>
                     </td>
-                    <td>{guest.roomName}</td>
+                    <td>{guest.roomname}</td>
                     <td>{guest.cottageName}</td>
                     <td>₱ {guest.roomPrice}</td>
                     <td>₱ {guest.fiftyPercentPrice}</td>
                     <td>₱ {guest.balance}</td>
                     <td>
                       {guest.checkedOut ? (
-                        <span
-                          className="fs-6 text-bold text-white p-1 rounded"
-                          style={{ backgroundColor: "green" }}
-                        >
+                        <span className="fs-6 text-bold text-white p-1 rounded" style={{ backgroundColor: "green" }}>
                           <small className="fw-bold">Checked-Out</small>
                         </span>
                       ) : guest.checkedIn ? (
@@ -251,18 +220,10 @@ export const Guest_List = ({ guestDataId }) => {
                       )}
                     </td>
                     <td>
-                      <Button variant="" size="sm" className="mr-2" onClick={()=> handleDelete(guest.id)}> 
-                        <FontAwesomeIcon
-                          style={{ color: "red" }}
-                          icon={faTrashAlt}
-                        />
+                      <Button variant="" size="sm" className="mr-2" onClick={() => handleDelete(guest.id)}> 
+                        <FontAwesomeIcon style={{ color: "red" }} icon={faTrashAlt} />
                       </Button>
-                      <Button
-                        className="text-success"
-                        variant="link"
-                        size="sm"
-                        onClick={() => handleCheckIn(guest)}
-                      >
+                      <Button className="text-success" variant="link" size="sm" onClick={() => handleCheckIn(guest)}>
                         <FontAwesomeIcon icon={faEye} />
                       </Button>
                     </td>
@@ -285,118 +246,63 @@ export const Guest_List = ({ guestDataId }) => {
           <Modal show={showModal} onHide={() => setShowModal(false)} centered>
             <Modal.Header closeButton className="border-0">
               <Modal.Title className="fw-bold text-primary">
-                Check In Guest
+                {currentGuest?.checkedIn ? "Check-Out" : "Check-In"} Guest
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Form>
                 {/* Guest Name Field */}
                 <Form.Group className="mb-3">
-                  <Form.Label className="fw-bold">Guest Name</Form.Label>
+                  <Form.Label>Guest Name</Form.Label>
                   <Form.Control
-                    className="bg-light text-dark"
-                    style={{
-                      border: "1px solid #ced4da",
-                      borderRadius: "0.375rem",
-                    }}
                     type="text"
-                    disabled
+                    value={`${currentGuest?.guestDetails?.firstname || ""} ${currentGuest?.guestDetails?.lastname || ""}`}
                     readOnly
-                    value={currentGuest ? currentGuest.guestName : ""}
                   />
                 </Form.Group>
-
-                {/* Check-In Date Field */}
+                {/* Balance Field */}
                 <Form.Group className="mb-3">
-                  <Form.Label className="fw-bold">Check-In Date</Form.Label>
+                  <Form.Label>Balance</Form.Label>
                   <Form.Control
-                    className="bg-light"
-                    style={{
-                      border: "1px solid #ced4da",
-                      borderRadius: "0.375rem",
-                    }}
-                    type="date"
-                    value={currentGuest ? currentGuest.checkInDate : ""}
-                    onChange={(e) =>
-                      handleInputChange("checkInDate", e.target.value)
-                    }
-                  />
-                </Form.Group>
-
-                {/* Check-Out Date Field */}
-                <Form.Group className="mb-3">
-                  <Form.Label className="fw-bold">Check-Out Date</Form.Label>
-                  <Form.Control
-                    className="bg-light"
-                    style={{
-                      border: "1px solid #ced4da",
-                      borderRadius: "0.375rem",
-                    }}
-                    type="date"
-                    value={currentGuest ? currentGuest.checkOutDate : ""}
-                    onChange={(e) =>
-                      handleInputChange("checkOutDate", e.target.value)
-                    }
-                  />
-                </Form.Group>
-
-                {/* Remaining Balance Field */}
-                <Form.Group className="mb-3">
-                  <Form.Label className="fw-bold">
-                    Remaining Balance (50%)
-                  </Form.Label>
-                  <Form.Control
-                    className="bg-light"
-                    style={{
-                      border: "1px solid #ced4da",
-                      borderRadius: "0.375rem",
-                    }}
                     type="number"
-                    value={currentGuest ? currentGuest.balance : ""}
-                    onChange={(e) =>
-                      handleInputChange("balance", e.target.value)
-                    }
+                    value={currentGuest?.balance || 0}
+                    onChange={(e) => handleInputChange("balance", e.target.value)}
                   />
                 </Form.Group>
-
-                {/* Room Price Field */}
-                <Form.Group className="mb-3">
-                  <Form.Label className="fw-bold">Room Price</Form.Label>
-                  <Form.Control
-                    className="bg-light text-dark"
-                    style={{
-                      border: "1px solid #ced4da",
-                      borderRadius: "0.375rem",
-                    }}
-                    disabled
-                    readOnly
-                    value={currentGuest ? currentGuest.roomPrice : ""}
-                  />
-                </Form.Group>
+                {/* Check-In Date */}
+                {currentGuest && !currentGuest.checkedOut && (
+                  <Form.Group className="mb-3">
+                    <Form.Label>Check-In Date</Form.Label>
+                    <Form.Control
+                      type="date"
+                      value={currentGuest.checkInDate || ""}
+                      onChange={(e) => handleInputChange("checkInDate", e.target.value)}
+                    />
+                  </Form.Group>
+                )}
+                {/* Check-Out Date */}
+                {currentGuest && currentGuest.checkedIn && (
+                  <Form.Group className="mb-3">
+                    <Form.Label>Check-Out Date</Form.Label>
+                    <Form.Control
+                      type="date"
+                      value={currentGuest.checkOutDate || ""}
+                      onChange={(e) => handleInputChange("checkOutDate", e.target.value)}
+                    />
+                  </Form.Group>
+                )}
               </Form>
             </Modal.Body>
-
             <Modal.Footer className="border-0">
-              <div className="w-100 d-flex justify-content-end">
-                {currentGuest && currentGuest.checkedIn === true ? (
-                  currentGuest.checkedOut === true ? (
-                    <button
-                      className="btn btn-secondary"
-                      onClick={() => setShowModal(false)}
-                    >
-                      Close
-                    </button>
-                  ) : (
-                    <button className="btn btn-success" onClick={saveCheckIn}>
-                      Check Out
-                    </button>
-                  )
-                ) : (
-                  <button className="btn btn-warning" onClick={saveCheckIn}>
-                    Check-In
-                  </button>
-                )}
-              </div>
+              <Button variant="secondary" onClick={() => setShowModal(false)}>
+                Close
+              </Button>
+              <Button
+                variant="primary"
+                onClick={saveCheckIn}
+              >
+                {currentGuest?.checkedIn ? "Confirm Check-Out" : "Confirm Check-In"}
+              </Button>
             </Modal.Footer>
           </Modal>
         </div>

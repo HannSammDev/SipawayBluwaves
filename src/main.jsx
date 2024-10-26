@@ -40,7 +40,7 @@ import AdminActivityForm from "./Admin/Manage_activities/AddActivity";
 import { EditCottage } from "./Admin/CottageManagement/Editicottage";
 import { Check_in } from "./Admin/RoomManagement/Checkin";
 import { Guest_List } from "./Admin/GuestM/GuestL";
-import Reservation from "./Admin/Reservation_Management/reservations";
+import Reservations from "./Admin/Reservation_Management/reservations";
 
 // import ReservationConfirmation from "./user/Client_side/Userdashboard";
 
@@ -93,7 +93,7 @@ const App = () => (
         {/* Activities */}
         <Route path="/activityF" element={<AdminActivityForm/>} />
         {/* Reservation */}
-        <Route path="/reservatioms" element={<Reservation/>} />
+        <Route path="/reservatioms" element={<Reservations/>} />
 
         {/* ---------------- */}
         <Route path="/radmin" element={Registeradmin} />

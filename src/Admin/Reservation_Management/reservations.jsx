@@ -1,14 +1,29 @@
-import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+  addDoc,
+  deleteDoc,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
+
+import { Reservationss } from "./component/reservations";
+
 import Table from "react-bootstrap/Table";
 import { textDB } from "../../firebase";
 import { Button, Modal, Form, Tabs, Tab } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
 
-function Reservation() {
+function Reservations() {
   const [reservations, setReservations] = useState([]);
   const [pendings, setPendings] = useState([]);
-  const [showModal, setShowModal] = useState(false); // State for modal visibility
+  const [showConfirmModal, setShowConfirmModal] = useState(false); // State for confirmation modal
+  const [showDeclineModal, setShowDeclineModal] = useState(false); // State for decline modal
   const [currentGuest, setCurrentGuest] = useState(null); // State for the current guest
+  const [actionType, setActionType] = useState(""); // State for action type (check-in or check-out)
+  const [value, setValue] = useState("");
 
   const getReservation = async () => {
     const reservationsCollection = collection(textDB, "guestData");
@@ -19,6 +34,7 @@ function Reservation() {
     }));
     setReservations(reservationList);
   };
+
   const getPending = async () => {
     const pendingCollection = collection(textDB, "Peding");
     const pendingSnapshot = await getDocs(pendingCollection);
@@ -28,75 +44,104 @@ function Reservation() {
     }));
     setPendings(pendingList);
   };
+
   useEffect(() => {
     getPending();
     getReservation();
   }, []);
 
-  // Function to handle input change for the modal form
   const handleInputChange = (field, value) => {
     setCurrentGuest((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Open modal and set current guest details for editing or viewing
-  const handleShowModal = (guest) => {
-    setCurrentGuest(guest);
-    setShowModal(true);
+  const handleShowConfirmModal = (type) => {
+    setActionType(type);
+    setShowConfirmModal(true);
   };
 
-  // Function to handle Check-In/Check-Out
-  const saveCheckIn = async () => {
-    if (!currentGuest) return;
-
+  const [isLoading, setIsLoading] = useState(false);
+  const handleConfirm = async (pending) => {
     try {
-      const guestDocRef = doc(textDB, "guestData", currentGuest.id);
+      // Default values
+      const room = {
+        id: pending.id,
+        roomname: pending.roomname || "Unknown Room",
+        price: pending.roomPrice || 0,
+      };
+      const cottage = {
+        id: pending.cottageId || "unknown-cottage-id",
+        cottagename: pending.cottagename || "Unknown Cottage",
+        price: pending.cottagePrice || 0,
+      };
 
-      if (currentGuest.checkedIn && !currentGuest.checkedOut) {
-        // Check-Out Logic
-        await updateDoc(guestDocRef, {
-          checkedOut: true,
-          checkOutDate: new Date().toISOString().split("T")[0],
-        });
+      const guests = pending.guests || { adults: 0, children: 0 };
+      const checkInDate = pending.checkInDate || new Date().toISOString();
+      const checkOutDate = pending.checkOutDate || new Date().toISOString();
+      const specialCode = pending.specialCode || "";
+      const guestDetails = pending.guestDetails || {};
 
-        setReservations((prevReservations) =>
-          prevReservations.map((guest) =>
-            guest.id === currentGuest.id
-              ? { ...guest, checkedOut: true }
-              : guest
-          )
-        );
-      } else if (!currentGuest.checkedIn) {
-        // Check-In Logic
-        await updateDoc(guestDocRef, {
-          checkedIn: true,
-          checkInDate: currentGuest.checkInDate,
-          checkOutDate: currentGuest.checkOutDate,
-          balance: currentGuest.balance,
-          checkedOut: false,
-        });
+      // Set loading state before the async operation
+      setIsLoading(true);
 
-        setReservations((prevReservations) =>
-          prevReservations.map((guest) =>
-            guest.id === currentGuest.id
-              ? {
-                  ...guest,
-                  ...currentGuest,
-                  checkedIn: true,
-                  checkedOut: false,
-                }
-              : guest
-          )
-        );
+      // Create reservation document
+      const reservationSnapshot = await addDoc(
+        collection(textDB, "guestData"),
+        {
+          roomId: room.id,
+          roomname: room.roomname,
+          guests,
+          checkInDate,
+          checkOutDate,
+          specialCode,
+          roomPrice: room.price,
+          fiftyPercentPrice: room.price * 0.5,
+          balance: room.price * 0.5,
+          // availability: "Pending",
+          cottageId: cottage.id,
+          cottagename: cottage.cottagename,
+          cottagePrice: cottage.price,
+          cottageFiftyPercentPrice: cottage.price * 0.5,
+          cottageBalance: cottage.price * 0.5,
+          guestDetails,
+
+        }
+        
+      );
+
+      // Delete the specific pending document
+      if (pending.id) {
+        await deleteDoc(doc(textDB, "Peding", pending.id));
       }
 
-      setShowModal(false); // Close modal after save
+      // Update state if input value is not empty
+      if (value.trim() !== "") {
+        const newItem = inputValue;
+        if (newItem) {
+          setPendings((prevData) => ({
+            ...prevData,
+            list: [...prevData.list, newItem],
+          }));
+        }
+        console.log(reservationSnapshot);
+        setValue("");
+        setIsLoading(true)
+      }
+
+      console.log(reservationSnapshot);
     } catch (error) {
-      console.error("Error saving check-in:", error);
+      console.error("Error confirming reservation:", error);
+    } finally {
+      // Reset loading state after operations
+      setIsLoading(false);
     }
   };
 
+  const handleShowDeclineModal = () => {
+    setShowDeclineModal(true);
+  };
+
   return (
-    <>
+    <main>
       <Tabs
         variant="pills"
         defaultActiveKey="home"
@@ -104,8 +149,7 @@ function Reservation() {
         id="noanim-tab-example"
         className="mb-3"
       >
-        <Tab className="text-dark" eventKey="home" title="Pending">
-          {/* Example placeholder data */}
+        <Tab className="text-dark" eventKey="home" title="Pending" size="sm">
           <Table striped>
             <thead>
               <tr>
@@ -114,33 +158,47 @@ function Reservation() {
                 <th>Assets</th>
                 <th>Price</th>
                 <th>50% Paid</th>
-                <th>Balance</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
               {pendings.map((pending, index) => (
-                <tr>
+                <tr key={pending.id}>
                   <td>{index + 1}</td>
                   <td>
-                    {pending.guestDetails.firstname}
-                    {pending.guestDetails.lastname} {"|| "}
+                    {pending.guestDetails.firstname}{" "}
+                    {pending.guestDetails.lastname} {" || "}
                     <span className="text-muted">
-                      {pending.guests.adults}
-                      {", Adults"} {pending.guests.children}
-                      {" Children"}
+                      {pending.guests.adults} Adults, {pending.guests.children}{" "}
+                      Children
                     </span>
                   </td>
-
-                  <td>{pending.roomname}{pending.cottagename}</td>
-                  <td></td>
                   <td>
-                    <Button size="sm" variant="primary" className="me-1">
-                      Confirm
-                    </Button>
-                    <Button size="sm" variant="danger">
-                      Decline
-                    </Button>
+                    {pending.roomname} {pending.cottagename}
+                  </td>
+                  <td>
+                    {pending.roomPrice} {pending.cottagePrice}
+                  </td>
+                  <td>{pending.fiftyPercentPrice}</td>
+                  <td>
+                    <div className="button-container">
+                      <Button
+                        size="sm"
+                        variant="outline-success"
+                        className="me-1"
+                        onClick={() => handleConfirm(pending)}
+                        isLoading={isLoading}
+                      >
+                        <FontAwesomeIcon icon={faCheck} />
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline-danger"
+                        onClick={() => handleShowDeclineModal()}
+                      >
+                        <FontAwesomeIcon icon={faX} />
+                      </Button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -149,179 +207,56 @@ function Reservation() {
         </Tab>
 
         <Tab className="text-dark" eventKey="profile" title="Reservations">
-          <Table striped>
-            <thead>
-              <tr>
-                <th>Reservation_ID</th>
-                <th>Room</th>
-                <th>Cottage</th>
-                <th>Reservation Date</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {reservations.map((reservation) => (
-                <tr key={reservation.id}>
-                  <td>{reservation.id}</td>
-                  <td>{reservation.roomName}</td>
-                  <td>{reservation.cottageName}</td>
-                  <td>
-                    {reservation.checkInDate} - {reservation.checkOutDate}
-                  </td>
-                  <td>
-                    {reservation.checkedOut ? (
-                      <span
-                        className="fs-6 text-bold text-white p-1 rounded"
-                        style={{ backgroundColor: "green" }}
-                      >
-                        <small className="fw-bold">Checked-Out</small>
-                      </span>
-                    ) : reservation.checkedIn ? (
-                      <span className="bg-warning fs-6 text-bold p-1 rounded">
-                        <small className="fw-bold">Checked-IN</small>
-                      </span>
-                    ) : (
-                      <span className="text-danger">
-                        <small className="fw-bold">Not Checked-IN</small>
-                      </span>
-                    )}
-                  </td>
-                  <td>
-                    <Button
-                      size="sm"
-                      onClick={() => handleShowModal(reservation)}
-                    >
-                      View
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+          <Reservationss />
         </Tab>
       </Tabs>
 
-      {/* Modal for guest details */}
-      {currentGuest && (
-        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-          <Modal.Header closeButton className="border-0">
-            <Modal.Title className="fw-bold text-primary">
-              Check-In Guest
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              {/* Guest Name Field */}
-              <Form.Group className="mb-3">
-                <Form.Label className="fw-bold">Guest Name</Form.Label>
-                <Form.Control
-                  className="bg-light text-dark"
-                  style={{
-                    border: "1px solid #ced4da",
-                    borderRadius: "0.375rem",
-                  }}
-                  type="text"
-                  disabled
-                  readOnly
-                  value={currentGuest.guestName || ""}
-                />
-              </Form.Group>
+      {/* Confirmation Modal */}
+      <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)}>
+        <Modal.Body>
+          Are you sure you want to{" "}
+          {actionType === "checkIn" ? "check in" : "check out"} this guest?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowConfirmModal(false)}
+          >
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={() => handleConfirm(pending)}>
+            Confirm
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
-              {/* Check-In Date Field */}
-              <Form.Group className="mb-3">
-                <Form.Label className="fw-bold">Check-In Date</Form.Label>
-                <Form.Control
-                  className="bg-light"
-                  style={{
-                    border: "1px solid #ced4da",
-                    borderRadius: "0.375rem",
-                  }}
-                  type="date"
-                  value={currentGuest.checkInDate || ""}
-                  onChange={(e) =>
-                    handleInputChange("checkInDate", e.target.value)
-                  }
-                />
-              </Form.Group>
-
-              {/* Check-Out Date Field */}
-              <Form.Group className="mb-3">
-                <Form.Label className="fw-bold">Check-Out Date</Form.Label>
-                <Form.Control
-                  className="bg-light"
-                  style={{
-                    border: "1px solid #ced4da",
-                    borderRadius: "0.375rem",
-                  }}
-                  type="date"
-                  value={currentGuest.checkOutDate || ""}
-                  onChange={(e) =>
-                    handleInputChange("checkOutDate", e.target.value)
-                  }
-                />
-              </Form.Group>
-
-              {/* Remaining Balance Field */}
-              <Form.Group className="mb-3">
-                <Form.Label className="fw-bold">
-                  Remaining Balance (50%)
-                </Form.Label>
-                <Form.Control
-                  className="bg-light"
-                  style={{
-                    border: "1px solid #ced4da",
-                    borderRadius: "0.375rem",
-                  }}
-                  type="number"
-                  value={currentGuest.balance || ""}
-                  onChange={(e) => handleInputChange("balance", e.target.value)}
-                />
-              </Form.Group>
-
-              {/* Room Price Field */}
-              <Form.Group className="mb-3">
-                <Form.Label className="fw-bold">Room Price</Form.Label>
-                <Form.Control
-                  className="bg-light text-dark"
-                  style={{
-                    border: "1px solid #ced4da",
-                    borderRadius: "0.375rem",
-                  }}
-                  disabled
-                  readOnly
-                  value={currentGuest.roomPrice || ""}
-                />
-              </Form.Group>
-            </Form>
-          </Modal.Body>
-
-          <Modal.Footer className="border-0">
-            <div className="w-100 d-flex justify-content-end">
-              {currentGuest.checkedIn ? (
-                currentGuest.checkedOut ? (
-                  <Button
-                    variant="secondary"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Close
-                  </Button>
-                ) : (
-                  <Button variant="success" onClick={saveCheckIn}>
-                    Check Out
-                  </Button>
-                )
-              ) : (
-                <Button variant="warning" onClick={saveCheckIn}>
-                  Check-In
-                </Button>
-              )}
-            </div>
-          </Modal.Footer>
-        </Modal>
-      )}
-    </>
+      {/* Decline Modal */}
+      <Modal show={showDeclineModal} onHide={() => setShowDeclineModal(false)}>
+        {/* <Modal.Header closeButton>
+          <Modal.Title>Decline Action</Modal.Title>
+        </Modal.Header> */}
+        <Modal.Body>Are you sure you want to decline this action?</Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowDeclineModal(false)}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="danger"
+            onClick={() => {
+              // Add decline logic here
+              console.log("Action declined!");
+              handleConfirm(false);
+            }}
+          >
+            Decline
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </main>
   );
 }
 
-export default Reservation;
+export default Reservations;

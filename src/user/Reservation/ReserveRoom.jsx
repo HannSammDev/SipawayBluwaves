@@ -80,7 +80,7 @@ export const GuestInfo = () => {
         fiftyPercentPrice: room.price * 0.5,
         balance: room.price * 0.5,
         paymentMethod: "GCash",
-        availability: "Pending",
+       
         guestDetails
       });
 
