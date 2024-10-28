@@ -19,11 +19,12 @@ import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
 function Reservations() {
   const [reservations, setReservations] = useState([]);
   const [pendings, setPendings] = useState([]);
-  const [showConfirmModal, setShowConfirmModal] = useState(false); // State for confirmation modal
-  const [showDeclineModal, setShowDeclineModal] = useState(false); // State for decline modal
-  const [currentGuest, setCurrentGuest] = useState(null); // State for the current guest
-  const [actionType, setActionType] = useState(""); // State for action type (check-in or check-out)
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showDeclineModal, setShowDeclineModal] = useState(false);
+  const [currentGuest, setCurrentGuest] = useState(null);
+  const [actionType, setActionType] = useState("");
   const [value, setValue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const getReservation = async () => {
     const reservationsCollection = collection(textDB, "guestData");
@@ -54,84 +55,64 @@ function Reservations() {
     setCurrentGuest((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleShowConfirmModal = (type) => {
+  const handleShowConfirmModal = (type, pending) => {
     setActionType(type);
+    setCurrentGuest(pending); // Set the current guest
     setShowConfirmModal(true);
   };
 
-  const [isLoading, setIsLoading] = useState(false);
   const handleConfirm = async (pending) => {
+    if (!pending) {
+      console.error("No guest selected.");
+      return;
+    }
+
+    setIsLoading(true);
     try {
-      // Default values
       const room = {
         id: pending.id,
-        roomname: pending.roomname || "Unknown Room",
+        roomname: pending.roomname || " ",
         price: pending.roomPrice || 0,
       };
       const cottage = {
         id: pending.cottageId || "unknown-cottage-id",
-        cottagename: pending.cottagename || "Unknown Cottage",
+        cottagename: pending.cottagename || "",
         price: pending.cottagePrice || 0,
       };
-
       const guests = pending.guests || { adults: 0, children: 0 };
       const checkInDate = pending.checkInDate || new Date().toISOString();
       const checkOutDate = pending.checkOutDate || new Date().toISOString();
       const specialCode = pending.specialCode || "";
       const guestDetails = pending.guestDetails || {};
 
-      // Set loading state before the async operation
-      setIsLoading(true);
+      await addDoc(collection(textDB, "guestData"), {
+        status:'Not Available',
+        roomId: room.id,
+        roomname: room.roomname,
+        guests,
+        checkInDate,
+        checkOutDate,
+        specialCode,
+        roomPrice: room.price,
+        fiftyPercentPrice: room.price * 0.5,
+        balance: room.price * 0.5,
+        cottageId: cottage.id,
+        cottagename: cottage.cottagename,
+        cottagePrice: cottage.price,
+        cottageFiftyPercentPrice: cottage.price * 0.5,
+        cottageBalance: cottage.price * 0.5,
+        guestDetails,
+      });
 
-      // Create reservation document
-      const reservationSnapshot = await addDoc(
-        collection(textDB, "guestData"),
-        {
-          roomId: room.id,
-          roomname: room.roomname,
-          guests,
-          checkInDate,
-          checkOutDate,
-          specialCode,
-          roomPrice: room.price,
-          fiftyPercentPrice: room.price * 0.5,
-          balance: room.price * 0.5,
-          // availability: "Pending",
-          cottageId: cottage.id,
-          cottagename: cottage.cottagename,
-          cottagePrice: cottage.price,
-          cottageFiftyPercentPrice: cottage.price * 0.5,
-          cottageBalance: cottage.price * 0.5,
-          guestDetails,
-
-        }
-        
-      );
-
-      // Delete the specific pending document
       if (pending.id) {
         await deleteDoc(doc(textDB, "Peding", pending.id));
+        setPendings((prevPendings) =>
+          prevPendings.filter((item) => item.id !== pending.id)
+        );
       }
-
-      // Update state if input value is not empty
-      if (value.trim() !== "") {
-        const newItem = inputValue;
-        if (newItem) {
-          setPendings((prevData) => ({
-            ...prevData,
-            list: [...prevData.list, newItem],
-          }));
-        }
-        console.log(reservationSnapshot);
-        setValue("");
-        setIsLoading(true)
-      }
-
-      console.log(reservationSnapshot);
     } catch (error) {
       console.error("Error confirming reservation:", error);
     } finally {
-      // Reset loading state after operations
       setIsLoading(false);
     }
   };
@@ -186,11 +167,12 @@ function Reservations() {
                         size="sm"
                         variant="outline-success"
                         className="me-1"
-                        onClick={() => handleConfirm(pending)}
-                        isLoading={isLoading}
+                        onClick={() => handleShowConfirmModal("checkIn", pending)} // Pass pending
+                        disabled={isLoading}
                       >
                         <FontAwesomeIcon icon={faCheck} />
                       </Button>
+
                       <Button
                         size="sm"
                         variant="outline-danger"
@@ -214,17 +196,18 @@ function Reservations() {
       {/* Confirmation Modal */}
       <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)}>
         <Modal.Body>
-          Are you sure you want to{" "}
-          {actionType === "checkIn" ? "check in" : "check out"} this guest?
+          Are you sure you want to {actionType === "checkIn" ? "check in" : "check out"} this guest?
+          {currentGuest && (
+            <div>
+              {currentGuest.guestDetails.firstname} {currentGuest.guestDetails.lastname}
+            </div>
+          )}
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            variant="secondary"
-            onClick={() => setShowConfirmModal(false)}
-          >
+          <Button variant="secondary" onClick={() => setShowConfirmModal(false)}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={() => handleConfirm(pending)}>
+          <Button variant="primary" onClick={() => handleConfirm(currentGuest)}>
             Confirm
           </Button>
         </Modal.Footer>
@@ -232,21 +215,14 @@ function Reservations() {
 
       {/* Decline Modal */}
       <Modal show={showDeclineModal} onHide={() => setShowDeclineModal(false)}>
-        {/* <Modal.Header closeButton>
-          <Modal.Title>Decline Action</Modal.Title>
-        </Modal.Header> */}
         <Modal.Body>Are you sure you want to decline this action?</Modal.Body>
         <Modal.Footer>
-          <Button
-            variant="secondary"
-            onClick={() => setShowDeclineModal(false)}
-          >
+          <Button variant="secondary" onClick={() => setShowDeclineModal(false)}>
             Cancel
           </Button>
           <Button
             variant="danger"
             onClick={() => {
-              // Add decline logic here
               console.log("Action declined!");
               handleConfirm(false);
             }}

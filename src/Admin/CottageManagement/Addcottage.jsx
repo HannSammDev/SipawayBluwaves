@@ -93,13 +93,13 @@ export const AddCottages = () => {
 
   return (
     <>
-      <div className="container my-5">
-        <div className="card shadow-lg" style={{ backgroundColor: "#f5f5f5",  boxShadow: "0px 0px 10px 5px rgba(0, 0, 0, 0.1)" }}>
-          <div className="card-header bg-transparent  text-white">
+      {/* <div className="container my-5">
+        <div className="" style={{ backgroundColor: "#f5f5f5",  boxShadow: "0px 0px 10px 5px rgba(0, 0, 0, 0.1)" }}> */}
+          {/* <div className="card-header bg-transparent  text-white">
             <h5 className="mb-0 text-dark">
               <i className="bi bi-pencil-square"></i> Add Cottage
             </h5>
-          </div>
+          </div> */}
 
           <form
             className="row g-3"
@@ -234,8 +234,8 @@ export const AddCottages = () => {
               </button>{" "}
             </div>{" "}
           </form>
-        </div>
-      </div>
+        {/* </div>
+      </div> */}
     </>
   );
 };

@@ -10,6 +10,7 @@ import {
   addDoc,
 } from "firebase/firestore";
 import { textDB } from "../../firebase"; // Ensure this path is correct
+import { AddCottages } from "./Addcottage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +21,8 @@ import {
   faEye,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
 export const Available_cottages = () => {
   const [cottages, setCottages] = useState([]);
@@ -31,6 +34,8 @@ export const Available_cottages = () => {
   const [isConfirmed, setIsConfirmed] = useState(false); // New state for tracking confirmation
   const [isDeclined, setIsDeclined] = useState(false); // New state for tracking decline action
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const [lgShow, setLgShow] = useState(false);
 
   const fetchReservations = async () => {
     try {
@@ -168,7 +173,9 @@ export const Available_cottages = () => {
         }, 2000);
       } else {
         setIsLoading(false);
-        setConfirmationMessage("No pending reservation found for this cottage.");
+        setConfirmationMessage(
+          "No pending reservation found for this cottage."
+        );
       }
     } catch (error) {
       console.error("Error confirming reservation:", error);
@@ -218,7 +225,9 @@ export const Available_cottages = () => {
         }, 2000);
       } else {
         setIsLoading(false);
-        setConfirmationMessage("No pending reservation found for this cottage.");
+        setConfirmationMessage(
+          "No pending reservation found for this cottage."
+        );
       }
     } catch (error) {
       console.error("Error declining and deleting reservation:", error);
@@ -244,9 +253,26 @@ export const Available_cottages = () => {
         >
           <div className="d-flex justify-content-between align-items-center">
             <h4>Cottages</h4>
-            <a className="btn btn-dark" href="/addcottage">
-              <FontAwesomeIcon icon={faPlus} /> Add 
-            </a>
+
+            <Button className="btn btn-dark" onClick={() => setLgShow(true)}>
+              Add <FontAwesomeIcon icon={faPlus} />
+            </Button>
+
+            <Modal
+              size="lg"
+              show={lgShow}
+              onHide={() => setLgShow(false)}
+              aria-labelledby="example-modal-sizes-title-lg"
+            >
+              <Modal.Header closeButton>
+                <h5 className="mb-0 text-dark">
+                  <i className="bi bi-pencil-square"></i> Add Cottage
+                </h5>
+              </Modal.Header>
+              <Modal.Body>
+                <AddCottages />
+              </Modal.Body>
+            </Modal>
           </div>
         </div>
         <div
@@ -341,7 +367,8 @@ export const Available_cottages = () => {
                     )
                       ? reservations
                           .filter(
-                            (reservation) => reservation.cottageId === cottage.id
+                            (reservation) =>
+                              reservation.cottageId === cottage.id
                           )
                           .map((reservation) => (
                             <div key={reservation.id}>
@@ -517,9 +544,7 @@ export const Available_cottages = () => {
         </div>
 
         {confirmationMessage && (
-          <div className="alert alert-success mt-3">
-            {confirmationMessage}
-          </div>
+          <div className="alert alert-success mt-3">{confirmationMessage}</div>
         )}
       </div>
     </>

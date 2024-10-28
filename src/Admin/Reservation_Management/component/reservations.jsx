@@ -1,21 +1,17 @@
-import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+  addDoc,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
 import { textDB } from "../../../firebase";
 import { Button, Modal, Form, Pagination } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { BsThreeDotsVertical } from "react-icons/bs";
-import {
-  faCheck,
-  faCheckCircle,
-  faEllipsis,
-  faEye,
-  faSignOutAlt,
-} from "@fortawesome/free-solid-svg-icons";
-// import { ThreeDots } from 'react-bootstrap-icons';
+import { faCheckCircle, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import Dropdown from "react-bootstrap/Dropdown";
-
-// import DropdownButton from "react-bootstrap/DropdownButton";
 import { AddCheckin } from "./addCheckin";
 
 export const Reservationss = () => {
@@ -39,7 +35,7 @@ export const Reservationss = () => {
         ...doc.data(),
       }));
       setReservations(reservationList);
-      console.log("Fetched reservations: ", reservationList); // Log the fetched reservations
+      console.log("Fetched reservations: ", reservationList);
     } catch (error) {
       console.error("Error fetching reservations: ", error);
     }
@@ -50,12 +46,17 @@ export const Reservationss = () => {
   }, []);
 
   const handleShowModal = (guest) => {
-    setCurrentGuest(guest);
-    setShowModal(true);
+    if (guest) {
+      setCurrentGuest(guest);
+      setShowModal(true);
+    } else {
+      console.error("Guest is not defined");
+    }
   };
 
-  const handleShowConfirmModal = (action) => {
+  const handleShowConfirmModal = (action, guest) => {
     setActionType(action);
+    setCurrentGuest(guest);
     setShowConfirmModal(true);
   };
 
@@ -64,14 +65,34 @@ export const Reservationss = () => {
   };
 
   const handleAction = async () => {
+    if (!currentGuest) {
+      console.error("No guest selected.");
+      return;
+    }
+
     const guestRef = doc(textDB, "guestData", currentGuest.id);
     try {
       if (actionType === "checkIn") {
-        await updateDoc(guestRef, { checkedIn: true });
+        await updateDoc(guestRef, {
+          checkedIn: true,
+          checkInDate: new Date().toISOString().split("T")[0],
+          checkedOut: false,
+        });
+
+        // Add a new document in the reservations collection
+        await addDoc(collection(textDB, "reservations"), {
+          guestId: currentGuest.id, // Optionally include the guest's ID
+          status: "Not Available",
+          roomname: currentGuest.roomname, // Include room info if needed
+          checkInDate: new Date().toISOString().split("T")[0],
+        });
       } else if (actionType === "checkOut") {
-        await updateDoc(guestRef, { checkedOut: true });
+        await updateDoc(guestRef, {
+          checkedOut: true,
+          checkOutDate: new Date().toISOString().split("T")[0],
+        });
       }
-      getReservation();
+      getReservation(); // Refresh the reservations list
       setShowConfirmModal(false);
       setShowModal(false);
     } catch (error) {
@@ -79,12 +100,10 @@ export const Reservationss = () => {
     }
   };
 
-  const filteredGuests = reservations.filter(
-    (guest) =>
-      guest.guestDetails?.firstname &&
-      guest.guestDetails.firstname
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase())
+  const filteredGuests = reservations.filter((guest) =>
+    guest.guestDetails?.firstname
+      ?.toLowerCase()
+      .includes(searchTerm.toLowerCase())
   );
 
   // Pagination logic
@@ -142,20 +161,18 @@ export const Reservationss = () => {
         onHide={() => setLgShow(false)}
         aria-labelledby="example-modal-sizes-title-lg"
       >
-        <Modal.Header closeButton>
-          
-        </Modal.Header>
+        <Modal.Header closeButton></Modal.Header>
         <Modal.Body>
           <AddCheckin />
         </Modal.Body>
       </Modal>
+
       <Table striped>
         <thead>
           <tr>
             <th>#</th>
             <th>Assets</th>
             <th>Guest</th>
-
             <th>Reservation Date</th>
             <th>Status</th>
             <th>Action</th>
@@ -168,11 +185,9 @@ export const Reservationss = () => {
               <td>
                 {reservation.roomname} {reservation.cottagename}
               </td>
-
               <td>{`${reservation.guestDetails?.firstname || ""} ${
                 reservation.guestDetails?.lastname || ""
               }`}</td>
-
               <td>
                 {reservation.checkInDate} - {reservation.checkOutDate}
               </td>
@@ -188,65 +203,47 @@ export const Reservationss = () => {
                 ) : (
                   <span className="text-danger">Not Checked-IN</span>
                 )}
-                <Button
-                  variant="link"
-                  size="sm"
-                  onClick={() => handleShowOptions(reservation)}
-                ></Button>
               </td>
               <td>
                 <div className="d-flex align-items-center">
-                  <Dropdown>
-                    <Dropdown.Toggle variant="link" id="dropdown-basic-button">
-                      {/* <BsThreeDotsVertical /> */}
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu>
-                      <Dropdown.Item href="#/action-1">
-                        <Button
-                          size="sm"
-                          onClick={() => handleShowModal(reservation)}
-                          variant="transparent"
-                          className="me-2"
-                        >
-                          View
-                          {/* <FontAwesomeIcon icon={faEye} className="me-1" /> */}
-                        </Button>
-                      </Dropdown.Item>
-                      <Dropdown.Item href="#/action-2">
-                        {!reservation.checkedIn && (
-                          <Button
-                            size="sm"
-                            onClick={() => handleShowConfirmModal("checkIn")}
-                            variant="link"
-                            className="me-2"
-                          >
-                            <FontAwesomeIcon
-                              icon={faCheckCircle}
-                              className="me-1"
-                            />{" "}
-                            Check-In
-                          </Button>
-                        )}
-                      </Dropdown.Item>
-                      <Dropdown.Item href="#/action-3">
-                        {!reservation.checkedOut && (
-                          <Button
-                            //  className="border border-dark"
-                            size="sm"
-                            onClick={() => handleShowConfirmModal("checkOut")}
-                            variant="link"
-                          >
-                            <FontAwesomeIcon
-                              icon={faSignOutAlt}
-                              className="me-1"
-                            />{" "}
-                            Checkout
-                          </Button>
-                        )}
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
+                  {!reservation.checkedIn && (
+                    <Button
+                      size="sm"
+                      onClick={() =>
+                        handleShowConfirmModal("checkIn", reservation)
+                      }
+                      variant="link"
+                      className="me-2 text-primary"
+                    >
+                      <FontAwesomeIcon
+                        icon={faCheckCircle}
+                        className="me-0 text-primary"
+                      />
+                    </Button>
+                  )}
+                  {!reservation.checkedOut && (
+                    <Button
+                      size="sm"
+                      onClick={() =>
+                        handleShowConfirmModal("checkOut", reservation)
+                      }
+                      variant=""
+                      className="me-2"
+                    >
+                      <FontAwesomeIcon
+                        icon={faSignOutAlt}
+                        className="me-0 text-success"
+                      />
+                    </Button>
+                  )}
+                  <Button
+                    size="sm"
+                    onClick={() => handleShowModal(reservation)}
+                    variant="primary"
+                    className="me-2"
+                  >
+                    View
+                  </Button>
                 </div>
               </td>
             </tr>
@@ -304,21 +301,10 @@ export const Reservationss = () => {
               <p>
                 <strong>Check-Out Date:</strong> {currentGuest.checkOutDate}
               </p>
-              <p>
-                <strong>Balance:</strong> ₱{currentGuest.balance}
-              </p>
-              <p>
-                <strong>Status:</strong>{" "}
-                {currentGuest.checkedIn ? "Checked-In" : "Not Checked-In"}
-              </p>
+              {/* Add more details as needed */}
             </div>
           )}
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
-            Close
-          </Button>
-        </Modal.Footer>
       </Modal>
     </div>
   );

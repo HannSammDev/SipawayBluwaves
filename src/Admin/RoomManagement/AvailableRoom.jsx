@@ -269,10 +269,10 @@ export const Available_rooms = () => {
             borderRadius: "10px",
           }}
         >
-          <Modal show={show} onHide={handleClose}>
+          <Modal size='lg' show={show} onHide={handleClose}>
             <Modal.Header closeButton>
               <Modal.Title>
-                {" "}
+               
                 <h5 className="mb-0 text-dark">
                   <i className="bi bi-pencil-square"></i> Add Room
                 </h5>
@@ -370,7 +370,7 @@ export const Available_rooms = () => {
                           )
                           .map((reservation) => (
                             <div key={reservation.id}>
-                              {reservation.availability}
+                              {reservation.status}
                             </div>
                           ))
                       : "Available"}
