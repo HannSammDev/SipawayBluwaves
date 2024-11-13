@@ -41,7 +41,7 @@ import { EditCottage } from "./Admin/CottageManagement/Editicottage";
 import { Check_in } from "./Admin/RoomManagement/Checkin";
 import { Guest_List } from "./Admin/GuestM/GuestL";
 import Reservations from "./Admin/Reservation_Management/reservations";
-import {InventoryPage} from "./Admin/inventory/inventorypage";
+import { InventoryPage } from "./Admin/inventory/inventorypage";
 
 // import ReservationConfirmation from "./user/Client_side/Userdashboard";
 
@@ -58,53 +58,49 @@ const App = () => (
         <Route path="/testimonail" element={<Testimonials />} />
       </Route> */}
       
-      <Route path="/activity"   element={<DailyActivities/>}/>
+      <Route path="/activity" element={<DailyActivities />} />
       <Route path="/reserv" element={<Rooms_Info />} />
-      <Route path="/guest" element={<GuestInfo/>} />
-      <Route path="/cottagereserve" element={<Guest/>} />
-     <Route path="/ava" element={<AvailableRooms/>} />
-
-
+      <Route path="/guest" element={<GuestInfo />} />
+      <Route path="/cottagereserve" element={<Guest />} />
+      <Route path="/ava" element={<AvailableRooms />} />
 
       {/* --------------Admin--------------------- */}
 
-      <Route path="/radmin" element= {<Registeradmin/> }/>
-      <Route path="/adminlogin" element={<Admin_Login/>} / >
+      <Route path="/radmin" element={<Registeradmin />} />
+      <Route path="/adminlogin" element={<Admin_Login />} />
       
-      <Route  element={<Admin_layout/>}>
+      <Route element={<Admin_layout />}>
 
-        <Route path="/dash" element={<Dashboard/>}/>
+        <Route path="/dash" element={<Dashboard />} />
         {/* Room Management */}
-        <Route path="/addroom" element={<Addrooms/>}/>
-        <Route path="/roomsdetails" element={<RoomDetails/>} />
-        <Route path="/occupied" element={<OccupiedRooms/>} />
-        <Route path="/editroom/:id" element={<EditRoom/>} />
-        <Route path="/rooms" element={<Available_rooms/>} />
-        <Route path="/checkin/:id" element={<Check_in/>}/>
+        <Route path="/addroom" element={<Addrooms />} />
+        <Route path="/roomsdetails" element={<RoomDetails />} />
+        <Route path="/occupied" element={<OccupiedRooms />} />
+        <Route path="/editroom/:id" element={<EditRoom />} />
+        <Route path="/rooms" element={<Available_rooms />} />
+        <Route path="/checkin/:id" element={<Check_in />} />
 
         {/* Cottage Management */}
-        <Route path="/addcottage" element={<AddCottages/>} />
-        <Route path="/cottageslist" element={<CottageDetails/>} />
-        <Route path="/Cottage" element={<Available_cottages/>} />
-        <Route path ='/editcottage/:id' element= {<EditCottage/>}/>
+        <Route path="/addcottage" element={<AddCottages />} />
+        <Route path="/cottageslist" element={<CottageDetails />} />
+        <Route path="/Cottage" element={<Available_cottages />} />
+        <Route path='/editcottage/:id' element={<EditCottage />} />
 
         {/* GuestM */}
-        <Route path='/guestL' element={<Guest_List/>}/>
+        <Route path='/guestL' element={<Guest_List />} />
         
         {/* Activities */}
-        <Route path="/activityF" element={<AdminActivityForm/>} />
+        <Route path="/activityF" element={<AdminActivityForm />} />
         {/* Reservation */}
-        <Route path="/reservatioms" element={<Reservations/>} />
+        <Route path="/reservatioms" element={<Reservations />} />
 
         {/* Inventory */}
-        <Route path="/inventory" element={<InventoryPage/>} />
+        <Route path="/inventory" element={<InventoryPage />} />
 
         {/* ---------------- */}
-        <Route path="/radmin" element={Registeradmin} />
-
+        <Route path="/radmin" element={<Registeradmin />} />
       </Route>
     </Routes>
-
   </Router>
 );
 
