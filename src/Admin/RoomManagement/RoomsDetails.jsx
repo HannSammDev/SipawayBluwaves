@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrashAlt, faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { textDB } from "../../firebase";
 import { useNavigate } from "react-router-dom";
@@ -34,9 +34,9 @@ export const RoomDetails = () => {
     }
   };
 
-  const handleEdit = (roomId) => {
-    navigate(`/editroom/${roomId}`);
-  };
+  // const handleEdit = (roomId) => {
+  //   navigate(`/editroom/${roomId}`);
+  // };
 
   useEffect(() => {
     getData();

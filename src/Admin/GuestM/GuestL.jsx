@@ -1,5 +1,5 @@
 import {
-  faEdit,
+  // faEdit,
   faTrashAlt,
   faEye,
   faPlus,

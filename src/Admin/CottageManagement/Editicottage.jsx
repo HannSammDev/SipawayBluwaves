@@ -9,7 +9,7 @@ import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 export const EditCottage = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const { id } = useParams();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [cottage, setCottage] = useState({
     cottagename: "",
     description: "",
