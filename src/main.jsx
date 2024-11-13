@@ -18,7 +18,7 @@ import { Rooms_Info } from "./user/Reservation/Rooms Details";
 // import { GuestInfo } from "./user/Reservation/GuestInfo";
 // import { Side_nav } from "./Admin/Side_Nav";
 
-import { Dashboard } from "./Admin/Dashboard/dashborad";
+import { Dashboard } from "./Admin/dashborad";
 import { Admin_layout } from "./AdminLayout";
 import { Addrooms } from "./Admin/RoomManagement/Addrooms";
 import { RoomDetails } from "./Admin/RoomManagement/RoomsDetails";
@@ -49,7 +49,6 @@ const App = () => (
   <Router>
     <Routes>
       <Route path="/" element={<Layout />}>
-        
         <Route path="/signup" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -57,7 +56,7 @@ const App = () => (
       {/* <Route path="/" element={<TestimonialPage />}>
         <Route path="/testimonail" element={<Testimonials />} />
       </Route> */}
-      
+
       <Route path="/activity" element={<DailyActivities />} />
       <Route path="/reserv" element={<Rooms_Info />} />
       <Route path="/guest" element={<GuestInfo />} />
@@ -68,9 +67,8 @@ const App = () => (
 
       <Route path="/radmin" element={<Registeradmin />} />
       <Route path="/adminlogin" element={<Admin_Login />} />
-      
-      <Route element={<Admin_layout />}>
 
+      <Route element={<Admin_layout />}>
         <Route path="/dash" element={<Dashboard />} />
         {/* Room Management */}
         <Route path="/addroom" element={<Addrooms />} />
@@ -84,11 +82,11 @@ const App = () => (
         <Route path="/addcottage" element={<AddCottages />} />
         <Route path="/cottageslist" element={<CottageDetails />} />
         <Route path="/Cottage" element={<Available_cottages />} />
-        <Route path='/editcottage/:id' element={<EditCottage />} />
+        <Route path="/editcottage/:id" element={<EditCottage />} />
 
         {/* GuestM */}
-        <Route path='/guestL' element={<Guest_List />} />
-        
+        <Route path="/guestL" element={<Guest_List />} />
+
         {/* Activities */}
         <Route path="/activityF" element={<AdminActivityForm />} />
         {/* Reservation */}

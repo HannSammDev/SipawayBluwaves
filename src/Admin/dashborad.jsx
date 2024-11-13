@@ -12,8 +12,8 @@ import {
 } from "chart.js";
 import annotationPlugin from "chartjs-plugin-annotation";
 import { collection, getDocs } from "firebase/firestore";
-import { textDB } from "../../firebase"; // Ensure this path is correct
-import { Dashtwo } from "./dash2";
+import { textDB } from "../firebase"; // Ensure this path is correct
+import { Dashtwo } from "./Dashboard/dash2";
 
 ChartJS.register(
   CategoryScale,
@@ -27,15 +27,18 @@ ChartJS.register(
 );
 
 const fetchReservations = async () => {
-  const reservationsCollection = collection(textDB, 'reservations');
+  const reservationsCollection = collection(textDB, "reservations");
   const reservationsSnapshot = await getDocs(reservationsCollection);
-  return reservationsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  return reservationsSnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
 };
 
 const calculateDailyIncome = (reservations) => {
   const incomeByDay = {};
 
-  reservations.forEach(reservation => {
+  reservations.forEach((reservation) => {
     const date = reservation.checkInDate; // Assuming checkInDate is in 'YYYY-MM-DD' format
     const roomPrice = parseFloat(reservation.roomPrice) || 0;
     const cottagePrice = parseFloat(reservation.cottagePrice) || 0;
@@ -62,9 +65,9 @@ const calculateDailyIncome = (reservations) => {
   });
 
   const sortedDates = Object.keys(incomeByDay).sort();
-  return sortedDates.map(date => ({
+  return sortedDates.map((date) => ({
     day: date,
-    ...incomeByDay[date]
+    ...incomeByDay[date],
   }));
 };
 
@@ -95,7 +98,9 @@ export const Dashboard = () => {
       {
         label: "Cumulative Income",
         data: dailyIncomeData.map((item, index) =>
-          dailyIncomeData.slice(0, index + 1).reduce((sum, data) => sum + data.totalIncome, 0)
+          dailyIncomeData
+            .slice(0, index + 1)
+            .reduce((sum, data) => sum + data.totalIncome, 0)
         ),
         borderColor: "#36b9cc",
         backgroundColor: "#36b9cc",
@@ -184,11 +189,14 @@ export const Dashboard = () => {
     },
   };
 
-  const today = new Date().toISOString().split('T')[0];
-  const todayData = dailyIncomeData.find(item => item.day === today) || {};
+  const today = new Date().toISOString().split("T")[0];
+  const todayData = dailyIncomeData.find((item) => item.day === today) || {};
   const todayInitialIncome = todayData.initialIncome || 0;
-  const todayDueUponArrival = todayData.dueUponArrival || 0;
-  const totalIncome = dailyIncomeData.reduce((sum, item) => sum + item.totalIncome, 0);
+  // const todayDueUponArrival = todayData.dueUponArrival || 0;
+  const totalIncome = dailyIncomeData.reduce(
+    (sum, item) => sum + item.totalIncome,
+    0
+  );
 
   return (
     <>
@@ -204,7 +212,7 @@ export const Dashboard = () => {
                 // background: "linear-gradient(135deg, #e2eafc 0%, #fef6f9 100%)",
                 boxShadow: "0px 5px 20px rgba(0, 0, 0, 0.2)",
               }}
-            > 
+            >
               <Line data={data} options={options} />
             </div>
           </div>
@@ -218,8 +226,12 @@ export const Dashboard = () => {
               }}
             >
               <div className="card-body">
-                <h5 className="card-title fs-4 text-dark">Today's Initial Income (50%)</h5>
-                <p className="card-text display-4 text-dark">₱{todayInitialIncome}</p>
+                <h5 className="card-title fs-4 text-dark">
+                  Today's Initial Income (50%)
+                </h5>
+                <p className="card-text display-4 text-dark">
+                  ₱{todayInitialIncome}
+                </p>
               </div>
             </div>
             <div
@@ -251,7 +263,6 @@ export const Dashboard = () => {
           </div>
         </div>
       </div>
-      
     </>
   );
 };
