@@ -16,7 +16,7 @@ import { Register } from "./user/Client_side/Register";
 // import { Gallery } from "./Client_side/Galery";
 import { Rooms_Info } from "./user/Reservation/Rooms Details";
 // import { GuestInfo } from "./user/Reservation/GuestInfo";
-import { Side_nav } from "./Admin/Side_Nav";
+// import { Side_nav } from "./Admin/Side_Nav";
 
 import { Dashboard } from "./Admin/Dashboard/dashborad";
 import { Admin_layout } from "./AdminLayout";
@@ -35,7 +35,7 @@ import { GuestInfo } from "./user/Reservation/ReserveRoom";
 import { Guest } from "./user/Reservation/ReserveCottage";
 import DailyActivities from "./user/Client_side/css/Activities";
 import { Registeradmin } from "./Admin/Login/Register";
-import DailyActivitiesForm from "./Admin/Manage_activities/AddActivity";
+// import DailyActivitiesForm from "./Admin/Manage_activities/AddActivity";
 import AdminActivityForm from "./Admin/Manage_activities/AddActivity";
 import { EditCottage } from "./Admin/CottageManagement/Editicottage";
 import { Check_in } from "./Admin/RoomManagement/Checkin";
