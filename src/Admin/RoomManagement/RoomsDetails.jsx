@@ -76,7 +76,7 @@ export const RoomDetails = () => {
           <thead>
             <tr>
               <th className="w-10" scope="col">#</th>
-              <th className="w-10" className="" scope="col">Room_Name</th>
+              <th className="w-10"  scope="col">Room_Name</th>
               {/* <th className="w-10" scope="col">Description</th> */}
               {/* <th className="w-10" scope="col">Amenities</th> */}
               {/* <th className="w-10" scope="col">Price</th> */}
