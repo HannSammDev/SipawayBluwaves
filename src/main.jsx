@@ -41,6 +41,7 @@ import { EditCottage } from "./Admin/CottageManagement/Editicottage";
 import { Check_in } from "./Admin/RoomManagement/Checkin";
 import { Guest_List } from "./Admin/GuestM/GuestL";
 import Reservations from "./Admin/Reservation_Management/reservations";
+import {InventoryPage} from "./Admin/inventory/inventorypage";
 
 // import ReservationConfirmation from "./user/Client_side/Userdashboard";
 
@@ -94,6 +95,9 @@ const App = () => (
         <Route path="/activityF" element={<AdminActivityForm/>} />
         {/* Reservation */}
         <Route path="/reservatioms" element={<Reservations/>} />
+
+        {/* Inventory */}
+        <Route path="/inventory" element={<InventoryPage/>} />
 
         {/* ---------------- */}
         <Route path="/radmin" element={Registeradmin} />

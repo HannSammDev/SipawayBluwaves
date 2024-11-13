@@ -86,7 +86,7 @@ function Reservations() {
       const guestDetails = pending.guestDetails || {};
 
       await addDoc(collection(textDB, "guestData"), {
-        status:'Not Available',
+        status: "Not Available",
         roomId: room.id,
         roomname: room.roomname,
         guests,
@@ -114,6 +114,15 @@ function Reservations() {
       console.error("Error confirming reservation:", error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleDecline = async (id) => {
+    try {
+      await deleteDoc(doc(textDB, "peding", id));
+      setPendings(); // Refresh state
+    } catch (error) {
+      console.error("Error deleting document:", error);
     }
   };
 
@@ -167,7 +176,9 @@ function Reservations() {
                         size="sm"
                         variant="outline-success"
                         className="me-1"
-                        onClick={() => handleShowConfirmModal("checkIn", pending)} // Pass pending
+                        onClick={() =>
+                          handleShowConfirmModal("checkIn", pending)
+                        } // Pass pending
                         disabled={isLoading}
                       >
                         <FontAwesomeIcon icon={faCheck} />
@@ -176,7 +187,7 @@ function Reservations() {
                       <Button
                         size="sm"
                         variant="outline-danger"
-                        onClick={() => handleShowDeclineModal()}
+                        onClick={() => handleShowDeclineModal(pending)}
                       >
                         <FontAwesomeIcon icon={faX} />
                       </Button>
@@ -196,15 +207,20 @@ function Reservations() {
       {/* Confirmation Modal */}
       <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)}>
         <Modal.Body>
-          Are you sure you want to {actionType === "checkIn" ? "check in" : "check out"} this guest?
+          Are you sure you want to{" "}
+          {actionType === "checkIn" ? "check in" : "check out"} this guest?
           {currentGuest && (
             <div>
-              {currentGuest.guestDetails.firstname} {currentGuest.guestDetails.lastname}
+              {currentGuest.guestDetails.firstname}{" "}
+              {currentGuest.guestDetails.lastname}
             </div>
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowConfirmModal(false)}>
+          <Button
+            variant="secondary"
+            onClick={() => setShowConfirmModal(false)}
+          >
             Cancel
           </Button>
           <Button variant="primary" onClick={() => handleConfirm(currentGuest)}>
@@ -217,14 +233,20 @@ function Reservations() {
       <Modal show={showDeclineModal} onHide={() => setShowDeclineModal(false)}>
         <Modal.Body>Are you sure you want to decline this action?</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowDeclineModal(false)}>
+          <Button
+            variant="secondary"
+            onClick={() => setShowDeclineModal(false)}
+          >
             Cancel
           </Button>
           <Button
             variant="danger"
             onClick={() => {
               console.log("Action declined!");
-              handleConfirm(false);
+              if (selectedPending) {
+                handleDecline(selectedPending.id);
+              }
+              setShowDeclineModal(false); // Close the modal after action
             }}
           >
             Decline

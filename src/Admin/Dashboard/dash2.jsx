@@ -7,6 +7,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { getDocs, collection } from "firebase/firestore";
 import { textDB } from "../../firebase";
+// import ReservationCalendar from "./components/calendar";
+// import RoomCalendar from "./components/roomsList";
 
 export const Dashtwo = () => {
   const [rooms, setRooms] = useState([]);
@@ -120,6 +122,8 @@ export const Dashtwo = () => {
           </div>
         </div>
       </div>
+      {/* <ReservationCalendar/> */}
+      {/* <RoomCalendar/> */}
     </div>
   );
 };

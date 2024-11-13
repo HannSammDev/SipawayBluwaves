@@ -369,10 +369,9 @@ export const Guest = () => {
                 </div>
                 <button
                   type="submit"
-                  className="btn btn-primary w-100"
-                  style={{ marginTop: "1em" }}
+                  className="btn btn-primary btn-sm col-md-3"
                 >
-                  Confirm Reservation
+                  Pay with Gcash
                 </button>
               </div>
             </form>
