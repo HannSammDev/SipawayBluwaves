@@ -12,8 +12,8 @@ import {
 } from "chart.js";
 import annotationPlugin from "chartjs-plugin-annotation";
 import { collection, getDocs } from "firebase/firestore";
-import { textDB } from "../firebase"; // Ensure this path is correct
-import { Dashtwo } from "./Dashboard/dash2";
+import { textDB } from "../../firebase"; // Ensure this path is correct
+import { Dashtwo } from "./dash2";
 
 ChartJS.register(
   CategoryScale,

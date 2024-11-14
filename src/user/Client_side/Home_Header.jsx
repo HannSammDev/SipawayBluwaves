@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth"; 
-import { auth } from "../../firebase"; 
-import { useNavigate } from "react-router-dom"; 
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../../firebase";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSmile } from "@fortawesome/free-solid-svg-icons";
 
@@ -16,9 +16,9 @@ const Header = () => {
         const additionalData = storedUserData ? JSON.parse(storedUserData) : {};
 
         setUser({
-          displayName: currentUser.displayName || additionalData.name, 
+          displayName: currentUser.displayName || additionalData.name,
           email: currentUser.email,
-          ...additionalData, 
+          ...additionalData,
         });
       } else {
         setUser(null);
@@ -60,7 +60,7 @@ const Header = () => {
               alt="Blue Waves Logo"
               width="60"
             />
-            <div className="d-flex flex-column text-start">
+            <div className="d-flex flex-column text-start d-none d-sm-block">
               <h5
                 className="mb-0 fw-bold"
                 style={{ color: "#2c3e50", fontSize: "1.5rem" }}
@@ -155,7 +155,7 @@ const Header = () => {
               </li>
             </ul>
 
-           {/* User */}
+            {/* User */}
             {user ? (
               <div className="dropstart ">
                 <button
@@ -175,8 +175,6 @@ const Header = () => {
                     className="bi bi-person-circle text-black"
                     style={{ marginRight: "8px" }}
                   ></i>{" "}
-                 
-                  
                 </button>
                 <ul
                   className="dropdown-menu"
@@ -187,7 +185,7 @@ const Header = () => {
                   }}
                 >
                   <li>
-                  <a
+                    <a
                       className="dropdown-item"
                       href="/profile"
                       style={{
@@ -196,11 +194,12 @@ const Header = () => {
                         color: "#495057",
                       }}
                     >
-                      <FontAwesomeIcon icon={faSmile} className=""/>
-                      {" "}
-                       <span className="text-dark">{user.name || "My Account"}</span> 
+                      <FontAwesomeIcon icon={faSmile} className="" />{" "}
+                      <span className="text-dark">
+                        {user.name || "My Account"}
+                      </span>
                     </a>
-                 
+
                     <a
                       className="dropdown-item"
                       href="/profile"

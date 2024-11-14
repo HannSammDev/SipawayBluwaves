@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FormControl, Modal, Button } from "react-bootstrap";
+import { Form, Modal, Button, FloatingLabel } from "react-bootstrap";
 import { textDB } from "../../../firebase";
 import { addDoc, collection } from "firebase/firestore";
 
@@ -28,11 +28,16 @@ export const AddInventoy = () => {
         <Modal.Title className="fs-5">Add Inventory</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <FormControl
-          value={inventory}
-          name="Inventory"
-          onChange={(e) => setInventory(e.target.value)}
-        />
+        <FloatingLabel
+          controlId="floatingInput"
+          label="Add Item"
+          className="mb-3"
+        >
+          <Form.Control size="sm" type="email" placeholder="Item" />
+        </FloatingLabel>
+        <FloatingLabel controlId="floatingPassword" label="Quantity">
+          <Form.Control size="sm" type="number" placeholder="Quantity" />
+        </FloatingLabel>
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={handleSubmit} variant="primary">

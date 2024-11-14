@@ -18,7 +18,7 @@ import { Rooms_Info } from "./user/Reservation/Rooms Details";
 // import { GuestInfo } from "./user/Reservation/GuestInfo";
 // import { Side_nav } from "./Admin/Side_Nav";
 
-import { Dashboard } from "./Admin/dashborad";
+// import { Dashboard } from "./Admin/Dashboard/dashborad";
 import { Admin_layout } from "./AdminLayout";
 import { Addrooms } from "./Admin/RoomManagement/Addrooms";
 import { RoomDetails } from "./Admin/RoomManagement/RoomsDetails";
@@ -42,6 +42,7 @@ import { Check_in } from "./Admin/RoomManagement/Checkin";
 import { Guest_List } from "./Admin/GuestM/GuestL";
 import Reservations from "./Admin/Reservation_Management/reservations";
 import { InventoryPage } from "./Admin/inventory/inventorypage";
+import { MainDashbord } from "./Admin/Dashboard/mainDasbord";
 
 // import ReservationConfirmation from "./user/Client_side/Userdashboard";
 
@@ -69,7 +70,7 @@ const App = () => (
       <Route path="/adminlogin" element={<Admin_Login />} />
 
       <Route element={<Admin_layout />}>
-        <Route path="/dash" element={<Dashboard />} />
+        <Route path="/dash" element={<MainDashbord/>} />
         {/* Room Management */}
         <Route path="/addroom" element={<Addrooms />} />
         <Route path="/roomsdetails" element={<RoomDetails />} />

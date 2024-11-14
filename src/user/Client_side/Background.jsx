@@ -1,6 +1,7 @@
 import React from "react";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "bootstrap/dist/css/bootstrap.min.css";
+
 function Background() {
   return (
     <>
@@ -50,10 +51,10 @@ function Background() {
             ></button>
           </div>
           {/* Carousel Inner */}
-          <div className="carousel-inner" data-bs-ride="carousel ">
+          <div className="carousel-inner" data-bs-ride="carousel">
             <div className="carousel-item active" style={{ height: "580px" }}>
               <img
-                style={{ height: "580px" }}
+                style={{ height: "580px", objectFit: "cover" }}
                 src="../img/nice1.jpg"
                 className="d-block w-100"
                 alt="Slide 1"
@@ -61,7 +62,7 @@ function Background() {
             </div>
             <div className="carousel-item" style={{ height: "580px" }}>
               <img
-                style={{ height: "580px" }}
+                style={{ height: "580px", objectFit: "cover" }}
                 src="../img/nice2.jpg"
                 className="d-block w-100"
                 alt="Slide 2"
@@ -69,7 +70,7 @@ function Background() {
             </div>
             <div className="carousel-item" style={{ height: "580px" }}>
               <img
-                style={{ height: "580px" }}
+                style={{ height: "580px", objectFit: "cover" }}
                 src="../img/nice3.jpg"
                 className="d-block w-100"
                 alt="Slide 3"
@@ -77,23 +78,23 @@ function Background() {
             </div>
             <div className="carousel-item" style={{ height: "580px" }}>
               <img
-                style={{ height: "580px" }}
+                style={{ height: "580px", objectFit: "cover" }}
                 src="../img/nice4.jpg"
                 className="d-block w-100"
-                alt="Slide 3"
+                alt="Slide 4"
               />
             </div>
             <div className="carousel-item" style={{ height: "580px" }}>
               <img
-                style={{ height: "580px" }}
+                style={{ height: "580px", objectFit: "cover" }}
                 src="../img/nice6.jpg"
                 className="d-block w-100"
-                alt="Slide 3"
+                alt="Slide 5"
               />
             </div>
           </div>
         </div>
-       
+
         <div
           className="entrances position-absolute top-0 start-0 border border-dark p-4 text-center"
           style={{
@@ -109,12 +110,10 @@ function Background() {
         >
           <div className="mb-3">
             <button
-              className="btn btn-light border border-dark"
+              className="btn btn-light border border-dark w-100 mb-2"
               data-bs-toggle="modal"
               data-bs-target="#dayUseModal"
               style={{
-                marginRight: "2%",
-                width: "100%",
                 maxWidth: "10em",
                 borderRadius: "20px",
               }}
@@ -122,16 +121,12 @@ function Background() {
               <b>Day Use</b>
             </button>
             <a
-              className="btn btn-primary border border-dark"
-              // data-bs-toggle="modal"
-              // data-bs-target="#OvernightModal"
+              className="btn btn-primary border border-dark w-100 mb-2"
+              href="/reserv"
               style={{
-                marginRight: "2%",
-                width: "100%",
                 maxWidth: "10em",
                 borderRadius: "20px",
               }}
-              href="/reserv"
             >
               <b>Overnight Stay</b>
             </a>
@@ -152,105 +147,18 @@ function Background() {
           </div>
           <div className="d-flex justify-content-around mt-2">
             <p>Adult</p>
-            <p>Kids 7 year below</p>
+            <p>Kids 7 years below</p>
           </div>
         </div>
       </div>
-      {/* Modal for Day Use */}
-      {/* <div
-        className="modal fade"
-        id="dayUseModal"
-        tabIndex="-1"
-        role="dialog"
-        aria-labelledby="dayUseModalLabel"
-        aria-hidden="true"
-      >
-        <div
-          className="modal-dialog modal-lg"
-          style={{ marginTop: "9em" }}
-          role="document"
-        >
-          <div className="modal-content">
-            <div className="modal-body modal-sm ">
-              <form action="" className="mt-4">
-                <div className="row">
-                  <div className="col-md-4 mb-3">
-                    <label htmlFor="" className="form-label">
-                      Check-in
-                    </label>
-                    <input type="date" className="form-control" />
-                  </div>
-                  <div className="col-md-4 mb-3">
-                    <label htmlFor="" className="form-label">
-                      Check-out
-                    </label>
-                    <input type="date" className="form-control" />
-                  </div>
-                  <div className="col-md-4 mb-3">
-                    <a
-                      href="/dayuse"
-                      className="btn btn-primary"
-                      type="button"
-                      style={{ marginTop: "2em" }}
-                    >
-                      Check Availability
-                    </a>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* Overnight */}
-      {/* <div
-        className="modal fade"
-        id="OvernightModal"
-        tabIndex="-1"
-        role="dialog"
-        aria-labelledby="dayUseModalLabel"
-        aria-hidden="true"
-      >
-        <div
-          className="modal-dialog modal-lg"
-          style={{ marginTop: "9em" }}
-          role="document"
-        >
-          <div className="modal-content">
-            <div className="modal-body modal-sm ">
-              <form action="" className="mt-4">
-                <div className="row">
-                  <div className="col-md-4 mb-3">
-                    <label htmlFor="" className="form-label">
-                      Check-in
-                    </label>
-                    <input type="date" className="form-control" />
-                  </div>
-                  <div className="col-md-4 mb-3">
-                    <label htmlFor="" className="form-label">
-                      Check-out
-                    </label>
-                    <input type="date" className="form-control" />
-                  </div>
-                  <div className="col-md-4 mb-3">
-                    <a
-                      className="btn btn-primary"
-                      type="button"
-                      style={{ marginTop: "2em" }}
-                    >
-                      Check Availability
-                    </a>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div> */}
+
       {/* Pagination */}
       <ul
-        style={{ marginTop: "13em", marginRight: "1em" }}
-        className="pagination justify-content-end position-absolute top-50 end-0  "
+        style={{
+          marginTop: "13em",
+          marginRight: "1em",
+        }}
+        className="pagination justify-content-end position-absolute top-50 end-0 flex-wrap"
       >
         <a
           style={{
@@ -259,7 +167,7 @@ function Background() {
             padding: "0px",
             margin: "5px",
           }}
-          className="page-item page-link "
+          className="page-item page-link"
           href="#carouselExampleIndicators"
           data-bs-slide-to="0"
         >
