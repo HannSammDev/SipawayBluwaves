@@ -60,7 +60,7 @@ function Cottages() {
                       key={idx}
                     >
                       <img
-                        className="image d-block w-100"
+                        className="d-block w-100 img-fluid"
                         src={url}
                         alt={`Slide ${idx + 1}`}
                       />
@@ -123,6 +123,33 @@ function Cottages() {
         ))}
         <hr />
       </div>
+
+      {/* Add media query for small screens */}
+      <style>
+        {`
+          /* Make carousel inner height responsive */
+          .carousel-inner {
+            height: auto !important; /* Ensures the height adjusts with content */
+          }
+
+          @media (max-width: 344px) {
+            .carousel-item img {
+              width: 100% !important;
+              height: auto !important;
+            }
+            .carousel-inner {
+              width: 100%;
+              height: auto !important; /* Adjust height dynamically */
+            }
+            .cards {
+              padding-left: 0;
+              padding-right: 0;
+            }
+          }
+        `}
+      </style>
     </>
   );
-}export default Cottages;
+}
+
+export default Cottages;
