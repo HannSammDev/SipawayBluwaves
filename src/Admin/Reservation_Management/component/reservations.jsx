@@ -8,7 +8,7 @@ import {
 import { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
 import { textDB } from "../../../firebase";
-import { Button, Modal, Form, Pagination } from "react-bootstrap";
+import { Button, Modal, Form, Pagination, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -24,6 +24,7 @@ export const Reservationss = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const guestsPerPage = 5;
   const [lgShow, setLgShow] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Fetch reservations from Firestore
   const getReservation = async () => {
@@ -38,6 +39,8 @@ export const Reservationss = () => {
       console.log("Fetched reservations: ", reservationList);
     } catch (error) {
       console.error("Error fetching reservations: ", error);
+    } finally {
+      setIsLoading(false); // Stop loading after data fetch completes
     }
   };
 
@@ -130,6 +133,8 @@ export const Reservationss = () => {
     );
   }
 
+  
+
   return (
     <div>
       <div
@@ -179,75 +184,80 @@ export const Reservationss = () => {
           </tr>
         </thead>
         <tbody>
-          {currentGuests.map((reservation, index) => (
-            <tr key={reservation.id}>
-              <td>{index + 1}</td>
-              <td>
-                {reservation.roomname} {reservation.cottagename}
-              </td>
-              <td>{`${reservation.guestDetails?.firstname || ""} ${
-                reservation.guestDetails?.lastname || ""
-              }`}</td>
-              <td>
-                {reservation.checkInDate} - {reservation.checkOutDate}
-              </td>
-              <td>
-                {reservation.checkedOut ? (
-                  <span className="bg-success text-white p-1 rounded">
-                    Checked-Out
-                  </span>
-                ) : reservation.checkedIn ? (
-                  <span className="bg-warning text-dark p-1 rounded">
-                    Checked-IN
-                  </span>
-                ) : (
-                  <span className="text-danger">Not Checked-IN</span>
-                )}
-              </td>
-              <td>
-                <div className="d-flex align-items-center">
-                  {!reservation.checkedIn && (
-                    <Button
-                      size="sm"
-                      onClick={() =>
-                        handleShowConfirmModal("checkIn", reservation)
-                      }
-                      variant="link"
-                      className="me-2 text-primary"
-                    >
-                      <FontAwesomeIcon
-                        icon={faCheckCircle}
-                        className="me-0 text-primary"
-                      />
-                    </Button>
-                  )}
-                  {!reservation.checkedOut && (
-                    <Button
-                      size="sm"
-                      onClick={() =>
-                        handleShowConfirmModal("checkOut", reservation)
-                      }
-                      variant=""
-                      className="me-2"
-                    >
-                      <FontAwesomeIcon
-                        icon={faSignOutAlt}
-                        className="me-0 text-success"
-                      />
-                    </Button>
-                  )}
-                  <Button
-                    size="sm"
-                    onClick={() => handleShowModal(reservation)}
-                    variant="primary"
-                    className="me-2"
-                  >
-                    View
-                  </Button>
+          {isLoading ? (
+            <tr>
+              <td colSpan="6" className="text-center">
+                <div className="d-flex justify-content-center align-items-center">
+                  <Spinner animation="border" role="status" />
+                  <span className="ms-2">Loading...</span>
                 </div>
               </td>
             </tr>
-          ))}
+          ) : (
+            currentGuests.map((reservation, index) => (
+              <tr key={reservation.id}>
+                <td>{index + 1}</td>
+                <td>
+                  {reservation.roomname} {reservation.cottagename}
+                </td>
+                <td>{`${reservation.guestDetails?.firstname || ""} ${reservation.guestDetails?.lastname || ""}`}</td>
+                <td>
+                  {reservation.checkInDate} - {reservation.checkOutDate}
+                </td>
+                <td>
+                  {reservation.checkedOut ? (
+                    <span className="bg-success text-white p-1 rounded">
+                      Checked-Out
+                    </span>
+                  ) : reservation.checkedIn ? (
+                    <span className="bg-warning text-dark p-1 rounded">
+                      Checked-IN
+                    </span>
+                  ) : (
+                    <span className="text-danger">Not Checked-IN</span>
+                  )}
+                </td>
+                <td>
+                  <div className="d-flex align-items-center">
+                    {!reservation.checkedIn && (
+                      <Button
+                        size="sm"
+                        onClick={() => handleShowConfirmModal("checkIn", reservation)}
+                        variant="link"
+                        className="me-2 text-primary"
+                      >
+                        <FontAwesomeIcon
+                          icon={faCheckCircle}
+                          className="me-0 text-primary"
+                        />
+                      </Button>
+                    )}
+                    {!reservation.checkedOut && (
+                      <Button
+                        size="sm"
+                        onClick={() => handleShowConfirmModal("checkOut", reservation)}
+                        variant=""
+                        className="me-2"
+                      >
+                        <FontAwesomeIcon
+                          icon={faSignOutAlt}
+                          className="me-0 text-success"
+                        />
+                      </Button>
+                    )}
+                    <Button
+                      size="sm"
+                      onClick={() => handleShowModal(reservation)}
+                      variant="primary"
+                      className="me-2"
+                    >
+                      View
+                    </Button>
+                  </div>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </Table>
 

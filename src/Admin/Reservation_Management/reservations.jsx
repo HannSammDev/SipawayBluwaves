@@ -25,6 +25,7 @@ function Reservations() {
   const [actionType, setActionType] = useState("");
   const [value, setValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedPending, setSelectedPending] = useState(null); // New state to store selected pending guest
 
   const getReservation = async () => {
     const reservationsCollection = collection(textDB, "guestData");
@@ -117,17 +118,27 @@ function Reservations() {
     }
   };
 
-  const handleDecline = async (id) => {
+  // Modified Decline Handler
+  const handleDecline = async (pending) => {
+    if (!pending) {
+      console.error("No pending reservation selected.");
+      return;
+    }
+
     try {
-      await deleteDoc(doc(textDB, "peding", id));
-      setPendings(); // Refresh state
+      await deleteDoc(doc(textDB, "Peding", pending.id)); // Ensure collection name is correct
+      setPendings((prevPendings) =>
+        prevPendings.filter((item) => item.id !== pending.id)
+      ); // Update the state to reflect the changes
     } catch (error) {
       console.error("Error deleting document:", error);
     }
   };
 
-  const handleShowDeclineModal = () => {
-    setShowDeclineModal(true);
+  // Modified Decline Modal trigger to set the selectedPending state
+  const handleShowDeclineModal = (pending) => {
+    setSelectedPending(pending); // Set the selected pending reservation
+    setShowDeclineModal(true); // Show the decline modal
   };
 
   return (
@@ -178,7 +189,7 @@ function Reservations() {
                         className="me-1"
                         onClick={() =>
                           handleShowConfirmModal("checkIn", pending)
-                        } // Pass pending
+                        }
                         disabled={isLoading}
                       >
                         <FontAwesomeIcon icon={faCheck} />
@@ -233,18 +244,14 @@ function Reservations() {
       <Modal show={showDeclineModal} onHide={() => setShowDeclineModal(false)}>
         <Modal.Body>Are you sure you want to decline this action?</Modal.Body>
         <Modal.Footer>
-          <Button
-            variant="secondary"
-            onClick={() => setShowDeclineModal(false)}
-          >
+          <Button variant="secondary" onClick={() => setShowDeclineModal(false)}>
             Cancel
           </Button>
           <Button
             variant="danger"
             onClick={() => {
-              console.log("Action declined!");
               if (selectedPending) {
-                handleDecline(selectedPending.id);
+                handleDecline(selectedPending); // Pass the selectedPending to handleDecline function
               }
               setShowDeclineModal(false); // Close the modal after action
             }}
