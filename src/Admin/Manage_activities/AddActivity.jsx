@@ -54,7 +54,7 @@ const AdminActivityForm = () => {
   return (
     <div className="container my-5">
       <div className="card border border-none" style={{ boxShadow: "0px 0px 10px 5px rgba(0, 0, 0, 0.1)",}}>
-        <div className="card-header bg-primary text-white">
+        <div className="card-header text-dark">
           <h5 className="mb-0">Add Activity</h5>
         </div>
         <div className="card-body">
@@ -70,7 +70,7 @@ const AdminActivityForm = () => {
               </label>
               <input
                 type="text"
-                className="form-control border-primary"
+                className="form-control"
                 id="activityName"
                 placeholder="Enter activity name"
                 value={activityName}
@@ -82,7 +82,7 @@ const AdminActivityForm = () => {
                 <i className="bi bi-pencil"></i> Write Anything:
               </label>
               <textarea
-                className="form-control border-primary"
+                className="form-control"
                 id="activityDescription"
                 rows="3"
                 placeholder="Enter details about the activity"
@@ -96,7 +96,7 @@ const AdminActivityForm = () => {
               </label>
               <input
                 type="file"
-                className="form-control border-primary"
+                className="form-control"
                 id="uploadImage"
                 onChange={handleFileInput} // Handle file input
               />

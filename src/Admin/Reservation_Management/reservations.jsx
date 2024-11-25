@@ -12,7 +12,7 @@ import { Reservationss } from "./component/reservations";
 
 import Table from "react-bootstrap/Table";
 import { textDB } from "../../firebase";
-import { Button, Modal, Form, Tabs, Tab } from "react-bootstrap";
+import { Button, Modal, Form, Tabs, Tab, Badge} from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
 
@@ -26,6 +26,7 @@ function Reservations() {
   const [value, setValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedPending, setSelectedPending] = useState(null); // New state to store selected pending guest
+  // const [pendings, setPendings] = useState([]);
 
   const getReservation = async () => {
     const reservationsCollection = collection(textDB, "guestData");
@@ -149,8 +150,9 @@ function Reservations() {
         transition={false}
         id="noanim-tab-example"
         className="mb-3"
-      >
-        <Tab className="text-dark" eventKey="home" title="Pending" size="sm">
+      >                                                                                           
+        <Tab className="text-dark" eventKey="home" title={<>Pending<Badge className="m-1" bg="danger">{pendings.length}</Badge></>} size="sm">
+        
           <Table striped>
             <thead>
               <tr>

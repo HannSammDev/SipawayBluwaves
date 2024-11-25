@@ -43,6 +43,7 @@ import { Guest_List } from "./Admin/GuestM/GuestL";
 import Reservations from "./Admin/Reservation_Management/reservations";
 import { InventoryPage } from "./Admin/inventory/inventorypage";
 import { MainDashbord } from "./Admin/Dashboard/mainDasbord";
+import BeachActivitiesTable from "./Admin/Manage_activities/activitiesTable";
 
 // import ReservationConfirmation from "./user/Client_side/Userdashboard";
 
@@ -89,6 +90,8 @@ const App = () => (
         <Route path="/guestL" element={<Guest_List />} />
 
         {/* Activities */}
+        BeachActivitiesTable
+        <Route path="/activityT" element={<BeachActivitiesTable/>} />
         <Route path="/activityF" element={<AdminActivityForm />} />
         {/* Reservation */}
         <Route path="/reservatioms" element={<Reservations />} />

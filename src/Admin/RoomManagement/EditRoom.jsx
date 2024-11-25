@@ -15,7 +15,7 @@ export const EditRoom = () => {
     description: "",
     amenities: [],
     price: "",
-    images: [], // Store URLs of existing images from Firebase
+    images: [], 
   });
   const [newImages, setNewImages] = useState([]); // Store new image files
 

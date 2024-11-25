@@ -14,6 +14,7 @@ import annotationPlugin from "chartjs-plugin-annotation";
 import { collection, getDocs } from "firebase/firestore";
 import { textDB } from "../../firebase"; // Ensure this path is correct
 import { Dashtwo } from "./dash2";
+import ReservationCalendar from "./components/calendar";
 
 ChartJS.register(
   CategoryScale,
@@ -201,6 +202,7 @@ export const Dashboard = () => {
   return (
     <>
       <Dashtwo />
+     
       <div className="container mt-5">
         <div className="row">
           <div className="col-md-8">
@@ -262,6 +264,7 @@ export const Dashboard = () => {
             </div> */}
           </div>
         </div>
+        <ReservationCalendar/>
       </div>
     </>
   );

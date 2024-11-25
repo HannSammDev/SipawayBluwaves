@@ -6,7 +6,6 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { collection, getDocs } from "firebase/firestore";
 import { textDB } from "../../../firebase";
 import { Container, Row, Col, Card } from "react-bootstrap";
-// import "./Calendar.css"; // Assuming you have a CSS file for additional styles
 
 export default function ReservationCalendar() {
   const [reservations, setReservations] = useState([]);
@@ -33,7 +32,7 @@ export default function ReservationCalendar() {
         title: ` ${reservation.cottagename}${reservation.roomname}`,
         start: reservation.checkInDate,
         end: reservation.checkOutDate,
-        backgroundColor: reservation.checkedIn,
+        // backgroundColor: reservation.checkedIn ? "#ff7f7f" : "#1e90ff",
       }));
 
       setEvents(eventsList);
@@ -44,11 +43,17 @@ export default function ReservationCalendar() {
 
   return (
     <Container className="mt-2">
-      <Row className="justify-content-center">
+      <Row className="jitem-center justify-content-center">
         <Col md={30}>
-          <Card className="shadow-lg border-0 rounded-3">
+          <Card
+            className="shadow-lg border-0 rounded-3"
+            style={{ boxShadow: "0 1rem 3rem rgba(0,0,0,.175)", borderRadius: "1rem" }}
+          >
             <Card.Body className="p-5">
-              <Card.Title className="text-center mb-4 text-primary  fs-4 fw-bold">
+              <Card.Title
+                className="text-left mb-4 text-dark fs-4 fw-bold"
+                // style={{ fontFamily: 'Arial, sans-serif' }}
+              >
                 Reservation Calendar
               </Card.Title>
               <FullCalendar
@@ -73,8 +78,8 @@ export default function ReservationCalendar() {
                 }}
                 eventContent={({ event, el }) => (
                   <div
-                    className="bg-info p-2 rounded-3 shadow-sm text-dark fs-6 fw-bold text-center"
-                    style={{ backgroundColor: event.backgroundColor, color: 'white' }}
+                    className="bg-warning p-2 rounded-3 shadow-sm text-dark fs-6 fw-bold text-center"
+                    style={{color: 'white', textDecoration: 'none' }}
                   >
                     {event.title}
                   </div>
@@ -86,6 +91,9 @@ export default function ReservationCalendar() {
                 }}
                 eventMouseLeave={(_, el) => {
                   el.style.transform = 'scale(1)';
+                }}
+                dayCellDidMount={info => {
+                  info.el.style.color = '#007bff'; // Custom color for the dates
                 }}
               />
             </Card.Body>

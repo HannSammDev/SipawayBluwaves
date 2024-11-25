@@ -255,7 +255,7 @@ export const Available_cottages = () => {
             <h4>Cottages</h4>
 
             <Button className="btn btn-dark" onClick={() => setLgShow(true)}>
-              Add <FontAwesomeIcon icon={faPlus} />
+            <FontAwesomeIcon icon={faPlus} /> Add
             </Button>
 
             <Modal

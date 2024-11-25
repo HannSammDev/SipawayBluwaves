@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import{Tab,Tabs}  from 'react-bootstrap';
+import { Tab, Tabs } from 'react-bootstrap';
 
 import { Dashboard } from './dashborad';
 // import ReservationCalendar from './RCalendar';
@@ -11,23 +11,18 @@ export const MainDashbord = () => {
 
   return (
     <Tabs
-      variant='pills'
-      
+      variant="pills"
       id="controlled-tab-example"
       activeKey={key}
       onSelect={(k) => setKey(k)}
       className="mb-3 "
     >
-      <Tab eventKey="home" title="Overview"  >
-       <Dashboard/>
+      <Tab eventKey="home" title="Overview">
+        <Dashboard />
       </Tab>
       <Tab eventKey="profile" title="Calendar">
-       <ReservationCalendar/>
-      </Tab>
-      <Tab eventKey="contact" title="Contact" disabled>
-        Tab content for Contact
+        <ReservationCalendar />
       </Tab>
     </Tabs>
   );
-}
-
+};

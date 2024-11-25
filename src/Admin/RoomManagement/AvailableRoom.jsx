@@ -21,6 +21,7 @@ import {
   faEdit,
   faTrashAlt,
   faEye,
+  faPlus,
   // faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -256,8 +257,8 @@ export const Available_rooms = () => {
             {/* <a className="btn btn-dark" href="/addroom">
               <FontAwesomeIcon icon={faPlus} /> Add
             </a> */}
-            <Button variant="dark" onClick={handleShow}>
-              Add
+            <Button size="md" variant="dark" onClick={handleShow}>
+             <FontAwesomeIcon icon={faPlus} /> Add
             </Button>
           </div>
         </div>
