@@ -11,7 +11,7 @@ export const MainDashbord = () => {
 
   return (
     <Tabs
-      variant="pills"
+      // variant="pills"
       id="controlled-tab-example"
       activeKey={key}
       onSelect={(k) => setKey(k)}

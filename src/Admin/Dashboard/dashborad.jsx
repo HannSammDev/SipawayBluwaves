@@ -15,6 +15,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { textDB } from "../../firebase"; // Ensure this path is correct
 import { Dashtwo } from "./dash2";
 import ReservationCalendar from "./components/calendar";
+import { DoughnutChart } from "./components/Doughnut";
 
 ChartJS.register(
   CategoryScale,
@@ -220,21 +221,18 @@ export const Dashboard = () => {
           </div>
           <div className="col-md-4">
             <div
-              className="card text-center mb-4 p-3"
-              style={{
-                boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)",
-                borderRadius: "12px",
-                // background: "linear-gradient(135deg, #e3fdfd 0%, #ffe6fa 100%)",
-              }}
+              className="text-center mb-4"
+             
             >
-              <div className="card-body">
+              {/* <div className="card-body">
                 <h5 className="card-title fs-4 text-dark">
                   Today's Initial Income (50%)
                 </h5>
                 <p className="card-text display-4 text-dark">
                   ₱{todayInitialIncome}
                 </p>
-              </div>
+              </div> */}
+              <DoughnutChart/>
             </div>
             <div
               className="card text-center mb-4 p-3"
@@ -264,6 +262,7 @@ export const Dashboard = () => {
             </div> */}
           </div>
         </div>
+       
         <ReservationCalendar/>
       </div>
     </>

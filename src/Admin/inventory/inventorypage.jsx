@@ -23,7 +23,7 @@ export const InventoryPage = () => {
             <span>Monitor and manage inventory</span>
           </div>
           <div className="me-2">
-            <Button onClick={handleShow}>
+            <Button onClick={handleShow} variant="dark">
               <FontAwesomeIcon icon={faPlus} /> Item
             </Button>
           </div>

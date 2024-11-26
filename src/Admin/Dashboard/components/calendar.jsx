@@ -78,7 +78,7 @@ export default function ReservationCalendar() {
                 }}
                 eventContent={({ event, el }) => (
                   <div
-                    className="bg-warning p-2 rounded-3 shadow-sm text-dark fs-6 fw-bold text-center"
+                    className="bg-primary p-1 rounded-3 shadow-sm text-dark fs-6 fw-bold text-center"
                     style={{color: 'white', textDecoration: 'none' }}
                   >
                     {event.title}

@@ -24,8 +24,8 @@ export const AddInventoy = () => {
 
   return (
     <>
-      <Modal.Header closeButton>
-        <Modal.Title className="fs-5">Add Inventory</Modal.Title>
+      <Modal.Header closeButton className="bg-primary">
+        <Modal.Title className="fs-5  text-white">Add Inventory</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <FloatingLabel

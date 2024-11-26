@@ -5,16 +5,16 @@ import {
   updateDoc,
   addDoc,
   deleteDoc,
-} from "firebase/firestore";
-import { useEffect, useState } from "react";
+} from 'firebase/firestore';
+import { useEffect, useState } from 'react';
 
-import { Reservationss } from "./component/reservations";
+import { Reservationss } from './component/reservations';
 
-import Table from "react-bootstrap/Table";
-import { textDB } from "../../firebase";
-import { Button, Modal, Form, Tabs, Tab, Badge} from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
+import Table from 'react-bootstrap/Table';
+import { textDB } from '../../firebase';
+import { Button, Modal, Form, Tabs, Tab, Badge } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faX } from '@fortawesome/free-solid-svg-icons';
 
 function Reservations() {
   const [reservations, setReservations] = useState([]);
@@ -22,14 +22,14 @@ function Reservations() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showDeclineModal, setShowDeclineModal] = useState(false);
   const [currentGuest, setCurrentGuest] = useState(null);
-  const [actionType, setActionType] = useState("");
-  const [value, setValue] = useState("");
+  const [actionType, setActionType] = useState('');
+  const [value, setValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [selectedPending, setSelectedPending] = useState(null); // New state to store selected pending guest
   // const [pendings, setPendings] = useState([]);
 
   const getReservation = async () => {
-    const reservationsCollection = collection(textDB, "guestData");
+    const reservationsCollection = collection(textDB, 'guestData');
     const reservationSnapshot = await getDocs(reservationsCollection);
     const reservationList = reservationSnapshot.docs.map((doc) => ({
       id: doc.id,
@@ -39,7 +39,7 @@ function Reservations() {
   };
 
   const getPending = async () => {
-    const pendingCollection = collection(textDB, "Peding");
+    const pendingCollection = collection(textDB, 'Peding');
     const pendingSnapshot = await getDocs(pendingCollection);
     const pendingList = pendingSnapshot.docs.map((doc) => ({
       id: doc.id,
@@ -65,7 +65,7 @@ function Reservations() {
 
   const handleConfirm = async (pending) => {
     if (!pending) {
-      console.error("No guest selected.");
+      console.error('No guest selected.');
       return;
     }
 
@@ -73,22 +73,22 @@ function Reservations() {
     try {
       const room = {
         id: pending.id,
-        roomname: pending.roomname || " ",
+        roomname: pending.roomname || ' ',
         price: pending.roomPrice || 0,
       };
       const cottage = {
-        id: pending.cottageId || "unknown-cottage-id",
-        cottagename: pending.cottagename || "",
+        id: pending.cottageId || 'unknown-cottage-id',
+        cottagename: pending.cottagename || '',
         price: pending.cottagePrice || 0,
       };
       const guests = pending.guests || { adults: 0, children: 0 };
       const checkInDate = pending.checkInDate || new Date().toISOString();
       const checkOutDate = pending.checkOutDate || new Date().toISOString();
-      const specialCode = pending.specialCode || "";
+      const specialCode = pending.specialCode || '';
       const guestDetails = pending.guestDetails || {};
 
-      await addDoc(collection(textDB, "guestData"), {
-        status: "Not Available",
+      await addDoc(collection(textDB, 'guestData'), {
+        status: 'Not Available',
         roomId: room.id,
         roomname: room.roomname,
         guests,
@@ -107,13 +107,13 @@ function Reservations() {
       });
 
       if (pending.id) {
-        await deleteDoc(doc(textDB, "Peding", pending.id));
+        await deleteDoc(doc(textDB, 'Peding', pending.id));
         setPendings((prevPendings) =>
-          prevPendings.filter((item) => item.id !== pending.id)
+          prevPendings.filter((item) => item.id !== pending.id),
         );
       }
     } catch (error) {
-      console.error("Error confirming reservation:", error);
+      console.error('Error confirming reservation:', error);
     } finally {
       setIsLoading(false);
     }
@@ -122,17 +122,17 @@ function Reservations() {
   // Modified Decline Handler
   const handleDecline = async (pending) => {
     if (!pending) {
-      console.error("No pending reservation selected.");
+      console.error('No pending reservation selected.');
       return;
     }
 
     try {
-      await deleteDoc(doc(textDB, "Peding", pending.id)); // Ensure collection name is correct
+      await deleteDoc(doc(textDB, 'Peding', pending.id)); // Ensure collection name is correct
       setPendings((prevPendings) =>
-        prevPendings.filter((item) => item.id !== pending.id)
+        prevPendings.filter((item) => item.id !== pending.id),
       ); // Update the state to reflect the changes
     } catch (error) {
-      console.error("Error deleting document:", error);
+      console.error('Error deleting document:', error);
     }
   };
 
@@ -145,14 +145,26 @@ function Reservations() {
   return (
     <main>
       <Tabs
-        variant="pills"
+        
+        // variant="pills"
         defaultActiveKey="home"
         transition={false}
         id="noanim-tab-example"
         className="mb-3"
-      >                                                                                           
-        <Tab className="text-dark" eventKey="home" title={<>Pending<Badge className="m-1" bg="danger">{pendings.length}</Badge></>} size="sm">
-        
+      >
+        <Tab
+          className="text-dark"
+          eventKey="home"
+          title={
+            <>
+              Pending
+              <Badge className="m-1" bg="danger">
+                {pendings.length}
+              </Badge>
+            </>
+          }
+          size="sm"
+        >
           <Table striped>
             <thead>
               <tr>
@@ -169,10 +181,10 @@ function Reservations() {
                 <tr key={pending.id}>
                   <td>{index + 1}</td>
                   <td>
-                    {pending.guestDetails.firstname}{" "}
-                    {pending.guestDetails.lastname} {" || "}
+                    {pending.guestDetails.firstname}{' '}
+                    {pending.guestDetails.lastname} {' || '}
                     <span className="text-muted">
-                      {pending.guests.adults} Adults, {pending.guests.children}{" "}
+                      {pending.guests.adults} Adults, {pending.guests.children}{' '}
                       Children
                     </span>
                   </td>
@@ -190,7 +202,7 @@ function Reservations() {
                         variant="outline-success"
                         className="me-1"
                         onClick={() =>
-                          handleShowConfirmModal("checkIn", pending)
+                          handleShowConfirmModal('checkIn', pending)
                         }
                         disabled={isLoading}
                       >
@@ -220,11 +232,11 @@ function Reservations() {
       {/* Confirmation Modal */}
       <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)}>
         <Modal.Body>
-          Are you sure you want to{" "}
-          {actionType === "checkIn" ? "check in" : "check out"} this guest?
+          Are you sure you want to{' '}
+          {actionType === 'checkIn' ? 'check in' : 'check out'} this guest?
           {currentGuest && (
             <div>
-              {currentGuest.guestDetails.firstname}{" "}
+              {currentGuest.guestDetails.firstname}{' '}
               {currentGuest.guestDetails.lastname}
             </div>
           )}
@@ -246,7 +258,10 @@ function Reservations() {
       <Modal show={showDeclineModal} onHide={() => setShowDeclineModal(false)}>
         <Modal.Body>Are you sure you want to decline this action?</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowDeclineModal(false)}>
+          <Button
+            variant="secondary"
+            onClick={() => setShowDeclineModal(false)}
+          >
             Cancel
           </Button>
           <Button
