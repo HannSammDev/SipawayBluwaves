@@ -145,8 +145,6 @@ function Reservations() {
   return (
     <main>
       <Tabs
-        
-        // variant="pills"
         defaultActiveKey="home"
         transition={false}
         id="noanim-tab-example"

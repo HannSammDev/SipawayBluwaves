@@ -60,7 +60,7 @@ const BeachActivitiesTable = () => {
           borderRadius: '10px',
         }}
       >
-        <Table responsive bordered hover>
+        <Table responsive striped hover>
           <thead>
             <tr>
               <th>Activity</th>
