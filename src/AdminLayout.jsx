@@ -12,7 +12,7 @@ export const Admin_layout = () => {
        
         <div className="admin-content col" style={{ height: '50em', overflowY: 'auto', overflowX: 'hidden',padding:'0px' }}>
         <Topbar />
-          <Outlet />
+          <Outlet  />
         </div>
         
       </div>

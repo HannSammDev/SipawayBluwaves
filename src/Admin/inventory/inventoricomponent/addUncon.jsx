@@ -1,33 +1,44 @@
-import { useState } from 'react';
-import { Form, Modal, Button, FloatingLabel } from 'react-bootstrap';
+import React, {useState} from 'react';
+import { Modal,FloatingLabel,Form, Button } from 'react-bootstrap';
+import { collection , addDoc} from 'firebase/firestore';
 import { textDB } from '../../../firebase';
-import { addDoc, collection } from 'firebase/firestore';
 
-export const AddInventoy = () => {
+export const AddUnConsummable = () => {
   const [inventoryData, setInventoryData] = useState({
     item_name: '',
     quantity: 1,
+    location: '',
   });
 
   const handleSubmit = async () => {
     try {
-      const inventoryRef = collection(textDB, 'inventory_Consumable');
+      const inventoryRef = collection(textDB, 'inventory_Unconsumable');
 
       const response = await addDoc(inventoryRef, {
         item_name: inventoryData.item_name,
         quantity: Number(inventoryData.quantity),
+        location: inventoryData.location,
       });
-      setInventoryData(response.data)
-      console.log(response.data,'Added Succesfully');
+
+      const addedData = {
+        ...inventoryData,
+
+        id: response.id,
+      }
+      setInventoryData(addedData);
+
+
+      console.log(addedData, 'Added Succesfully');
+
       setInventoryData({
         item_name: ' ',
         quantity: 1,
+        location: ' ',
       });
     } catch (error) {
       console.log(error);
     }
   };
-
   return (
     <>
       <Modal.Header closeButton className="bg-primary">
@@ -51,7 +62,7 @@ export const AddInventoy = () => {
             }
           />
         </FloatingLabel>
-        <FloatingLabel controlId="floatingPassword" label="Quantity">
+        <FloatingLabel className='mb-3' controlId="floatingPassword" label="Quantity">
           <Form.Control
             size="sm"
             type="number"
@@ -61,6 +72,20 @@ export const AddInventoy = () => {
               setInventoryData((prevData) => ({
                 ...prevData,
                 quantity: e.target.value,
+              }))
+            }
+          />
+        </FloatingLabel>
+        <FloatingLabel className='mb-3' controlId="floatingPassword" label="Location">
+          <Form.Control
+            size="sm"
+            type="text"
+            value={inventoryData.location}
+            placeholder="Location"
+            onChange={(e) =>
+              setInventoryData((prevData) => ({
+                ...prevData,
+                location: e.target.value,
               }))
             }
           />
