@@ -220,9 +220,9 @@ export const Dashboard = () => {
             </div>
           </div>
 
-          {/* Right-Side Section */}
+
           <div className="col-lg-4 col-md-12">
-            {/* Doughnut Chart */}
+           
             <div
               className="text-center mb-4 p-3"
               style={{
@@ -233,7 +233,7 @@ export const Dashboard = () => {
               <DoughnutChart />
             </div>
 
-            {/* Total Income Card */}
+            
             <div
               className="card text-center mb-4 p-3"
               style={{
@@ -249,7 +249,7 @@ export const Dashboard = () => {
           </div>
         </div>
 
-        {/* Calendar Section */}
+      
         <div className="row mt-4">
           <div className="col-12">
             <div

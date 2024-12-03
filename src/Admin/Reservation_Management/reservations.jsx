@@ -175,49 +175,57 @@ function Reservations() {
               </tr>
             </thead>
             <tbody>
-              {pendings.map((pending, index) => (
-                <tr key={pending.id}>
-                  <td>{index + 1}</td>
-                  <td>
-                    {pending.guestDetails.firstname}{' '}
-                    {pending.guestDetails.lastname} {' || '}
-                    <span className="text-muted">
-                      {pending.guests.adults} Adults, {pending.guests.children}{' '}
-                      Children
-                    </span>
-                  </td>
-                  <td>
-                    {pending.roomname} {pending.cottagename}
-                  </td>
-                  <td>
-                    {pending.roomPrice} {pending.cottagePrice}
-                  </td>
-                  <td>{pending.fiftyPercentPrice}</td>
-                  <td>
-                    <div className="button-container">
-                      <Button
-                        size="sm"
-                        variant="outline-success"
-                        className="me-1"
-                        onClick={() =>
-                          handleShowConfirmModal('checkIn', pending)
-                        }
-                        disabled={isLoading}
-                      >
-                        <FontAwesomeIcon icon={faCheck} />
-                      </Button>
+              {pendings.length > 0 ? (
+                pendings.map((pending, index) => (
+                  <tr key={pending.id}>
+                    <td>{index + 1}</td>
+                    <td>
+                      {pending.guestDetails.firstname}{' '}
+                      {pending.guestDetails.lastname} {' || '}
+                      <span className="text-muted">
+                        {pending.guests.adults} Adults,{' '}
+                        {pending.guests.children} Children
+                      </span>
+                    </td>
+                    <td>
+                      {pending.roomname} {pending.cottagename}
+                    </td>
+                    <td>
+                      {pending.roomPrice} {pending.cottagePrice}
+                    </td>
+                    <td>{pending.fiftyPercentPrice}</td>
+                    <td>
+                      <div className="button-container">
+                        <Button
+                          size="sm"
+                          variant="outline-success"
+                          className="me-1"
+                          onClick={() =>
+                            handleShowConfirmModal('checkIn', pending)
+                          }
+                          disabled={isLoading}
+                        >
+                          <FontAwesomeIcon icon={faCheck} />
+                        </Button>
 
-                      <Button
-                        size="sm"
-                        variant="outline-danger"
-                        onClick={() => handleShowDeclineModal(pending)}
-                      >
-                        <FontAwesomeIcon icon={faX} />
-                      </Button>
-                    </div>
+                        <Button
+                          size="sm"
+                          variant="outline-danger"
+                          onClick={() => handleShowDeclineModal(pending)}
+                        >
+                          <FontAwesomeIcon icon={faX} />
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-center">
+                    No Pending
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </Table>
         </Tab>

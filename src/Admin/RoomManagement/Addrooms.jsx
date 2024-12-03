@@ -1,24 +1,25 @@
-import React, { useState } from "react";
-
-import { fileDB, textDB } from "../../firebase";
-import { v4 } from "uuid";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { addDoc, collection } from "firebase/firestore";
+import React, { useState } from 'react';
+import { InputGroup, Form, Dropdown, DropdownButton } from 'react-bootstrap';
+import { fileDB, textDB } from '../../firebase';
+import { v4 } from 'uuid';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { addDoc, collection } from 'firebase/firestore';
 
 export const Addrooms = () => {
   const [files, setFiles] = useState([
-    { id: Date.now(), type: "file", preview: null, url: "" },
+    { id: Date.now(), type: 'file', preview: null, url: '' },
   ]);
-  const [roomname, setRoomname] = useState("");
-  const [description, setDescription] = useState("");
-  const [amenities, setAmenities] = useState([""]);
-  const [price, setPrice] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [roomname, setRoomname] = useState('');
+  const [description, setDescription] = useState('');
+  const [amenities, setAmenities] = useState(['']);
+  const [price, setPrice] = useState('');
+  const [pricingType, setPricingType] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const addFileInput = () => {
     setFiles([
       ...files,
-      { id: Date.now(), type: "file", preview: null, url: "" },
+      { id: Date.now(), type: 'file', preview: null, url: '' },
     ]);
   };
 
@@ -44,8 +45,8 @@ export const Addrooms = () => {
           setFiles(newFiles);
         })
         .catch((error) => {
-          console.error("Error uploading file: ", error);
-          alert("Error uploading file. Please try again.");
+          console.error('Error uploading file: ', error);
+          alert('Error uploading file. Please try again.');
         });
     }
   };
@@ -57,12 +58,16 @@ export const Addrooms = () => {
   };
 
   const addAmenity = () => {
-    setAmenities([...amenities, ""]);
+    setAmenities([...amenities, '']);
   };
 
   const removeAmenity = (index) => {
     const newAmenities = amenities.filter((_, i) => i !== index);
     setAmenities(newAmenities);
+  };
+
+  const handlePricingType = (eventKey) => {
+    setPricingType(eventKey);
   };
 
   const handleSubmit = async (event) => {
@@ -73,22 +78,23 @@ export const Addrooms = () => {
     const roomData = {
       description,
       roomname,
-      amenities: amenities.join(","),
+      amenities: amenities.join(','),
       price,
       images: fileUrls,
+      pricingType,
       // availability: "not reserved",
     };
 
     try {
-      await addDoc(collection(textDB, "rooms"), roomData);
-      console.log("Room added successfully!");
-      setSuccessMessage("Room added successfully!");
+      await addDoc(collection(textDB, 'rooms'), roomData);
+      console.log('Room added successfully!');
+      setSuccessMessage('Room added successfully!');
       setTimeout(() => {
-        setSuccessMessage("");
+        setSuccessMessage('');
       }, 8000);
     } catch (error) {
-      console.error("Error adding room: ", error);
-      alert("There was an error adding the room. Please try again.");
+      console.error('Error adding room: ', error);
+      alert('There was an error adding the room. Please try again.');
     }
   };
 
@@ -98,15 +104,10 @@ export const Addrooms = () => {
         <div
           // className="card "
           style={{
-            backgroundColor: "white",
+            backgroundColor: 'white',
             // boxShadow: "0px 5px 20px rgba(0, 0, 0, 0.2)",
           }}
         >
-          {/* <div className="card-header bg-none text-white">
-            <h5 className="mb-0 text-dark">
-              <i className="bi bi-pencil-square"></i> Add Room
-            </h5>
-          </div> */}
           <div className="card-body">
             <form onSubmit={handleSubmit}>
               {files.map((file, index) => (
@@ -116,11 +117,11 @@ export const Addrooms = () => {
                       src={file.preview}
                       alt={`Preview ${index + 1}`}
                       style={{
-                        width: "100px",
-                        height: "100px",
-                        objectFit: "cover",
-                        marginBottom: "10px",
-                        borderRadius: "5px",
+                        width: '100px',
+                        height: '100px',
+                        objectFit: 'cover',
+                        marginBottom: '10px',
+                        borderRadius: '5px',
                       }}
                     />
                   )}
@@ -140,10 +141,7 @@ export const Addrooms = () => {
                       type="button"
                       className="btn btn-sm btn-close mt-2"
                       onClick={() => handleRemoveFileInput(file.id)}
-                    >
-                      {/* <i className="bi bi-trash"></i>  */}
-                      {/* Remove File */}
-                    </button>
+                    ></button>
                   )}
                 </div>
               ))}
@@ -176,7 +174,7 @@ export const Addrooms = () => {
                 <textarea
                   id="description"
                   className="form-control "
-                  rows="3"
+                  rows="2"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                 ></textarea>
@@ -214,9 +212,9 @@ export const Addrooms = () => {
                 </button>
               </div>
 
-              <div className="mb-3">
+              {/* <div className="mb-3">
                 <label htmlFor="price" className="form-label">
-                  <i className="bi bi-currency-dollar"></i> Price
+                  Price
                 </label>
                 <input
                   type="number"
@@ -225,7 +223,28 @@ export const Addrooms = () => {
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
                 />
-              </div>
+              </div> */}
+              <InputGroup className="mb-3">
+                <InputGroup.Text>₱</InputGroup.Text>
+                <Form.Control
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  aria-label="Amount (to the nearest dollar)"
+                />
+                <DropdownButton
+                  variant="outline-primary"
+                  title="Pricing Type"
+                  id="input-group-dropdown-4"
+                  align="end"
+                  value={pricingType}
+                  onSelect={handlePricingType}
+                >
+                  <Dropdown.Item eventKey="Per Person">
+                    Per Person
+                  </Dropdown.Item>
+                  <Dropdown.Item eventKey="Per Group">Per Group</Dropdown.Item>
+                </DropdownButton>
+              </InputGroup>
 
               {successMessage && (
                 <div
@@ -236,18 +255,15 @@ export const Addrooms = () => {
                   <button
                     type="button"
                     className="btn-close"
-                    onClick={() => setSuccessMessage("")}
+                    onClick={() => setSuccessMessage('')}
                   ></button>
                 </div>
               )}
 
-              <div className="">
-                <button type="submit" className="btn btn-primary btn-sm">
-                  <i className="bi bi-cloud-upload"></i> Submit
+              <div className="d-flex justify-content-end">
+                <button type="submit" className="btn btn-primary btn-sm t">
+                  <i className="bi bi-cloud-upload"></i> save
                 </button>
-                {/* <button type="reset" className="btn btn-secondary btn-sm ms-2">
-                  <i className="bi bi-x-circle"></i> Reset
-                </button> */}
               </div>
             </form>
           </div>

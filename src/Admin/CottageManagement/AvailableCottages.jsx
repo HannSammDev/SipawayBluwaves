@@ -254,7 +254,7 @@ export const Available_cottages = () => {
           <div className="d-flex justify-content-between align-items-center">
             <h4>Cottages</h4>
 
-            <Button className="btn btn-dark" onClick={() => setLgShow(true)}>
+            <Button className="btn btn-primary" onClick={() => setLgShow(true)}>
             <FontAwesomeIcon icon={faPlus} /> Add
             </Button>
 

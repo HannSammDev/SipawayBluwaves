@@ -27,10 +27,10 @@ export const Registeradmin = () => {
       const user = userCredential.user;
 
       // Add user details to Firestore (with 'admin' role)
-      await setDoc(doc(textDB, "users", user.uid), {
+      await setDoc(doc(textDB, "user_role", user.uid), {
         name: name.trim(),
         email: normalizedEmail,
-        role: "admin", // Set admin role
+        role: "admin",
       });
 
       navigate("/adminlogin"); // Navigate to dashboard after successful registration

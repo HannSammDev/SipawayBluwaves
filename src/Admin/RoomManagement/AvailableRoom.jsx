@@ -50,7 +50,7 @@ export const Available_rooms = () => {
         id: doc.id,
         ...doc.data(),
       }));
-      console.log('Fetched Reservations: ', reservationsList); // Log fetched reservations data
+      console.log('Fetched Reservations: ', reservationsList); 
       setReservations(reservationsList);
     } catch (error) {
       console.error('Error fetching reservations: ', error);
@@ -65,7 +65,7 @@ export const Available_rooms = () => {
         id: doc.id,
         ...doc.data(),
       }));
-      console.log('Fetched Rooms: ', roomsArray); // Log fetched rooms data
+      console.log('Fetched Rooms: ', roomsArray); 
       setRooms(roomsArray);
     } catch (error) {
       console.error('Error fetching rooms: ', error);
@@ -92,7 +92,7 @@ export const Available_rooms = () => {
     const roomReservations = reservations.filter(
       (reservation) => reservation.roomId === roomId,
     );
-    console.log('Room Reservations: ', roomReservations); // Log room reservations for selected room
+    console.log('Room Reservations: ', roomReservations); 
     setSelectedRoom(roomReservations);
   };
 
@@ -100,14 +100,14 @@ export const Available_rooms = () => {
     navigate(`/editroom/${roomId}`);
   };
 
-  // Updated handleConfirmReservation function
+ 
   const handleConfirmReservation = async () => {
     if (!selectedRoom || selectedRoom.length === 0) {
       setConfirmationMessage('No room selected for reservation.');
       return;
     }
 
-    const reservationDetails = selectedRoom[0]; // Get the first selected room's reservation details
+    const reservationDetails = selectedRoom[0];
     const guestDetails = reservationDetails.guestDetails;
 
     if (!guestDetails) {
@@ -257,7 +257,7 @@ export const Available_rooms = () => {
             {/* <a className="btn btn-dark" href="/addroom">
               <FontAwesomeIcon icon={faPlus} /> Add
             </a> */}
-            <Button size="md" variant="dark" onClick={handleShow}>
+            <Button size="md" variant="primary" onClick={handleShow}>
               <FontAwesomeIcon icon={faPlus} /> Add
             </Button>
           </div>
@@ -271,9 +271,9 @@ export const Available_rooms = () => {
           }}
         >
           <Modal size="lg" show={show} onHide={handleClose}>
-            <Modal.Header closeButton>
+            <Modal.Header closeButton className='bg-primary'>
               <Modal.Title>
-                <h5 className="mb-0 text-dark">
+                <h5 className="mb-0 text-white">
                   <i className="bi bi-pencil-square"></i> Add Room
                 </h5>
               </Modal.Title>

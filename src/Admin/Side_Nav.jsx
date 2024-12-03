@@ -35,10 +35,10 @@ export const Side_nav = () => {
             <Link
               to="/guestL"
               className={`text-white fs-5 d-flex nav-link text-decoration-none px-3 py-2  align-items-center ${
-                pathname === "/guestL" ? "active text-dark bg-dark " : ""
+                pathname === "/guestL" ? "active  bg-dark  " : ""
               }`}
             >
-              <i className="bi bi-people"></i>
+              <i className="bi bi-people" ></i>
               <span className="ms-2">Guest</span>
             </Link>
           </li>

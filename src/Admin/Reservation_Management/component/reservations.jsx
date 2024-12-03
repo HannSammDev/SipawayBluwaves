@@ -4,23 +4,23 @@ import {
   doc,
   updateDoc,
   addDoc,
-} from "firebase/firestore";
-import { useEffect, useState } from "react";
-import Table from "react-bootstrap/Table";
-import { textDB } from "../../../firebase";
-import { Button, Modal, Form, Pagination, Spinner } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
-import Dropdown from "react-bootstrap/Dropdown";
-import { AddCheckin } from "./addCheckin";
+} from 'firebase/firestore';
+import { useEffect, useState } from 'react';
+import Table from 'react-bootstrap/Table';
+import { textDB } from '../../../firebase';
+import { Button, Modal, Form, Pagination, Spinner } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import Dropdown from 'react-bootstrap/Dropdown';
+import { AddCheckin } from './addCheckin';
 
 export const Reservationss = () => {
   const [reservations, setReservations] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [currentGuest, setCurrentGuest] = useState(null);
-  const [actionType, setActionType] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [actionType, setActionType] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const guestsPerPage = 5;
   const [lgShow, setLgShow] = useState(false);
@@ -29,16 +29,16 @@ export const Reservationss = () => {
   // Fetch reservations from Firestore
   const getReservation = async () => {
     try {
-      const reservationsCollection = collection(textDB, "guestData");
+      const reservationsCollection = collection(textDB, 'guestData');
       const reservationSnapshot = await getDocs(reservationsCollection);
       const reservationList = reservationSnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
       setReservations(reservationList);
-      console.log("Fetched reservations: ", reservationList);
+      console.log('Fetched reservations: ', reservationList);
     } catch (error) {
-      console.error("Error fetching reservations: ", error);
+      console.error('Error fetching reservations: ', error);
     } finally {
       setIsLoading(false); // Stop loading after data fetch completes
     }
@@ -53,7 +53,7 @@ export const Reservationss = () => {
       setCurrentGuest(guest);
       setShowModal(true);
     } else {
-      console.error("Guest is not defined");
+      console.error('Guest is not defined');
     }
   };
 
@@ -69,44 +69,44 @@ export const Reservationss = () => {
 
   const handleAction = async () => {
     if (!currentGuest) {
-      console.error("No guest selected.");
+      console.error('No guest selected.');
       return;
     }
 
-    const guestRef = doc(textDB, "guestData", currentGuest.id);
+    const guestRef = doc(textDB, 'guestData', currentGuest.id);
     try {
-      if (actionType === "checkIn") {
+      if (actionType === 'checkIn') {
         await updateDoc(guestRef, {
           checkedIn: true,
-          checkInDate: new Date().toISOString().split("T")[0],
+          checkInDate: new Date().toISOString().split('T')[0],
           checkedOut: false,
         });
 
         // Add a new document in the reservations collection
-        await addDoc(collection(textDB, "reservations"), {
+        await addDoc(collection(textDB, 'reservations'), {
           guestId: currentGuest.id, // Optionally include the guest's ID
-          status: "Not Available",
+          status: 'Not Available',
           roomname: currentGuest.roomname, // Include room info if needed
-          checkInDate: new Date().toISOString().split("T")[0],
+          checkInDate: new Date().toISOString().split('T')[0],
         });
-      } else if (actionType === "checkOut") {
+      } else if (actionType === 'checkOut') {
         await updateDoc(guestRef, {
           checkedOut: true,
-          checkOutDate: new Date().toISOString().split("T")[0],
+          checkOutDate: new Date().toISOString().split('T')[0],
         });
       }
       getReservation(); // Refresh the reservations list
       setShowConfirmModal(false);
       setShowModal(false);
     } catch (error) {
-      console.error("Error updating reservation: ", error);
+      console.error('Error updating reservation: ', error);
     }
   };
 
   const filteredGuests = reservations.filter((guest) =>
     guest.guestDetails?.firstname
       ?.toLowerCase()
-      .includes(searchTerm.toLowerCase())
+      .includes(searchTerm.toLowerCase()),
   );
 
   // Pagination logic
@@ -114,7 +114,7 @@ export const Reservationss = () => {
   const indexOfFirstGuest = indexOfLastGuest - guestsPerPage;
   const currentGuests = filteredGuests.slice(
     indexOfFirstGuest,
-    indexOfLastGuest
+    indexOfLastGuest,
   );
   const totalPages = Math.ceil(filteredGuests.length / guestsPerPage);
 
@@ -129,20 +129,18 @@ export const Reservationss = () => {
         onClick={() => paginate(number)}
       >
         {number}
-      </Pagination.Item>
+      </Pagination.Item>,
     );
   }
-
-  
 
   return (
     <div>
       <div
         className="d-flex justify-content-between mb-4"
         style={{
-          borderRadius: "10px",
-          boxShadow: "0px 0px 10px 5px rgba(0, 0, 0, 0.1)",
-          padding: "8px",
+          borderRadius: '10px',
+          boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.1)',
+          padding: '8px',
         }}
       >
         <Button variant="transparent" onClick={() => setLgShow(true)}>
@@ -193,14 +191,16 @@ export const Reservationss = () => {
                 </div>
               </td>
             </tr>
-          ) : (
+          ) : currentGuests.length > 0 ? (
             currentGuests.map((reservation, index) => (
               <tr key={reservation.id}>
                 <td>{index + 1}</td>
                 <td>
                   {reservation.roomname} {reservation.cottagename}
                 </td>
-                <td>{`${reservation.guestDetails?.firstname || ""} ${reservation.guestDetails?.lastname || ""}`}</td>
+                <td>{`${reservation.guestDetails?.firstname || ''} ${
+                  reservation.guestDetails?.lastname || ''
+                }`}</td>
                 <td>
                   {reservation.checkInDate} - {reservation.checkOutDate}
                 </td>
@@ -222,7 +222,9 @@ export const Reservationss = () => {
                     {!reservation.checkedIn && (
                       <Button
                         size="sm"
-                        onClick={() => handleShowConfirmModal("checkIn", reservation)}
+                        onClick={() =>
+                          handleShowConfirmModal('checkIn', reservation)
+                        }
                         variant="link"
                         className="me-2 text-primary"
                       >
@@ -235,7 +237,9 @@ export const Reservationss = () => {
                     {!reservation.checkedOut && (
                       <Button
                         size="sm"
-                        onClick={() => handleShowConfirmModal("checkOut", reservation)}
+                        onClick={() =>
+                          handleShowConfirmModal('checkOut', reservation)
+                        }
                         variant=""
                         className="me-2"
                       >
@@ -257,6 +261,12 @@ export const Reservationss = () => {
                 </td>
               </tr>
             ))
+          ) : (
+            <tr>
+              <td colSpan="6" className="text-center">
+                No Reservation Confirmed
+              </td>
+            </tr>
           )}
         </tbody>
       </Table>
@@ -265,13 +275,13 @@ export const Reservationss = () => {
         {paginationItems}
       </Pagination>
 
-      {/* Modals for confirming actions */}
+     
       <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {actionType === "checkIn"
-              ? "Confirm Check-In"
-              : "Confirm Check-Out"}
+            {actionType === 'checkIn'
+              ? 'Confirm Check-In'
+              : 'Confirm Check-Out'}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -299,7 +309,7 @@ export const Reservationss = () => {
           {currentGuest && (
             <div>
               <p>
-                <strong>Name:</strong>{" "}
+                <strong>Name:</strong>{' '}
                 {`${currentGuest.guestDetails?.firstname} ${currentGuest.guestDetails?.lastname}`}
               </p>
               <p>
