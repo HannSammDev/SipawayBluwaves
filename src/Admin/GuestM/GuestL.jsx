@@ -244,8 +244,8 @@ export const Guest_List = () => {
 
           {/* Check-In Modal */}
           <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-            <Modal.Header closeButton className="border-0">
-              <Modal.Title className="fw-bold text-primary">
+            <Modal.Header closeButton className="border-0  bg-primary">
+              <Modal.Title className="fw-bold text-white">
                 {currentGuest?.checkedIn ? "Check-Out" : "Check-In"} Guest
               </Modal.Title>
             </Modal.Header>
@@ -300,8 +300,9 @@ export const Guest_List = () => {
               <Button
                 variant="primary"
                 onClick={saveCheckIn}
+                disabled={currentGuest?.checkedOut === true }
               >
-                {currentGuest?.checkedIn ? "Confirm Check-Out" : "Confirm Check-In"}
+                {currentGuest?.checkedIn ? "Confirm Check-Out" : "Confirm Check-In" }
               </Button>
             </Modal.Footer>
           </Modal>

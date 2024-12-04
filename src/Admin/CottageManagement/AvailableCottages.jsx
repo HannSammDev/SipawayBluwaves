@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   collection,
   getDocs,
@@ -8,28 +8,28 @@ import {
   where,
   updateDoc,
   addDoc,
-} from "firebase/firestore";
-import { textDB } from "../../firebase"; // Ensure this path is correct
-import { AddCottages } from "./Addcottage";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.min";
-import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+} from 'firebase/firestore';
+import { textDB } from '../../firebase'; // Ensure this path is correct
+import { AddCottages } from './Addcottage';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
+import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faEdit,
   faTrashAlt,
   faEye,
   faPlus,
-} from "@fortawesome/free-solid-svg-icons";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
+} from '@fortawesome/free-solid-svg-icons';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
 export const Available_cottages = () => {
   const [cottages, setCottages] = useState([]);
   const navigate = useNavigate();
   const [reservations, setReservations] = useState([]);
   const [selectedCottage, setSelectedCottage] = useState(null);
-  const [confirmationMessage, setConfirmationMessage] = useState("");
+  const [confirmationMessage, setConfirmationMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false); // Loading state for spinner
   const [isConfirmed, setIsConfirmed] = useState(false); // New state for tracking confirmation
   const [isDeclined, setIsDeclined] = useState(false); // New state for tracking decline action
@@ -39,31 +39,31 @@ export const Available_cottages = () => {
 
   const fetchReservations = async () => {
     try {
-      const reservationsCollection = collection(textDB, "reservations");
+      const reservationsCollection = collection(textDB, 'reservations');
       const reservationsSnapshot = await getDocs(reservationsCollection);
       const reservationsList = reservationsSnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      console.log("Fetched Reservations: ", reservationsList); // Log fetched reservations data
+      console.log('Fetched Reservations: ', reservationsList); // Log fetched reservations data
       setReservations(reservationsList);
     } catch (error) {
-      console.error("Error fetching reservations: ", error);
+      console.error('Error fetching reservations: ', error);
     }
   };
 
   const fetchCottages = async () => {
     try {
-      const cottageCollection = collection(textDB, "cottages");
+      const cottageCollection = collection(textDB, 'cottages');
       const cottageData = await getDocs(cottageCollection);
       const cottagesArray = cottageData.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      console.log("Fetched Cottages: ", cottagesArray); // Log fetched cottages data
+      console.log('Fetched Cottages: ', cottagesArray); // Log fetched cottages data
       setCottages(cottagesArray);
     } catch (error) {
-      console.error("Error fetching cottages: ", error);
+      console.error('Error fetching cottages: ', error);
     }
   };
 
@@ -74,20 +74,20 @@ export const Available_cottages = () => {
 
   const handleDelete = async (cottageId) => {
     try {
-      await deleteDoc(doc(textDB, "cottages", cottageId));
+      await deleteDoc(doc(textDB, 'cottages', cottageId));
       setCottages(cottages.filter((cottage) => cottage.id !== cottageId));
-      console.log("Cottage deleted successfully!");
+      console.log('Cottage deleted successfully!');
     } catch (error) {
-      console.error("Error deleting cottage: ", error);
-      alert("There was an error deleting the cottage. Please try again.");
+      console.error('Error deleting cottage: ', error);
+      alert('There was an error deleting the cottage. Please try again.');
     }
   };
 
   const handleViewClick = (cottageId) => {
     const cottageReservations = reservations.filter(
-      (reservation) => reservation.cottageId === cottageId
+      (reservation) => reservation.cottageId === cottageId,
     );
-    console.log("Cottage Reservations: ", cottageReservations); // Log cottage reservations for selected cottage
+    console.log('Cottage Reservations: ', cottageReservations); // Log cottage reservations for selected cottage
     setSelectedCottage(cottageReservations);
   };
 
@@ -98,7 +98,7 @@ export const Available_cottages = () => {
   // Updated handleConfirmReservation function
   const handleConfirmReservation = async () => {
     if (!selectedCottage || selectedCottage.length === 0) {
-      setConfirmationMessage("No cottage selected for reservation.");
+      setConfirmationMessage('No cottage selected for reservation.');
       return;
     }
 
@@ -106,7 +106,7 @@ export const Available_cottages = () => {
     const guestDetails = reservationDetails.guestDetails;
 
     if (!guestDetails) {
-      setConfirmationMessage("Guest details are missing.");
+      setConfirmationMessage('Guest details are missing.');
       return;
     }
 
@@ -115,10 +115,10 @@ export const Available_cottages = () => {
 
     // Get cottage details from the cottages array using the cottageId from reservationDetails
     const cottageDetails = cottages.find(
-      (cottage) => cottage.id === reservationDetails.cottageId
+      (cottage) => cottage.id === reservationDetails.cottageId,
     );
     if (!cottageDetails) {
-      setConfirmationMessage("Cottage details not found.");
+      setConfirmationMessage('Cottage details not found.');
       return;
     }
 
@@ -126,26 +126,26 @@ export const Available_cottages = () => {
 
     try {
       // Add the guest data to the 'guestData' collection in Firestore
-      const guestData = await addDoc(collection(textDB, "guestData"), {
+      const guestData = await addDoc(collection(textDB, 'guestData'), {
         cottageId: reservationDetails.cottageId,
         cottageName: cottageDetails.cottagename, // Use the cottageName from cottageDetails
         guestName: `${guestDetails.firstname} ${guestDetails.lastname}`,
         guests: `${guests.adults} adults, ${guests.children} children`,
         checkInDate: reservationDetails.checkInDate,
         checkOutDate: reservationDetails.checkOutDate,
-        specialCode: guestDetails.specialCode || "", // Add any specific fields you may want to store
+        specialCode: guestDetails.specialCode || '', // Add any specific fields you may want to store
         cottagePrice: reservationDetails.cottagePrice,
         fiftyPercentPrice: reservationDetails.cottagePrice * 0.5,
         balance: reservationDetails.cottagePrice * 0.5,
       });
 
-      console.log("Guest Data added with ID", guestData.id);
+      console.log('Guest Data added with ID', guestData.id);
 
       // Create a query to get the pending reservation for the selected cottage
       const reservationQuery = query(
-        collection(textDB, "reservations"),
-        where("cottageId", "==", reservationDetails.cottageId),
-        where("availability", "==", "Pending") // Check for pending reservations
+        collection(textDB, 'reservations'),
+        where('cottageId', '==', reservationDetails.cottageId),
+        where('availability', '==', 'Pending'), // Check for pending reservations
       );
 
       const querySnapshot = await getDocs(reservationQuery);
@@ -155,31 +155,31 @@ export const Available_cottages = () => {
           const reservationId = docSnapshot.id;
 
           // Update the reservation availability to "Reserved"
-          const reservationRef = doc(textDB, "reservations", reservationId);
-          await updateDoc(reservationRef, { availability: "Reserved" });
+          const reservationRef = doc(textDB, 'reservations', reservationId);
+          await updateDoc(reservationRef, { availability: 'Reserved' });
 
           console.log(
             "Reservation updated to 'Reserved' with ID:",
-            reservationId
+            reservationId,
           );
         });
 
         setTimeout(() => {
           setIsLoading(false); // Stop loading spinner
-          setConfirmationMessage("Reservation confirmed successfully!");
+          setConfirmationMessage('Reservation confirmed successfully!');
           setIsConfirmed(true); // Set confirmation state to true
-          document.getElementById("closeModalButton").click(); // Close the modal
+          document.getElementById('closeModalButton').click(); // Close the modal
           fetchReservations();
         }, 2000);
       } else {
         setIsLoading(false);
         setConfirmationMessage(
-          "No pending reservation found for this cottage."
+          'No pending reservation found for this cottage.',
         );
       }
     } catch (error) {
-      console.error("Error confirming reservation:", error);
-      setConfirmationMessage("Error confirming reservation. Please try again.");
+      console.error('Error confirming reservation:', error);
+      setConfirmationMessage('Error confirming reservation. Please try again.');
       setIsLoading(false);
     }
   };
@@ -187,20 +187,20 @@ export const Available_cottages = () => {
   // New handleDeclineReservation function to delete the reservation
   const handleDeclineReservation = async () => {
     if (!selectedCottage || selectedCottage.length === 0) {
-      setConfirmationMessage("No cottage selected for reservation.");
+      setConfirmationMessage('No cottage selected for reservation.');
       return;
     }
 
     const reservationDetails = selectedCottage[0]; // Get the first selected cottage's reservation details
 
-    setIsLoading(true); // Start loading spinner
+    setIsLoading(true); 
 
     try {
       // Create a query to get the pending reservation for the selected cottage
       const reservationQuery = query(
-        collection(textDB, "reservations"),
-        where("cottageId", "==", reservationDetails.cottageId),
-        where("availability", "==", "Pending") // Check for pending reservations
+        collection(textDB, 'reservations'),
+        where('cottageId', '==', reservationDetails.cottageId),
+        where('availability', '==', 'Pending'), // Check for pending reservations
       );
 
       const querySnapshot = await getDocs(reservationQuery);
@@ -210,28 +210,28 @@ export const Available_cottages = () => {
           const reservationId = docSnapshot.id;
 
           // Delete the reservation document from Firestore
-          const reservationRef = doc(textDB, "reservations", reservationId);
+          const reservationRef = doc(textDB, 'reservations', reservationId);
           await deleteDoc(reservationRef);
 
-          console.log("Reservation deleted with ID:", reservationId);
+          console.log('Reservation deleted with ID:', reservationId);
         });
 
         setTimeout(() => {
-          setIsLoading(false); // Stop loading spinner
-          setConfirmationMessage("Reservation declined successfully.");
-          setIsDeclined(true); // Set declined state to true
-          document.getElementById("closeModalButton").click(); // Close the modal
-          fetchReservations(); // Refresh the reservations to reflect the deletion
+          setIsLoading(false);
+          setConfirmationMessage('Reservation declined successfully.');
+          setIsDeclined(true);
+          document.getElementById('closeModalButton').click();
+          fetchReservations();
         }, 2000);
       } else {
         setIsLoading(false);
         setConfirmationMessage(
-          "No pending reservation found for this cottage."
+          'No pending reservation found for this cottage.',
         );
       }
     } catch (error) {
-      console.error("Error declining and deleting reservation:", error);
-      setConfirmationMessage("Error declining reservation. Please try again.");
+      console.error('Error declining and deleting reservation:', error);
+      setConfirmationMessage('Error declining reservation. Please try again.');
       setIsLoading(false);
     }
   };
@@ -246,16 +246,16 @@ export const Available_cottages = () => {
         <div
           className="mt-4 mb-3"
           style={{
-            boxShadow: "0px 0px 10px 5px rgba(0, 0, 0, 0.1)",
-            padding: "8px",
-            borderRadius: "10px",
+            boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.1)',
+            padding: '8px',
+            borderRadius: '10px',
           }}
         >
           <div className="d-flex justify-content-between align-items-center">
             <h4>Cottages</h4>
 
             <Button className="btn btn-primary" onClick={() => setLgShow(true)}>
-            <FontAwesomeIcon icon={faPlus} /> Add
+              <FontAwesomeIcon icon={faPlus} /> Add
             </Button>
 
             <Modal
@@ -264,8 +264,8 @@ export const Available_cottages = () => {
               onHide={() => setLgShow(false)}
               aria-labelledby="example-modal-sizes-title-lg"
             >
-              <Modal.Header closeButton>
-                <h5 className="mb-0 text-dark">
+              <Modal.Header closeButton className='bg-primary'>
+                <h5 className="mb-0 text-white">
                   <i className="bi bi-pencil-square"></i> Add Cottage
                 </h5>
               </Modal.Header>
@@ -278,19 +278,20 @@ export const Available_cottages = () => {
         <div
           className="table-responsive mt-2"
           style={{
-            boxShadow: "0px 0px 10px 5px rgba(0, 0, 0, 0.1)",
-            padding: "1em",
-            borderRadius: "10px",
+            boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.1)',
+            padding: '1em',
+            borderRadius: '10px',
           }}
         >
           <table
             className="table table-striped"
-            style={{ backgroundColor: "#f5f5f5" }}
+            style={{ backgroundColor: '#f5f5f5' }}
           >
             <thead>
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Cottage</th>
+                <th scope="col">Image</th>
                 <th scope="col">Description</th>
                 <th scope="col">Amenities</th>
                 <th scope="col">Price</th>
@@ -302,20 +303,24 @@ export const Available_cottages = () => {
               {cottages.map((cottage, index) => (
                 <tr key={cottage.id}>
                   <th scope="row">{index + 1}</th>
-                  <td style={{ maxWidth: "5px" }}>
+                  <td style={{ maxWidth: '5px' }}>
                     {cottage.cottagename}
+                    
+                  </td>
+                  <td>
+                    {' '}
                     <div
                       id={`cottageCarousel${index}`}
                       className="carousel slide"
                       data-bs-ride="carousel"
-                      style={{ width: "100%", height: "auto" }}
+                      style={{ width: '50%', height: 'auto' }}
                     >
                       <div className="carousel-inner">
                         {cottage.images.map((image, i) => (
                           <div
                             key={i}
                             className={`carousel-item ${
-                              i === 0 ? "active" : ""
+                              i === 0 ? 'active' : ''
                             }`}
                           >
                             <img
@@ -355,27 +360,28 @@ export const Available_cottages = () => {
                   <td>{cottage.description}</td>
                   <td>
                     <ul>
-                      {cottage.amenities.split(",").map((amenity, i) => (
-                        <li key={i}>{amenity}</li>
-                      ))}
+                      {cottage.amenities &&
+                        cottage.amenities
+                          .split(',')
+                          .map((amenity, i) => <li key={i}>{amenity}</li>)}
                     </ul>
                   </td>
                   <td>{cottage.price}</td>
                   <td>
                     {reservations.some(
-                      (reservation) => reservation.cottageId === cottage.id
+                      (reservation) => reservation.cottageId === cottage.id,
                     )
                       ? reservations
                           .filter(
                             (reservation) =>
-                              reservation.cottageId === cottage.id
+                              reservation.cottageId === cottage.id,
                           )
                           .map((reservation) => (
                             <div key={reservation.id}>
                               {reservation.availability}
                             </div>
                           ))
-                      : "Available"}
+                      : 'Available'}
                   </td>
                   <td>
                     <div className="btn-group">
@@ -386,7 +392,7 @@ export const Available_cottages = () => {
                       >
                         <FontAwesomeIcon
                           icon={faTrashAlt}
-                          style={{ color: "red" }}
+                          style={{ color: 'red' }}
                         />
                       </button>
                       <button
@@ -396,7 +402,7 @@ export const Available_cottages = () => {
                       >
                         <FontAwesomeIcon
                           icon={faEdit}
-                          style={{ color: "#FFA500" }}
+                          style={{ color: '#FFA500' }}
                         />
                       </button>
                       <button
@@ -449,7 +455,7 @@ export const Available_cottages = () => {
                         className="p-3 mb-4 bg-light rounded shadow-sm"
                       >
                         <button
-                          style={{ textDecoration: "none" }}
+                          style={{ textDecoration: 'none' }}
                           className="btn btn-link"
                           type="button"
                           data-bs-toggle="collapse"
@@ -461,7 +467,7 @@ export const Available_cottages = () => {
                           {isExpanded ? (
                             <span className="text-danger ">Show Less</span>
                           ) : (
-                            "Show Details"
+                            'Show Details'
                           )}
                         </button>
 
@@ -470,26 +476,26 @@ export const Available_cottages = () => {
                           className="collapse"
                         >
                           <p>
-                            <strong>Guest Name:</strong>{" "}
-                            {reservation.guestDetails.firstname}{" "}
+                            <strong>Guest Name:</strong>{' '}
+                            {reservation.guestDetails.firstname}{' '}
                             {reservation.guestDetails.lastname}
                           </p>
                           <p>
                             <strong>Adult:</strong> {reservation.guests.adults}
-                            {" || "}
-                            <strong>Chidren:</strong>{" "}
+                            {' || '}
+                            <strong>Chidren:</strong>{' '}
                             {reservation.guests.children}
                           </p>
                           <p>
-                            <strong>Check-In Date:</strong>{" "}
+                            <strong>Check-In Date:</strong>{' '}
                             {reservation.checkInDate}
                           </p>
                           <p>
-                            <strong>Check-Out Date:</strong>{" "}
+                            <strong>Check-Out Date:</strong>{' '}
                             {reservation.checkOutDate}
                           </p>
                           <p>
-                            <strong>Payment Method:</strong>{" "}
+                            <strong>Payment Method:</strong>{' '}
                             {reservation.paymentMethod}
                           </p>
                           <p>
@@ -497,8 +503,8 @@ export const Available_cottages = () => {
                             {reservation.cottagePrice}
                           </p>
                           <p>
-                            <strong>Contact:</strong>{" "}
-                            {reservation.guestDetails.email} |{" "}
+                            <strong>Contact:</strong>{' '}
+                            {reservation.guestDetails.email} |{' '}
                             {reservation.guestDetails.phoneNumber}
                           </p>
                         </div>
@@ -521,10 +527,10 @@ export const Available_cottages = () => {
                     }
                   >
                     {selectedCottage && selectedCottage.length > 0
-                      ? selectedCottage[0].availability === "Reserved"
-                        ? "Done"
-                        : "Confirm"
-                      : "Confirm"}
+                      ? selectedCottage[0].availability === 'Reserved'
+                        ? 'Done'
+                        : 'Confirm'
+                      : 'Confirm'}
                   </button>
                   <button
                     className="btn btn-danger"

@@ -26,7 +26,6 @@ export const Reservationss = () => {
   const [lgShow, setLgShow] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch reservations from Firestore
   const getReservation = async () => {
     try {
       const reservationsCollection = collection(textDB, 'guestData');
@@ -40,7 +39,7 @@ export const Reservationss = () => {
     } catch (error) {
       console.error('Error fetching reservations: ', error);
     } finally {
-      setIsLoading(false); // Stop loading after data fetch completes
+      setIsLoading(false);
     }
   };
 
@@ -82,11 +81,10 @@ export const Reservationss = () => {
           checkedOut: false,
         });
 
-        // Add a new document in the reservations collection
         await addDoc(collection(textDB, 'reservations'), {
-          guestId: currentGuest.id, // Optionally include the guest's ID
+          guestId: currentGuest.id,
           status: 'Not Available',
-          roomname: currentGuest.roomname, // Include room info if needed
+          roomname: currentGuest.roomname,
           checkInDate: new Date().toISOString().split('T')[0],
         });
       } else if (actionType === 'checkOut') {
@@ -95,7 +93,7 @@ export const Reservationss = () => {
           checkOutDate: new Date().toISOString().split('T')[0],
         });
       }
-      getReservation(); // Refresh the reservations list
+      getReservation();
       setShowConfirmModal(false);
       setShowModal(false);
     } catch (error) {
@@ -109,7 +107,6 @@ export const Reservationss = () => {
       .includes(searchTerm.toLowerCase()),
   );
 
-  // Pagination logic
   const indexOfLastGuest = currentPage * guestsPerPage;
   const indexOfFirstGuest = indexOfLastGuest - guestsPerPage;
   const currentGuests = filteredGuests.slice(
@@ -219,36 +216,6 @@ export const Reservationss = () => {
                 </td>
                 <td>
                   <div className="d-flex align-items-center">
-                    {!reservation.checkedIn && (
-                      <Button
-                        size="sm"
-                        onClick={() =>
-                          handleShowConfirmModal('checkIn', reservation)
-                        }
-                        variant="link"
-                        className="me-2 text-primary"
-                      >
-                        <FontAwesomeIcon
-                          icon={faCheckCircle}
-                          className="me-0 text-primary"
-                        />
-                      </Button>
-                    )}
-                    {!reservation.checkedOut && (
-                      <Button
-                        size="sm"
-                        onClick={() =>
-                          handleShowConfirmModal('checkOut', reservation)
-                        }
-                        variant=""
-                        className="me-2"
-                      >
-                        <FontAwesomeIcon
-                          icon={faSignOutAlt}
-                          className="me-0 text-success"
-                        />
-                      </Button>
-                    )}
                     <Button
                       size="sm"
                       onClick={() => handleShowModal(reservation)}
@@ -257,6 +224,39 @@ export const Reservationss = () => {
                     >
                       View
                     </Button>
+                    {!reservation.checkedIn && (
+                      <Button
+                        size="sm"
+                        onClick={() =>
+                          handleShowConfirmModal('checkIn', reservation)
+                        }
+                        variant="success"
+                        className="me-2 text-white"
+                      >
+                        Checkin
+                        {/* <FontAwesomeIcon
+                          icon={faCheckCircle}
+                          className="me-0 text-white"
+                        /> */}
+                      </Button>
+                    )}
+
+                    {!reservation.checkedOut && (
+                      <Button
+                        size="sm"
+                        onClick={() =>
+                          handleShowConfirmModal('checkOut', reservation)
+                        }
+                        variant="warning"
+                        className="me-2"
+                      >
+                        Checkout
+                        {/* <FontAwesomeIcon
+                          icon={faSignOutAlt}
+                          className="me-0 text-success"
+                        /> */}
+                      </Button>
+                    )}
                   </div>
                 </td>
               </tr>
@@ -275,7 +275,6 @@ export const Reservationss = () => {
         {paginationItems}
       </Pagination>
 
-     
       <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>
@@ -302,8 +301,8 @@ export const Reservationss = () => {
 
       {/* Modal to view guest details */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Guest Details</Modal.Title>
+        <Modal.Header closeButton className="bg-primary">
+          <Modal.Title className="text-white">Guest Details</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {currentGuest && (
@@ -311,10 +310,19 @@ export const Reservationss = () => {
               <p>
                 <strong>Name:</strong>{' '}
                 {`${currentGuest.guestDetails?.firstname} ${currentGuest.guestDetails?.lastname}`}
+                {'|| '}
+                <span className="text-muted">
+                  {currentGuest.guests.adults} Adults,{' '}
+                  {currentGuest.guests.children} Children
+                </span>
               </p>
               <p>
                 <strong>Room:</strong> {currentGuest.roomname}
               </p>
+              <p>
+                <strong>50%:</strong>
+              </p>
+
               <p>
                 <strong>Check-In Date:</strong> {currentGuest.checkInDate}
               </p>
