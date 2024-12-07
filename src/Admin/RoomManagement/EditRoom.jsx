@@ -1,35 +1,37 @@
-import React, { useState, useEffect } from "react";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { useParams, useNavigate } from "react-router-dom";
-import { textDB } from "../../firebase";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import React, { useState, useEffect } from 'react';
+import { InputGroup, Form, DropdownButton, Dropdown } from 'react-bootstrap';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { useParams, useNavigate } from 'react-router-dom';
+import { textDB } from '../../firebase';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export const EditRoom = () => {
-  const [successMessage, setSuccessMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState('');
   const { id } = useParams();
   const navigate = useNavigate();
   const [room, setRoom] = useState({
-    roomname: "",
-    description: "",
+    roomname: '',
+    description: '',
     amenities: [],
-    price: "",
-    images: [], 
+    price: '',
+    pricingType: '',
+    images: [],
   });
   const [newImages, setNewImages] = useState([]); // Store new image files
 
   const getRoom = async () => {
-    const docRef = doc(textDB, "rooms", id);
+    const docRef = doc(textDB, 'rooms', id);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       const roomData = docSnap.data();
       setRoom({
         ...roomData,
-        amenities: roomData.amenities.split(","),
+        amenities: roomData.amenities.split(','),
       });
     } else {
-      console.log("No such document!");
+      console.log('No such document!');
     }
   };
 
@@ -42,6 +44,10 @@ export const EditRoom = () => {
     setRoom({ ...room, [name]: value });
   };
 
+  // const handlePricingTypeChange = (selectedKey) => {
+  //   setRoom({ ...room, pricingtype: selectedKey });
+  // };
+
   const handleAmenityChange = (index, value) => {
     const newAmenities = [...room.amenities];
     newAmenities[index] = value;
@@ -49,7 +55,7 @@ export const EditRoom = () => {
   };
 
   const addAmenity = () => {
-    setRoom({ ...room, amenities: [...room.amenities, ""] });
+    setRoom({ ...room, amenities: [...room.amenities, ''] });
   };
 
   const removeAmenity = (index) => {
@@ -69,7 +75,7 @@ export const EditRoom = () => {
         const imageRef = ref(storage, `rooms/${id}/${image.name}`);
         await uploadBytes(imageRef, image);
         return await getDownloadURL(imageRef);
-      })
+      }),
     );
     return uploadedImageUrls;
   };
@@ -85,19 +91,23 @@ export const EditRoom = () => {
     }
   };
 
+  // const handlePricingType = (eventKey) => {
+  //   setPricingType(eventKey);
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let updatedRoom = { ...room, amenities: room.amenities.join(",") };
+    let updatedRoom = { ...room, amenities: room.amenities.join(',') };
 
     if (newImages.length > 0) {
       const imageUrls = await uploadImages();
       updatedRoom = { ...updatedRoom, images: [...room.images, ...imageUrls] };
     }
 
-    const docRef = doc(textDB, "rooms", id);
+    const docRef = doc(textDB, 'rooms', id);
     await updateDoc(docRef, updatedRoom);
-    console.log("Room updated successfully!");
-    setSuccessMessage("Room updated successfully!");
+    console.log('Room updated successfully!');
+    setSuccessMessage('Room updated successfully!');
     // navigate("/roomdetails");
   };
 
@@ -106,8 +116,8 @@ export const EditRoom = () => {
       <div
         className="card "
         style={{
-          backgroundColor: "#f5f5f5",
-          boxShadow: "0px 0px 10px 5px rgba(0, 0, 0, 0.1)",
+          backgroundColor: '#f5f5f5',
+          boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.1)',
         }}
       >
         <div className="card-header bg-primary text-white d-flex">
@@ -171,7 +181,7 @@ export const EditRoom = () => {
               </button>
             </div>
             <div className="mb-3">
-              <label htmlFor="price" className="form-label">
+              {/* <label htmlFor="price" className="form-label">
                 ₱ Price
               </label>
               <input
@@ -181,7 +191,28 @@ export const EditRoom = () => {
                 name="price"
                 value={room.price}
                 onChange={handleChange}
-              />
+              /> */}
+              <InputGroup className="mb-3">
+                <InputGroup.Text>₱</InputGroup.Text>
+                <Form.Control
+                  name="price"
+                  value={room.price}
+                  onChange={handleChange}
+                  aria-label="Amount (to the nearest dollar)"
+                />
+                <Form.Select
+                style={{width:'10px'}}
+                className=''
+                  name="pricingtype"
+                  value={room.pricingType}
+                  onChange={handleChange}
+                  // aria-label="Select Pricing Type"
+                >
+                 
+                  <option value="Per Person">Per Person</option>
+                  <option value="Per Group">Per Group</option>
+                </Form.Select>
+              </InputGroup>
             </div>
             <div className="mb-3">
               <label className="form-label">
@@ -193,11 +224,11 @@ export const EditRoom = () => {
                     src="https://via.placeholder.com/150"
                     alt="Placeholder"
                     style={{
-                      width: "150px",
-                      height: "150px",
-                      objectFit: "cover",
-                      borderRadius: "5px",
-                      marginBottom: "10px",
+                      width: '150px',
+                      height: '150px',
+                      objectFit: 'cover',
+                      borderRadius: '5px',
+                      marginBottom: '10px',
                     }}
                   />
                 </div>
@@ -208,11 +239,11 @@ export const EditRoom = () => {
                     src={image}
                     alt={`Existing ${index + 1}`}
                     style={{
-                      width: "100px",
-                      height: "100px",
-                      objectFit: "cover",
-                      borderRadius: "5px",
-                      marginRight: "10px",
+                      width: '100px',
+                      height: '100px',
+                      objectFit: 'cover',
+                      borderRadius: '5px',
+                      marginRight: '10px',
                     }}
                   />
                   <button
@@ -230,11 +261,11 @@ export const EditRoom = () => {
                     src={URL.createObjectURL(image)}
                     alt={`New ${index + 1}`}
                     style={{
-                      width: "100px",
-                      height: "100px",
-                      objectFit: "cover",
-                      borderRadius: "5px",
-                      marginRight: "10px",
+                      width: '100px',
+                      height: '100px',
+                      objectFit: 'cover',
+                      borderRadius: '5px',
+                      marginRight: '10px',
                     }}
                   />
                   <button
@@ -259,14 +290,14 @@ export const EditRoom = () => {
               <div
                 className="alert alert-dismissible fade show"
                 role="alert"
-                style={{ backgroundColor: "#FBCEB1" }}
+                style={{ backgroundColor: '#FBCEB1' }}
               >
                 {successMessage}
                 <a
                   href="/roomdetails"
                   type="button"
                   className="btn-close"
-                  onClick={() => setSuccessMessage("")}
+                  onClick={() => setSuccessMessage('')}
                   aria-label="Close"
                 ></a>
               </div>

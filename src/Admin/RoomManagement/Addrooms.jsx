@@ -13,6 +13,7 @@ export const Addrooms = () => {
   const [description, setDescription] = useState('');
   const [amenities, setAmenities] = useState(['']);
   const [price, setPrice] = useState('');
+  
   const [pricingType, setPricingType] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
@@ -66,9 +67,9 @@ export const Addrooms = () => {
     setAmenities(newAmenities);
   };
 
-  const handlePricingType = (eventKey) => {
-    setPricingType(eventKey);
-  };
+  // const handlePricingType = (eventKey) => {
+  //   setPricingType(eventKey);
+  // };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -231,7 +232,7 @@ export const Addrooms = () => {
                   onChange={(e) => setPrice(e.target.value)}
                   aria-label="Amount (to the nearest dollar)"
                 />
-                <DropdownButton
+                {/* <DropdownButton
                   variant="outline-primary"
                   title="Pricing Type"
                   id="input-group-dropdown-4"
@@ -243,7 +244,18 @@ export const Addrooms = () => {
                     Per Person
                   </Dropdown.Item>
                   <Dropdown.Item eventKey="Per Group">Per Group</Dropdown.Item>
-                </DropdownButton>
+                </DropdownButton> */}
+                <Form.Select
+                  style={{ width: '10px' }}
+                  className=""
+                  name="pricingtype"
+                  value={pricingType}
+                  onChange={(e) => setPricingType(e.target.value)}
+                  // aria-label="Select Pricing Type"
+                >
+                  <option value="Per Person">Per Person</option>
+                  <option value="Per Group">Per Group</option>
+                </Form.Select>
               </InputGroup>
 
               {successMessage && (

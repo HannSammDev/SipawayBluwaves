@@ -306,30 +306,67 @@ export const Reservationss = () => {
         </Modal.Header>
         <Modal.Body>
           {currentGuest && (
-            <div>
-              <p>
-                <strong>Name:</strong>{' '}
-                {`${currentGuest.guestDetails?.firstname} ${currentGuest.guestDetails?.lastname}`}
-                {'|| '}
-                <span className="text-muted">
+            <div className="container">
+              {/* <div className="row mb-2">
+                <div className="col-6">
+                  <strong>Name: </strong>
+                  {`${currentGuest.guestDetails?.firstname} ${currentGuest.guestDetails?.lastname}`}
+                </div>
+                
+                 
+
+              </div> */}
+              <div className="row mb-2">
+                <div className="col-6">
+                  <strong>Guests:</strong>
+                </div>
+                <div className="col-6 text-end text-muted">
                   {currentGuest.guests.adults} Adults,{' '}
                   {currentGuest.guests.children} Children
-                </span>
-              </p>
-              <p>
-                <strong>Room:</strong> {currentGuest.roomname}
-              </p>
-              <p>
-                <strong>50%:</strong>
-              </p>
-
-              <p>
-                <strong>Check-In Date:</strong> {currentGuest.checkInDate}
-              </p>
-              <p>
-                <strong>Check-Out Date:</strong> {currentGuest.checkOutDate}
-              </p>
-              {/* Add more details as needed */}
+                </div>
+              </div>
+              {/* <div className="row mb-2">
+                <div className="col-6">
+                  <strong>Asset:</strong>
+                </div>
+                <div className="col-6 text-end">{currentGuest.roomname}</div>
+              </div> */}
+              <div className="row mb-2">
+                <div className="col-6">
+                  <strong>Price:</strong>
+                </div>
+                <div className="col-6 text-end">₱{currentGuest.roomPrice}</div>
+              </div>
+              <div className="row mb-2">
+                <div className="col-6">
+                  <strong>Paid Amount (50%):</strong>
+                </div>
+                <div className="col-6 text-end">
+                  ₱{currentGuest.fiftyPercentPrice.toFixed(2)}
+                </div>
+              </div>
+              <div className="row mb-2">
+                <div className="col-6">
+                  <strong>Balance:</strong>
+                </div>
+                <div className="col-6 text-end">
+                  ₱{currentGuest.balance.toFixed(2)}
+                </div>
+              </div>
+              <div className="row mb-2">
+                <div className="col-6">
+                  <strong>Check-In Date:</strong>
+                </div>
+                <div className="col-6 text-end">{currentGuest.checkInDate}</div>
+              </div>
+              <div className="row mb-2">
+                <div className="col-6">
+                  <strong>Check-Out Date:</strong>
+                </div>
+                <div className="col-6 text-end">
+                  {currentGuest.checkOutDate}
+                </div>
+              </div>
             </div>
           )}
         </Modal.Body>
