@@ -263,7 +263,7 @@ export const Reservationss = () => {
             ))
           ) : (
             <tr>
-              <td colSpan="6" className="text-center">
+              <td colSpan="6" className="text-center bg-warning">
                 No Reservation Confirmed
               </td>
             </tr>

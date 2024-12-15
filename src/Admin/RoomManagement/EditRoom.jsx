@@ -19,7 +19,7 @@ export const EditRoom = () => {
     pricingType: '',
     images: [],
   });
-  const [newImages, setNewImages] = useState([]); // Store new image files
+  const [newImages, setNewImages] = useState([]); 
 
   const getRoom = async () => {
     const docRef = doc(textDB, 'rooms', id);

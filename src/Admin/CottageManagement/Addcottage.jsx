@@ -5,7 +5,7 @@ import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { fileDB, textDB } from '../../firebase';
 import { v4 } from 'uuid';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { addDoc, collection , getDocs} from 'firebase/firestore';
+import { addDoc, collection, getDocs } from 'firebase/firestore';
 export const AddCottages = () => {
   const [files, setFiles] = useState([
     { id: Date.now(), type: 'file', preview: null, url: '' },
@@ -16,6 +16,10 @@ export const AddCottages = () => {
   const [price, setPrice] = useState('');
   const [pricingType, setPricingType] = useState('');
   const [cottage, setCottage] = useState([]);
+
+  // success message
+  const [successMessage, setSuccessMessage] = useState('');
+
   const addFileInput = () => {
     setFiles([
       ...files,
@@ -77,9 +81,9 @@ export const AddCottages = () => {
     setCottages(cottages);
   };
 
-  const handlePricingType = (eventKey) => {
-    setPricingType(eventKey);
-  };
+  // const handlePricingType = (eventKey) => {
+  //   setPricingType(eventKey);
+  // };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -93,7 +97,7 @@ export const AddCottages = () => {
       price,
       images: fileUrls,
       pricingType,
-      availability: 'not reserved',
+      // availability: 'not reserved',
     };
 
     try {
@@ -101,6 +105,10 @@ export const AddCottages = () => {
       const newCottage = { id: docRef.id, ...cottageData };
       setCottage((prevCottages) => [...prevCottages, newCottage]);
       console.log('Cottage added successfully!');
+      setSuccessMessage('Cottage added successfully');
+      setTimeout(() => {
+        setSuccessMessage('');
+      }, 8000);
     } catch (error) {
       console.error('Error adding cottage: ', error);
       alert('There was an error adding the cottage. Please try again.');
@@ -239,7 +247,7 @@ export const AddCottages = () => {
               onChange={(e) => setPrice(e.target.value)}
               aria-label="Amount (to the nearest dollar)"
             />
-            <DropdownButton
+            {/* <DropdownButton
               variant="outline-primary"
               title="Pricing Type"
               id="input-group-dropdown-4"
@@ -249,8 +257,33 @@ export const AddCottages = () => {
             >
               <Dropdown.Item eventKey="Per Person">Per Person</Dropdown.Item>
               <Dropdown.Item eventKey="Per Group">Per Group</Dropdown.Item>
-            </DropdownButton>
+            </DropdownButton> */}
+
+            <Form.Select
+              style={{ width: '10px' }}
+              className=""
+              name="pricingtype"
+              value={pricingType}
+              onChange={(e) => setPricingType(e.target.value)}
+              // aria-label="Select Pricing Type"
+            >
+              <option value="Per Person">Per Person</option>
+              <option value="Per Group">Per Group</option>
+            </Form.Select>
           </InputGroup>
+          {successMessage && (
+            <div
+              className="alert alert-success alert-dismissible fade show"
+              role="alert"
+            >
+              {successMessage}
+              <button
+                type="button"
+                className="btn-close"
+                onClick={() => setSuccessMessage('')}
+              ></button>
+            </div>
+          )}
         </div>{' '}
         <div className="col-12 d-flex justify-content-end">
           {' '}

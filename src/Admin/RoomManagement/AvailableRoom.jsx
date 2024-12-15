@@ -299,7 +299,8 @@ export const Available_rooms = () => {
               </tr>
             </thead>
             <tbody>
-              {rooms.map((room, index) => (
+              {rooms.length > 0? (
+              rooms.map((room, index) => (
                 <tr key={room.id}>
                   <th scope="row">{index + 1}.</th>
                   <td style={{ maxWidth: '5px' }}>{room.roomname}</td>
@@ -409,7 +410,14 @@ export const Available_rooms = () => {
                     </div>
                   </td>
                 </tr>
-              ))}
+              ))
+            ) : (
+            <tr>
+              <td colSpan="9" className='text-center bg-warning'>
+                No Rooms
+              </td>
+            </tr>
+              )}
             </tbody>
           </table>
 

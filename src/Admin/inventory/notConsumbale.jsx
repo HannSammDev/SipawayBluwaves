@@ -49,7 +49,7 @@ export const NotConsumable = () => {
             <span>Monitor and manage inventory</span>
           </div> */}
           <div className="m-2">
-            <Button variant="primary" onClick={handleShow}>
+            <Button variant="primary"  onClick={handleShow}>
               <FontAwesomeIcon icon={faPlus} /> Item
             </Button>
           </div>
@@ -91,7 +91,7 @@ export const NotConsumable = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="5">No inventories available</td>{' '}
+                <td colSpan="5" className='text-center bg-warning'>No inventories available</td>{' '}
               </tr>
             )}
           </tbody>

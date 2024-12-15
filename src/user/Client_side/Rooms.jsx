@@ -137,8 +137,8 @@ function Rooms() {
               </div>
 
               <h4 className="btn price  ">
-                <b className='me-2'>₱ {room.price}</b>
-               
+                <b className="me-2">₱ {room.price}</b>
+
                 <span style={{ fontSize: '14px', color: 'grey' }}>
                   {room.pricingtype}
                 </span>

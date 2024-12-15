@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
-import { textDB } from "../../firebase";
-import { useNavigate } from "react-router-dom";
-
+import React, { useState, useEffect } from 'react';
+import { collection, getDocs, updateDoc, doc } from 'firebase/firestore';
+import { textDB } from '../../firebase';
+import { useNavigate } from 'react-router-dom';
+import { Badge } from 'react-bootstrap';
 function Cottages() {
   const [cottages, setCottages] = useState([]);
+  const [pendings, setPendings] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchcottages = async () => {
       try {
-        const cottagesCollection = collection(textDB, "cottages");
+        const cottagesCollection = collection(textDB, 'cottages');
         const cottagesnapshot = await getDocs(cottagesCollection);
         const cottageList = cottagesnapshot.docs.map((doc) => ({
           id: doc.id,
@@ -18,15 +19,31 @@ function Cottages() {
         }));
         setCottages(cottageList);
       } catch (error) {
-        console.error("Error fetching cottages: ", error);
+        console.error('Error fetching cottages: ', error);
       }
     };
 
     fetchcottages();
+    fetchPending();
   }, []);
 
+  const fetchPending = async () => {
+    try {
+      const pendingCollection = collection(textDB, 'Peding');
+      const pendingsnapshot = await getDocs(pendingCollection);
+      const pendingList = pendingsnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setPendings(pendingList);
+      console.log('fetch success', pendingList);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleReserve = (cottage) => {
-    navigate("/cottagereserve", { state: cottage });
+    navigate('/cottagereserve', { state: cottage });
   };
 
   return (
@@ -35,7 +52,7 @@ function Cottages() {
         <h2 id="cottages">cottages</h2>
         {cottages.map((cottage, index) => (
           <div className="cards col-md-4" key={cottage.id}>
-            <div className="row" style={{ width: "100%" }}>
+            <div className="row" style={{ width: '100%' }}>
               <div
                 id={`carousel${index}`}
                 className="carousel slide"
@@ -47,8 +64,8 @@ function Cottages() {
                       key={idx}
                       data-bs-target={`#carousel${index}`}
                       aria-label={`Slide ${idx + 1}`}
-                      aria-current={idx === 0 ? "true" : "false"}
-                      className={idx === 0 ? "active" : ""}
+                      aria-current={idx === 0 ? 'true' : 'false'}
+                      className={idx === 0 ? 'active' : ''}
                       data-bs-slide-to={idx}
                     ></button>
                   ))}
@@ -56,7 +73,7 @@ function Cottages() {
                 <div className="carousel-inner">
                   {cottage.images.map((url, idx) => (
                     <div
-                      className={`carousel-item ${idx === 0 ? "active" : ""}`}
+                      className={`carousel-item ${idx === 0 ? 'active' : ''}`}
                       key={idx}
                     >
                       <img
@@ -92,30 +109,55 @@ function Cottages() {
               </div>
               <div
                 className="card-body"
-                style={{ textAlign: "justify", marginLeft: "15px" }}
+                style={{ textAlign: 'justify', marginLeft: '15px' }}
               >
-                <h4>{cottage.cottagename}</h4>
+                <div>
+                  <h4>{cottage.cottagename}</h4>
+                  {(() => {
+                    const cottageAvailability = pendings.find(
+                      (avail) => avail.cottagename === cottage.cottagename,
+                    );
+                    return (
+                      cottageAvailability?.availability && (
+                        <h6>
+                          <Badge bg="warning">
+                            {cottageAvailability.availability}
+                          </Badge>
+                        </h6>
+                      )
+                    );
+                  })()}
+                </div>
+
                 <h4 className="btn price">
                   <b>₱ {cottage.price} </b>
+                  <span style={{ fontSize: '14px', color: 'grey' }}>
+                    {cottage.pricingtype}
+                  </span>
                 </h4>
                 <h5
                   className="fs-6"
-                  style={{ color: "grey", fontFamily: "arial" }}
+                  style={{ color: 'grey', fontFamily: 'arial' }}
                 >
                   {cottage.description}
                 </h5>
-                {cottage.amenities.split(",").map((amenity, i) => (
+                {cottage.amenities.split(',').map((amenity, i) => (
                   <li key={i}>{amenity}</li>
                 ))}
                 <button
                   className="btn btn-primary"
-                  style={{ float: "right" }}
+                  style={{ float: 'right' }}
                   onClick={() => handleReserve(cottage)}
-                  disabled={cottage.availability === "Reserved"}
+                  disabled={
+                    pendings.find(
+                      (available) =>
+                        available.cottagename === cottage.cottagename,
+                    )?.availability === 'Pending'
+                  }
                 >
-                  {cottage.availability === "Reserved"
-                    ? "Not Available"
-                    : "Reserve"}
+                  {cottage.availability === 'Reserved'
+                    ? 'Not Available'
+                    : 'Reserve'}
                 </button>
               </div>
             </div>

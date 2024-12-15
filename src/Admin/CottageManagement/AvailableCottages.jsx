@@ -300,7 +300,10 @@ export const Available_cottages = () => {
               </tr>
             </thead>
             <tbody>
-              {cottages.map((cottage, index) => (
+              {cottages.length > 0? (
+
+              
+              cottages.map((cottage, index) => (
                 <tr key={cottage.id}>
                   <th scope="row">{index + 1}</th>
                   <td style={{ maxWidth: '5px' }}>
@@ -416,7 +419,11 @@ export const Available_cottages = () => {
                     </div>
                   </td>
                 </tr>
-              ))}
+              ))) : (
+                <tr>
+                  <td colSpan='9' className='text-center bg-warning'>No Cottage</td>
+                </tr>
+              )}
             </tbody>
           </table>
 

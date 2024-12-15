@@ -105,7 +105,7 @@ export const ConsumableInventory = () => {
               </ListGroup.Item>
             ))
           ) : (
-            <ListGroup.Item className="text-center">
+            <ListGroup.Item className="text-center bg-warning">
               <span>No Inventory Found</span>
             </ListGroup.Item>
           )}

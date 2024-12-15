@@ -1,8 +1,20 @@
+import { TuneRounded } from '@mui/icons-material';
 import React, { useState, useEffect } from 'react';
-import { Table, Button, FormControl, Form } from 'react-bootstrap';
+import {
+  Table,
+  Button,
+  FormControl,
+  Form,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  ModalTitle,
+} from 'react-bootstrap';
 
 const BeachActivitiesTable = () => {
   const [activities, setActivities] = useState([]);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     // Simulate fetching data from an API
@@ -31,6 +43,10 @@ const BeachActivitiesTable = () => {
     fetchActivities();
   }, []);
 
+  const handleShow = () => setShow(true);
+
+  const handleClose = () => setShow(false);
+
   return (
     <div className="container mt-4">
       <div
@@ -43,12 +59,12 @@ const BeachActivitiesTable = () => {
       >
         <div className=" justify-content-start mb-3">
           <h5 className="mb-1 fs-4 bold">Beach Activities</h5>
-          <h6 className='fs-6'>Manage the Daily Activities</h6>
+          <h6 className="fs-6">Manage the Daily Activities</h6>
         </div>
 
         <div className="d-flex justify-content-between align-items-center pb-3">
-          <Form.Control type='search'  placeholder='Search' className='w-25'/>
-          <Button size="md" variant="dark">
+          <Form.Control type="search" placeholder="Search" className="w-25" />
+          <Button variant="primary" onClick={handleShow}>
             Add Activity
           </Button>
         </div>
@@ -60,6 +76,20 @@ const BeachActivitiesTable = () => {
           borderRadius: '10px',
         }}
       >
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header className='bg-primary' closeButton>
+            <Modal.Title className='fs-5 text-white'>Add Activities</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Insert your activity details here.</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary">Submit</Button>
+          </Modal.Footer>
+        </Modal>
         <Table responsive striped hover>
           <thead>
             <tr>

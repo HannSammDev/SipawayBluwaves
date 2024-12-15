@@ -231,7 +231,7 @@ export const Guest_List = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="9" className="text-center">
+                  <td colSpan="9" className="text-center bg-warning">
                     No guests found.
                   </td>
                 </tr>

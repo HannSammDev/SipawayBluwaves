@@ -59,7 +59,7 @@ function Reservations() {
 
   const handleShowConfirmModal = (type, pending) => {
     setActionType(type);
-    setCurrentGuest(pending); // Set the current guest
+    setCurrentGuest(pending);
     setShowConfirmModal(true);
   };
 
@@ -119,7 +119,7 @@ function Reservations() {
     }
   };
 
-  // Modified Decline Handler
+ 
   const handleDecline = async (pending) => {
     if (!pending) {
       console.error('No pending reservation selected.');
@@ -127,19 +127,19 @@ function Reservations() {
     }
 
     try {
-      await deleteDoc(doc(textDB, 'Peding', pending.id)); // Ensure collection name is correct
+      await deleteDoc(doc(textDB, 'Peding', pending.id)); 
       setPendings((prevPendings) =>
         prevPendings.filter((item) => item.id !== pending.id),
-      ); // Update the state to reflect the changes
+      ); 
     } catch (error) {
       console.error('Error deleting document:', error);
     }
   };
 
-  // Modified Decline Modal trigger to set the selectedPending state
+  
   const handleShowDeclineModal = (pending) => {
-    setSelectedPending(pending); // Set the selected pending reservation
-    setShowDeclineModal(true); // Show the decline modal
+    setSelectedPending(pending); 
+    setShowDeclineModal(true);
   };
 
   return (
@@ -221,7 +221,7 @@ function Reservations() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="6" className="text-center">
+                  <td colSpan="6" className="text-center bg-warning">
                     No Pending
                   </td>
                 </tr>

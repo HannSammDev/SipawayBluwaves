@@ -80,9 +80,9 @@ export const Side_nav = () => {
           </li>
           <li>
             <Link
-              to="/activityF"
+              to="/activityT"
               className={`text-white fs-5 d-flex nav-link text-decoration-none px-3 py-2  align-items-center ${
-                pathname === "/activityF" ? "active text-dark bg-dark " : ""
+                pathname === "/activityT" ? "active text-dark bg-dark " : ""
               }`}
             >
               <i className="bi bi-graph-up"></i>

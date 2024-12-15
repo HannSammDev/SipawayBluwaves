@@ -1,35 +1,37 @@
-import React, { useState, useEffect } from "react";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { useParams, useNavigate } from "react-router-dom";
-import { textDB } from "../../firebase";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import React, { useState, useEffect } from 'react';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { useParams, useNavigate } from 'react-router-dom';
+import { textDB } from '../../firebase';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { InputGroup, Form } from 'react-bootstrap';
 
 export const EditCottage = () => {
-  const [successMessage, setSuccessMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState('');
   const { id } = useParams();
   // const navigate = useNavigate();
   const [cottage, setCottage] = useState({
-    cottagename: "",
-    description: "",
+    cottagename: '',
+    description: '',
     amenities: [],
-    price: "",
-    images: [], // Store URLs of existing images from Firebase
+    price: '',
+    pricingType: '',
+    images: [],
   });
-  const [newImages, setNewImages] = useState([]); // Store new image files
+  const [newImages, setNewImages] = useState([]);
 
   const getCottage = async () => {
-    const docRef = doc(textDB, "cottages", id);
+    const docRef = doc(textDB, 'cottages', id);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       const cottageData = docSnap.data();
       setCottage({
         ...cottageData,
-        amenities: cottageData.amenities.split(","),
+        amenities: cottageData.amenities.split(','),
       });
     } else {
-      console.log("No such document!");
+      console.log('No such document!');
     }
   };
 
@@ -49,7 +51,7 @@ export const EditCottage = () => {
   };
 
   const addAmenity = () => {
-    setCottage({ ...cottage, amenities: [...cottage.amenities, ""] });
+    setCottage({ ...cottage, amenities: [...cottage.amenities, ''] });
   };
 
   const removeAmenity = (index) => {
@@ -69,7 +71,7 @@ export const EditCottage = () => {
         const imageRef = ref(storage, `cottages/${id}/${image.name}`);
         await uploadBytes(imageRef, image);
         return await getDownloadURL(imageRef);
-      })
+      }),
     );
     return uploadedImageUrls;
   };
@@ -87,17 +89,20 @@ export const EditCottage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let updatedCottage = { ...cottage, amenities: cottage.amenities.join(",") };
+    let updatedCottage = { ...cottage, amenities: cottage.amenities.join(',') };
 
     if (newImages.length > 0) {
       const imageUrls = await uploadImages();
-      updatedCottage = { ...updatedCottage, images: [...cottage.images, ...imageUrls] };
+      updatedCottage = {
+        ...updatedCottage,
+        images: [...cottage.images, ...imageUrls],
+      };
     }
 
-    const docRef = doc(textDB, "cottages", id);
+    const docRef = doc(textDB, 'cottages', id);
     await updateDoc(docRef, updatedCottage);
-    console.log("Cottage updated successfully!");
-    setSuccessMessage("Cottage updated successfully!");
+    console.log('Cottage updated successfully!');
+    setSuccessMessage('Cottage updated successfully!');
     // navigate("/cottagedetails");
   };
 
@@ -106,8 +111,8 @@ export const EditCottage = () => {
       <div
         className="card "
         style={{
-          backgroundColor: "#f5f5f5",
-          boxShadow: "0px 0px 10px 5px rgba(0, 0, 0, 0.1)",
+          backgroundColor: '#f5f5f5',
+          boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.1)',
         }}
       >
         <div className="card-header bg-primary text-white d-flex">
@@ -171,7 +176,7 @@ export const EditCottage = () => {
               </button>
             </div>
             <div className="mb-3">
-              <label htmlFor="price" className="form-label">
+              {/* <label htmlFor="price" className="form-label">
                 ₱ Price
               </label>
               <input
@@ -181,7 +186,27 @@ export const EditCottage = () => {
                 name="price"
                 value={cottage.price}
                 onChange={handleChange}
-              />
+              /> */}
+              <InputGroup className="mb-3">
+                <InputGroup.Text>₱</InputGroup.Text>
+                <Form.Control
+                  name="price"
+                  value={cottage.price}
+                  onChange={handleChange}
+                  aria-label="Amount (to the nearest dollar)"
+                />
+                <Form.Select
+                  style={{ width: '10px' }}
+                  className=""
+                  name="pricingtype"
+                  value={cottage.pricingType}
+                  onChange={handleChange}
+                  // aria-label="Select Pricing Type"
+                >
+                  <option value="Per Person">Per Person</option>
+                  <option value="Per Group">Per Group</option>
+                </Form.Select>
+              </InputGroup>
             </div>
             <div className="mb-3">
               <label className="form-label">
@@ -193,11 +218,11 @@ export const EditCottage = () => {
                     src="https://via.placeholder.com/150"
                     alt="Placeholder"
                     style={{
-                      width: "150px",
-                      height: "150px",
-                      objectFit: "cover",
-                      borderRadius: "5px",
-                      marginBottom: "10px",
+                      width: '150px',
+                      height: '150px',
+                      objectFit: 'cover',
+                      borderRadius: '5px',
+                      marginBottom: '10px',
                     }}
                   />
                 </div>
@@ -208,11 +233,11 @@ export const EditCottage = () => {
                     src={image}
                     alt={`Existing ${index + 1}`}
                     style={{
-                      width: "100px",
-                      height: "100px",
-                      objectFit: "cover",
-                      borderRadius: "5px",
-                      marginRight: "10px",
+                      width: '100px',
+                      height: '100px',
+                      objectFit: 'cover',
+                      borderRadius: '5px',
+                      marginRight: '10px',
                     }}
                   />
                   <button
@@ -230,11 +255,11 @@ export const EditCottage = () => {
                     src={URL.createObjectURL(image)}
                     alt={`New ${index + 1}`}
                     style={{
-                      width: "100px",
-                      height: "100px",
-                      objectFit: "cover",
-                      borderRadius: "5px",
-                      marginRight: "10px",
+                      width: '100px',
+                      height: '100px',
+                      objectFit: 'cover',
+                      borderRadius: '5px',
+                      marginRight: '10px',
                     }}
                   />
                   <button
@@ -259,14 +284,14 @@ export const EditCottage = () => {
               <div
                 className="alert alert-dismissible fade show"
                 role="alert"
-                style={{ backgroundColor: "#FBCEB1" }}
+                style={{ backgroundColor: '#FBCEB1' }}
               >
                 {successMessage}
                 <a
                   href="/cottagedetails"
                   type="button"
                   className="btn-close"
-                  onClick={() => setSuccessMessage("")}
+                  onClick={() => setSuccessMessage('')}
                   aria-label="Close"
                 ></a>
               </div>
