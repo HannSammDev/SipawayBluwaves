@@ -117,9 +117,10 @@ export const Guest = () => {
     }
   };
 
-  const fiftyPercentPrice = cottage.price * 0.5;
+ 
   const totalGuests = guests.adults + guests.children;
-  const guestMultipyBy = totalGuests * cottage.price;
+  const guestMultipyBy = totalGuests * cottage.price ;
+  const fiftyPercentPrice = guestMultipyBy * 0.5;
   return (
     <>
       <Headertwo />

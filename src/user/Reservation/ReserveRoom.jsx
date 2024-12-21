@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { Headertwo } from "./HeaderTwo";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
-import { textDB } from "../../firebase";
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Headertwo } from './HeaderTwo';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { collection, addDoc, updateDoc, doc } from 'firebase/firestore';
+import { textDB } from '../../firebase';
 
 export const GuestInfo = () => {
   const location = useLocation();
@@ -12,25 +12,24 @@ export const GuestInfo = () => {
   const navigate = useNavigate();
 
   const [guests, setGuests] = useState({ adults: 1, children: 0 });
-  const [checkInDate, setCheckInDate] = useState("");
-  const [checkOutDate, setCheckOutDate] = useState("");
-  const [specialCode, setSpecialCode] = useState("");
- 
+  const [checkInDate, setCheckInDate] = useState('');
+  const [checkOutDate, setCheckOutDate] = useState('');
+  const [specialCode, setSpecialCode] = useState('');
 
   const [isGuestsExpanded, setIsGuestsExpanded] = useState(false);
   const [isCalendarExpanded, setIsCalendarExpanded] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const [guestDetails, setGuestDetails] = useState({
-    firstname: "",
-    lastname: "",
-    phoneNumber: "",
-    email: "",
-    address: "",
-    city: "",
-    state: "",
-    zip: "",
-    country: ""
+    firstname: '',
+    lastname: '',
+    phoneNumber: '',
+    email: '',
+    address: '',
+    city: '',
+    state: '',
+    zip: '',
+    country: '',
   });
 
   useEffect(() => {
@@ -38,8 +37,8 @@ export const GuestInfo = () => {
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    setCheckInDate(today.toISOString().split("T")[0]);
-    setCheckOutDate(tomorrow.toISOString().split("T")[0]);
+    setCheckInDate(today.toISOString().split('T')[0]);
+    setCheckOutDate(tomorrow.toISOString().split('T')[0]);
   }, []);
 
   const toggleExpanded = (setter) => () => {
@@ -47,12 +46,12 @@ export const GuestInfo = () => {
   };
 
   const updateGuests = (type, action) => () => {
-    if (action === "increase") {
+    if (action === 'increase') {
       setGuests((prev) => ({
         ...prev,
         [type]: prev[type] + 1,
       }));
-    } else if (action === "decrease" && guests[type] > 0) {
+    } else if (action === 'decrease' && guests[type] > 0) {
       setGuests((prev) => ({
         ...prev,
         [type]: prev[type] - 1,
@@ -68,8 +67,7 @@ export const GuestInfo = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      
-      const reservationRef = await addDoc(collection(textDB,"reservations"), {
+      const reservationRef = await addDoc(collection(textDB, 'reservations'), {
         roomId: room.id,
         roomname: room.roomname,
         guests,
@@ -79,45 +77,49 @@ export const GuestInfo = () => {
         roomPrice: room.price,
         fiftyPercentPrice: room.price * 0.5,
         balance: room.price * 0.5,
-        paymentMethod: "GCash",
-       
-        guestDetails
+        paymentMethod: 'GCash',
+
+        guestDetails,
       });
 
-      const pendingRef = await addDoc(collection(textDB,"Peding"), {
+      const pendingRef = await addDoc(collection(textDB, 'Peding'), {
         roomId: room.id,
         roomname: room.roomname,
         guests,
         checkInDate,
         checkOutDate,
         specialCode,
-        roomPrice: room.price,
-        fiftyPercentPrice: room.price * 0.5,
+        roomPrice: guestMultipyBy,
+        fiftyPercentPrice: fiftyPercentPrice * 0.5,
         balance: room.price * 0.5,
-        paymentMethod: "GCash",
-        availability: "Pending",
-        guestDetails
+        paymentMethod: 'GCash',
+        availability: 'Pending',
+        guestDetails,
       });
 
+      console.log(
+        'Reservation added with ID: ',
+        reservationRef.id,
+        pendingRef.id,
+      );
 
-      console.log("Reservation added with ID: ", reservationRef.id, pendingRef.id);
-
-      const roomRef = doc(textDB, "rooms", room.id);
+      const roomRef = doc(textDB, 'rooms', room.id);
       await updateDoc(roomRef, {
         // availability: "Reserved",
       });
 
-      console.log("Room availability updated for room ID: ", room.id);
+      console.log('Room availability updated for room ID: ', room.id);
 
       setIsSubmitted(true);
-      navigate("/confirmation");
+      navigate('/confirmation');
     } catch (error) {
-      console.error("Error adding reservation: ", error);
+      console.error('Error adding reservation: ', error);
     }
   };
 
-  const fiftyPercentPrice = room.price * 0.5;
-  
+  const totalGuests = guests.adults + guests.children;
+  const guestMultipyBy = totalGuests * room.price;
+  const fiftyPercentPrice = guestMultipyBy * 0.5;
   return (
     <>
       <Headertwo />
@@ -125,10 +127,10 @@ export const GuestInfo = () => {
         <div
           className="card"
           style={{
-            maxWidth: "2000px",
-            boxShadow: "0px 0px 10px 5px rgba(0, 0, 0, 0.1)",
-            borderRadius: "5px",
-            padding: "1em",
+            maxWidth: '2000px',
+            boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.1)',
+            borderRadius: '5px',
+            padding: '1em',
           }}
         >
           <div className="card-body">
@@ -140,24 +142,24 @@ export const GuestInfo = () => {
                     onClick={toggleExpanded(setIsGuestsExpanded)}
                   >
                     Guests: {guests.adults} Adult
-                    {guests.adults !== 1 ? "s" : ""}, {guests.children} Child
-                    {guests.children !== 1 ? "ren" : ""}
+                    {guests.adults !== 1 ? 's' : ''}, {guests.children} Child
+                    {guests.children !== 1 ? 'ren' : ''}
                   </button>
                   {isGuestsExpanded && (
                     <div className="dropdown-menu p-3 show">
                       <div className="d-flex justify-content-between align-items-center mb-2">
-                        {["Adults", "Children"].map((type) => (
+                        {['Adults', 'Children'].map((type) => (
                           <div key={type}>
                             <label className="me-2">{type}:</label>
                             <div
                               className="btn-group"
-                              style={{ marginRight: "1em" }}
+                              style={{ marginRight: '1em' }}
                             >
                               <button
                                 className="btn btn-light border border-dark"
                                 onClick={updateGuests(
                                   type.toLowerCase(),
-                                  "decrease"
+                                  'decrease',
                                 )}
                               >
                                 -
@@ -169,7 +171,7 @@ export const GuestInfo = () => {
                                 className="btn btn-light border border-dark"
                                 onClick={updateGuests(
                                   type.toLowerCase(),
-                                  "increase"
+                                  'increase',
                                 )}
                               >
                                 +
@@ -186,12 +188,12 @@ export const GuestInfo = () => {
                 {
                   state: checkInDate,
                   setter: setCheckInDate,
-                  label: "Check-in",
+                  label: 'Check-in',
                 },
                 {
                   state: checkOutDate,
                   setter: setCheckOutDate,
-                  label: "Check-out",
+                  label: 'Check-out',
                 },
               ].map(({ state, setter, label }) => (
                 <div key={label} className="col-lg-4 mb-3">
@@ -224,7 +226,7 @@ export const GuestInfo = () => {
             <div className="d-flex align-items-center mb-4">
               <a
                 className="fs-5"
-                style={{ marginRight: "10px" }}
+                style={{ marginRight: '10px' }}
                 onClick={() => window.history.back()}
               >
                 <FontAwesomeIcon icon={faArrowLeft} />
@@ -234,9 +236,9 @@ export const GuestInfo = () => {
             <form
               onSubmit={handleSubmit}
               style={{
-                maxWidth: "2000px",
-                boxShadow: "0px 0px 10px 5px rgba(0, 0, 0, 0.1)",
-                borderRadius: "5px",
+                maxWidth: '2000px',
+                boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.1)',
+                borderRadius: '5px',
                 // padding: "1em",
               }}
             >
@@ -369,10 +371,10 @@ export const GuestInfo = () => {
             <div
               className="mb-3"
               style={{
-                padding: "3em",
-                boxShadow: "0px 0px 10px 5px rgba(0, 0, 0, 0.1)",
-                maxWidth: "550px",
-                marginTop: "2em",
+                padding: '3em',
+                boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.1)',
+                maxWidth: '550px',
+                marginTop: '2em',
               }}
             >
               <h5 className="">Your Stay</h5>
@@ -387,16 +389,16 @@ export const GuestInfo = () => {
               <hr />
               <div className="row">
                 <p>
-                  {guests.adults} Adult{guests.adults !== 1 ? "s" : ""} |{" "}
-                  {guests.children} Child{guests.children !== 1 ? "ren" : ""}
+                  {guests.adults} Adult{guests.adults !== 1 ? 's' : ''} |{' '}
+                  {guests.children} Child{guests.children !== 1 ? 'ren' : ''}
                 </p>
                 <p className="col">{room.roomname}</p>
                 <p className="col">{room.price}</p>
               </div>
-              <hr className="bg-dark" style={{ borderWidth: "3px" }} />
+              <hr className="bg-dark" style={{ borderWidth: '3px' }} />
               <div className="row">
                 <p className="col">Total:</p>
-                <p className="col">{room.price}</p>
+                <p className="col">{guestMultipyBy}</p>
               </div>
               <div className="row">
                 <p className="col">50%:</p>
