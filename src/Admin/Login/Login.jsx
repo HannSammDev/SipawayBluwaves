@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { Spinner } from "react-bootstrap";
 
 export const Admin_Login = () => {
   const [email, setEmail] = useState("");
@@ -129,7 +130,7 @@ export const Admin_Login = () => {
                 transition: "background-color 0.3s ease"
               }}
             >
-              {loading ? "Logging in..." : "Login"}
+              {loading ? <Spinner/> : "Login"}
             </button>
             {error && (
               <p className="mt-3 text-danger" style={{ fontSize: "14px" }}>

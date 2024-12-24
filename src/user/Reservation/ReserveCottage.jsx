@@ -67,22 +67,29 @@ export const Guest = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const reservationRef = await addDoc(collection(textDB, 'reservations'), {
-        cottageId: cottage.id,
-        cottagename: cottage.cottagename,
-        guests,
-        checkInDate,
-        checkOutDate,
-        specialCode,
-        cottagePrice: cottage.price,
-        fiftyPercentPrice: cottage.price * 0.5,
-        balance: cottage.price * 0.5,
-        paymentMethod: 'GCash',
+      // const reservationRef = await addDoc(collection(textDB, 'reservations'), {
+      //   cottageId: cottage.id,
+      //   cottagename: cottage.cottagename,
+      //   guests,
+      //   checkInDate,
+      //   checkOutDate,
+      //   specialCode,
+      //   cottagePrice: cottage.price,
+      //   fiftyPercentPrice:fiftyPercentPrice,
+      //   balance: cottage.price * 0.5,
+      //   paymentMethod: 'GCash',
 
-        guestDetails,
-      });
+      //   guestDetails,
+      // });
+            const reservationRef = await addDoc(collection(textDB, 'reservations'), {
+              guestId: 0,
+              status: 'Not Available',
+              cottagename: cottage.cottagename,
+              checkInDate,  
+            });
+      
 
-      const pendingRef = await addDoc(collection(textDB, 'Peding'), {
+      const pendingRef = await addDoc(collection(textDB, 'Pending'), {
         cottageId: cottage.id,
         cottagename: cottage.cottagename,
         guests,
@@ -90,10 +97,10 @@ export const Guest = () => {
         checkOutDate,
         specialCode,
         cottagePrice: guestMultipyBy,
-        fiftyPercentPrice: guestMultipyBy * 0.5,
+        fiftyPercentPrice:fiftyPercentPrice,
         balance: cottage.price * 0.5,
         paymentMethod: 'GCash',
-        availability: 'Pending',
+        availability: 'Not Available',
         guestDetails,
       });
 

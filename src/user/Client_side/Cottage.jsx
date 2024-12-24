@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Badge } from 'react-bootstrap';
 function Cottages() {
   const [cottages, setCottages] = useState([]);
-  const [pendings, setPendings] = useState([]);
+  const [status, setStatus] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,14 +29,14 @@ function Cottages() {
 
   const fetchPending = async () => {
     try {
-      const pendingCollection = collection(textDB, 'Peding');
-      const pendingsnapshot = await getDocs(pendingCollection);
-      const pendingList = pendingsnapshot.docs.map((doc) => ({
+      const reservationCollection = collection(textDB, 'reservations');
+      const statusnapshot = await getDocs(reservationCollection);
+      const reservationList = statusnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      setPendings(pendingList);
-      console.log('fetch success', pendingList);
+      setStatus(reservationList);
+      console.log('fetch success', reservationList);
     } catch (error) {
       console.log(error);
     }
@@ -114,14 +114,14 @@ function Cottages() {
                 <div>
                   <h4>{cottage.cottagename}</h4>
                   {(() => {
-                    const cottageAvailability = pendings.find(
+                    const cottageAvailability = status.find(
                       (avail) => avail.cottagename === cottage.cottagename,
                     );
                     return (
-                      cottageAvailability?.availability && (
+                      cottageAvailability?.status && (
                         <h6>
                           <Badge bg="warning">
-                            {cottageAvailability.availability}
+                            {cottageAvailability.status}
                           </Badge>
                         </h6>
                       )
@@ -149,10 +149,10 @@ function Cottages() {
                   style={{ float: 'right' }}
                   onClick={() => handleReserve(cottage)}
                   disabled={
-                    pendings.find(
+                    status.find(
                       (available) =>
                         available.cottagename === cottage.cottagename,
-                    )?.availability === 'Pending'
+                    )?.status === 'Not Available'
                   }
                 >
                   {cottage.availability === 'Reserved'

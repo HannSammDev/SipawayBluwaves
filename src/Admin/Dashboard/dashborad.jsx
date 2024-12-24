@@ -88,6 +88,7 @@ export const Dashboard = () => {
     datasets: [
       {
         label: 'Daily Income',
+
         data: dailyIncomeData.map((item) => item.totalIncome),
         borderColor: '#4e73df',
         backgroundColor: '#4e73df',
@@ -98,7 +99,7 @@ export const Dashboard = () => {
         borderWidth: 2,
       },
       {
-        label: 'Cumulative Income',
+        label: 'Total Earnings  ',
         data: dailyIncomeData.map((item, index) =>
           dailyIncomeData
             .slice(0, index + 1)
@@ -152,21 +153,21 @@ export const Dashboard = () => {
           },
         },
       },
-      annotation: {
-        annotations: [
-          {
-            type: 'line',
-            scaleID: 'x',
-            value: 'Day 3',
-            borderColor: 'red',
-            borderWidth: 2,
-            label: {
-              enabled: true,
-              content: 'Special Day',
-            },
-          },
-        ],
-      },
+      // annotation: {
+      //   annotations: [
+      //     {
+      //       type: 'line',
+      //       scaleID: 'x',
+      //       value: 'Day 3',
+      //       borderColor: 'red',
+      //       borderWidth: 2,
+      //       label: {
+      //         enabled: true,
+      //         content: 'Special Day',
+      //       },
+      //     },
+      //   ],
+      // },
     },
     scales: {
       y: {
@@ -234,7 +235,7 @@ export const Dashboard = () => {
             </div>
 
             
-            <div
+            {/* <div
               className="card text-center mb-4 p-3"
               style={{
                 boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.1)',
@@ -245,7 +246,7 @@ export const Dashboard = () => {
                 <h5 className="card-title fs-4 text-dark">Total Income</h5>
                 <p className="card-text display-4 text-dark">₱{totalIncome}</p>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 

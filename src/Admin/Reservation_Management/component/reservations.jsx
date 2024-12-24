@@ -9,9 +9,9 @@ import { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import { textDB } from '../../../firebase';
 import { Button, Modal, Form, Pagination, Spinner } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import Dropdown from 'react-bootstrap/Dropdown';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faCheckCircle, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+// import Dropdown from 'react-bootstrap/Dropdown';
 import { AddCheckin } from './addCheckin';
 
 export const Reservationss = () => {

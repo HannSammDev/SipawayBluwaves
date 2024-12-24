@@ -30,6 +30,8 @@ export const GuestInfo = () => {
     state: '',
     zip: '',
     country: '',
+    guestId: 0,
+
   });
 
   useEffect(() => {
@@ -67,22 +69,28 @@ export const GuestInfo = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const reservationRef = await addDoc(collection(textDB, 'reservations'), {
-        roomId: room.id,
-        roomname: room.roomname,
-        guests,
-        checkInDate,
-        checkOutDate,
-        specialCode,
-        roomPrice: room.price,
-        fiftyPercentPrice: room.price * 0.5,
-        balance: room.price * 0.5,
-        paymentMethod: 'GCash',
+      // const reservationRef = await addDoc(collection(textDB, 'reservations'), {
+      //   roomId: room.id,
+      //   roomname: room.roomname,
+      //   guests,
+      //   checkInDate,
+      //   checkOutDate,
+      //   specialCode,
+      //   roomPrice: room.price,
+      //   fiftyPercentPrice: fiftyPercentPrice,
+      //   balance: room.price * 0.5,
+      //   paymentMethod: 'GCash',
 
-        guestDetails,
+      //   guestDetails,
+      // });
+      const reservationRef = await addDoc(collection(textDB, 'reservations'), {
+        guestId: 0,
+        status: 'Not Available',
+        roomname: room.roomname,
+        checkInDate,
       });
 
-      const pendingRef = await addDoc(collection(textDB, 'Peding'), {
+      const pendingRef = await addDoc(collection(textDB, 'Pending'), {
         roomId: room.id,
         roomname: room.roomname,
         guests,
@@ -90,10 +98,10 @@ export const GuestInfo = () => {
         checkOutDate,
         specialCode,
         roomPrice: guestMultipyBy,
-        fiftyPercentPrice: fiftyPercentPrice * 0.5,
+        fiftyPercentPrice: fiftyPercentPrice,
         balance: room.price * 0.5,
         paymentMethod: 'GCash',
-        availability: 'Pending',
+        // availability: 'Not Available',
         guestDetails,
       });
 

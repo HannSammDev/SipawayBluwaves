@@ -7,17 +7,17 @@ import {
   Legend,
 } from "chart.js";
 
-// Register Chart.js components
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export const DoughnutChart = () => {
   // Define colors
   const CHART_COLORS = {
-    red: "rgb(255, 75, 75)",      // Vibrant Red
-    orange: "rgb(255, 159, 64)", // Warm Orange
-    yellow: "rgb(255, 205, 86)", // Bright Yellow
-    green: "rgb(75, 192, 192)",  // Cool Green
-    blue: "rgb(54, 162, 235)",   // Vibrant Blue
+    red: "rgb(255, 75, 75)",     
+    orange: "rgb(255, 159, 64)",
+    yellow: "rgb(255, 205, 86)", 
+    green: "rgb(75, 192, 192)",  
+    blue: "rgb(54, 162, 235)",   
   };
   
 
@@ -27,7 +27,7 @@ export const DoughnutChart = () => {
       Math.floor(Math.random() * (max - min + 1)) + min
     );
 
-  // Chart data
+ 
   const data = {
     // labels: ["Red", "Orange", "Yellow", "Green", "Blue"],
     datasets: [
@@ -39,7 +39,7 @@ export const DoughnutChart = () => {
     ],
   };
 
-  // Chart options
+ 
   const options = {
     responsive: true,
     plugins: {
@@ -55,7 +55,7 @@ export const DoughnutChart = () => {
 
   return (
     <div>
-      {/* <h2>Doughnut Chart</h2> */}
+      <h2></h2>
       <Doughnut  data={data} options={options} />
     </div>
   );

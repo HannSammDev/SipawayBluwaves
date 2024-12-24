@@ -187,7 +187,7 @@ export const Available_rooms = () => {
     }
   };
 
-  // New handleDeclineReservation function to delete the reservation
+  // New handleDeclineReservati on function to delete the reservation
   const handleDeclineReservation = async () => {
     if (!selectedRoom || selectedRoom.length === 0) {
       setConfirmationMessage('No room selected for reservation.');

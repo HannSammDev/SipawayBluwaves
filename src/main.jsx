@@ -44,6 +44,7 @@ import Reservations from './Admin/Reservation_Management/reservations';
 import { MainDashbord } from './Admin/Dashboard/mainDasbord';
 import BeachActivitiesTable from './Admin/Manage_activities/activitiesTable';
 import { InventoryMainPage } from './Admin/inventory/mainInventory';
+import { Test } from './Admin/testFolder/test';
 
 // import ReservationConfirmation from "./user/Client_side/Userdashboard";
 
@@ -96,6 +97,9 @@ const App = () => (
         <Route path="/inventory" element={<InventoryMainPage />} />
         {/* ---------------- */}
         <Route path="/radmin" element={<Registeradmin />} />
+
+        {/* ---TEST--- */}
+        <Route path="/TEST" element={<Test/>} />
       </Route>
     </Routes>
   </Router>

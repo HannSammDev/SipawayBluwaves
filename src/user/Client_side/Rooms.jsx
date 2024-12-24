@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 function Rooms() {
   const [rooms, setRooms] = useState([]);
-  const [availability, setAvailability] = useState([]);
+  const [status, setStatus] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,19 +25,19 @@ function Rooms() {
     };
 
     fetchRooms();
-    fetchAvailability();
+    fetchStatus();
   }, []);
 
-  const fetchAvailability = async () => {
+  const fetchStatus = async () => {
     try {
-      const pendingCollection = collection(textDB, 'Peding');
-      const availabilitySnapshot = await getDocs(pendingCollection);
-      const availabilityData = availabilitySnapshot.docs.map((doc) => ({
+      const reservationCollection = collection(textDB, 'reservations');
+      const statusSnapshot = await getDocs(reservationCollection);
+      const statusData = statusSnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      setAvailability(availabilityData);
-      console.log(availabilityData, 'succes feth peding  ');
+      setStatus(statusData);
+      console.log(statusData, 'succes feth peding  ');
     } catch (error) {
       console.log('Error to Fetch availability', error);
     }
@@ -121,14 +121,14 @@ function Rooms() {
               <div className="">
                 <h4>{room.roomname}</h4>
                 {(() => {
-                  const roomAvailability = availability.find(
+                  const roomAvailability = status.find(
                     (avail) => avail.roomname === room.roomname,
                   );
                   return (
-                    roomAvailability?.availability && (
+                    roomAvailability?.status && (
                       <h6>
                         <Badge bg="warning">
-                          {roomAvailability.availability}
+                          {roomAvailability.status}
                         </Badge>
                       </h6>
                     )
@@ -168,8 +168,8 @@ function Rooms() {
                 style={{ float: 'right' }}
                 onClick={() => handleReserve(room)}
                 disabled={
-                  availability.find((avail) => avail.roomname === room.roomname)
-                    ?.availability === 'Pending'
+                  status.find((avail) => avail.roomname === room.roomname)
+                    ?.status === 'Not Available'
                 }
               >
                 {room.availability === 'Reserved' ? 'Not Available' : 'Reserve'}

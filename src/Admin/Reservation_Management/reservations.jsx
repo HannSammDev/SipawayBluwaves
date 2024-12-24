@@ -25,7 +25,7 @@ function Reservations() {
   const [actionType, setActionType] = useState('');
   const [value, setValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedPending, setSelectedPending] = useState(null); // New state to store selected pending guest
+  const [selectedPending, setSelectedPending] = useState(null); 
   // const [pendings, setPendings] = useState([]);
 
   const getReservation = async () => {
@@ -39,7 +39,7 @@ function Reservations() {
   };
 
   const getPending = async () => {
-    const pendingCollection = collection(textDB, 'Peding');
+    const pendingCollection = collection(textDB, 'Pending');
     const pendingSnapshot = await getDocs(pendingCollection);
     const pendingList = pendingSnapshot.docs.map((doc) => ({
       id: doc.id,
@@ -89,6 +89,7 @@ function Reservations() {
 
       await addDoc(collection(textDB, 'guestData'), {
         status: 'Not Available',
+        // room
         roomId: room.id,
         roomname: room.roomname,
         guests,
@@ -98,6 +99,7 @@ function Reservations() {
         roomPrice: room.price,
         fiftyPercentPrice: room.price * 0.5,
         balance: room.price * 0.5,
+        // Cottage
         cottageId: cottage.id,
         cottagename: cottage.cottagename,
         cottagePrice: cottage.price,
@@ -107,7 +109,7 @@ function Reservations() {
       });
 
       if (pending.id) {
-        await deleteDoc(doc(textDB, 'Peding', pending.id));
+        await deleteDoc(doc(textDB, 'Pending', pending.id));
         setPendings((prevPendings) =>
           prevPendings.filter((item) => item.id !== pending.id),
         );
@@ -127,7 +129,7 @@ function Reservations() {
     }
 
     try {
-      await deleteDoc(doc(textDB, 'Peding', pending.id)); 
+      await deleteDoc(doc(textDB, 'Pending', pending.id)); 
       setPendings((prevPendings) =>
         prevPendings.filter((item) => item.id !== pending.id),
       ); 
@@ -274,9 +276,9 @@ function Reservations() {
             variant="danger"
             onClick={() => {
               if (selectedPending) {
-                handleDecline(selectedPending); // Pass the selectedPending to handleDecline function
+                handleDecline(selectedPending); 
               }
-              setShowDeclineModal(false); // Close the modal after action
+              setShowDeclineModal(false);
             }}
           >
             Decline
