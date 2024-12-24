@@ -6,7 +6,7 @@ import { Outlet } from "react-router-dom";
 export const Admin_layout = () => {
   return (
     <div className="container-fluid" style={{ height: '100vh' }}>
-      <div className="row" style={{ height: '100%' }}>
+      <div className="row col d-flex" style={{ height: '100%' }}>
       <Side_nav className="" />
       
        

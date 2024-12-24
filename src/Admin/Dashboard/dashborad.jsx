@@ -29,7 +29,7 @@ ChartJS.register(
 );
 
 const fetchReservations = async () => {
-  const reservationsCollection = collection(textDB, 'reservations');
+  const reservationsCollection = collection(textDB, 'Pending');
   const reservationsSnapshot = await getDocs(reservationsCollection);
   return reservationsSnapshot.docs.map((doc) => ({
     id: doc.id,
