@@ -64,3 +64,57 @@ export const Test = () => {
         </div>
     );
 };
+
+// const handleDecline = async (pending, reservation) => {
+//     if (!pending || !reservation) {
+//         console.error('No pending or reservation selected.');
+//         return;
+//     }
+
+//     try {
+//         console.log('Deleting reservation with id:', reservation.id); // Log reservation id
+//         console.log('Deleting pending with id:', pending.id); // Log pending id
+
+//         await deleteDoc(doc(textDB, 'reservations', reservation.id));
+//         await deleteDoc(doc(textDB, 'Pending', pending.id));
+//         setPendings((prevPendings) =>
+//             prevPendings.filter((item) => item.id !== pending.id && item.id !== reservation.id)
+//         );
+//     } catch (error) {
+//         console.error('Error deleting document:', error);
+//     }
+// };
+
+// const handleShowDeclineModal = (pending, reservation) => {
+//     console.log('handleShowDeclineModal called with pending:', pending); // Log pending
+//     console.log('handleShowDeclineModal called with reservation:', reservation); // Log reservation
+
+//     setSelectedReservation(reservation);
+//     setSelectedPending(pending);
+//     setShowDeclineModal(true);
+// };
+
+// <Modal show={showDeclineModal} onHide={() => setShowDeclineModal(false)}>
+//     <Modal.Body>Are you sure you want to decline this action?</Modal.Body>
+//     <Modal.Footer>
+//         <Button variant="secondary" onClick={() => setShowDeclineModal(false)}>
+//             Cancel
+//         </Button>
+//         <Button
+//             variant="danger"
+//             onClick={() => {
+//                 if (selectedPending && selectedReservation) {
+//                     console.log('Declining reservation and pending:', selectedPending, selectedReservation); // Log selected values
+//                     handleDecline(selectedPending, selectedReservation);
+//                 } else {
+//                     console.error('selectedPending or selectedReservation is undefined');
+//                 }
+//                 setShowDeclineModal(false);
+//             }}
+//         >
+//             Decline
+//         </Button>
+//     </Modal.Footer>
+// </Modal>
+
+

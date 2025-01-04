@@ -13,8 +13,8 @@ export const Admin_Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError(""); 
-    setLoading(true); 
+    setError("");
+    setLoading(true);
 
     try {
       const normalizedEmail = email.trim().toLowerCase(); // Normalize email
@@ -50,7 +50,15 @@ export const Admin_Login = () => {
   };
 
   return (
-    <div className="container-fluid d-flex align-items-center vh-100" style={{ background: "linear-gradient(to right, #6a11cb, #2575fc)" }}>
+    <div className="container-fluid d-flex align-items-center vh-100"
+      // style={{ background: "linear-gradient(to right, #6a11cb, #2575fc)" }}
+      style={{
+        backgroundImage: 'url(/bg.png)',
+        backgroundSize: 'cover',    
+        backgroundPosition: 'center', 
+        backgroundRepeat: 'no-repeat' 
+      }}
+    >
       <div className="row w-100 justify-content-center">
         <div className="col-md-5 d-flex flex-column align-items-center justify-content-center text-center">
           <img
@@ -130,7 +138,7 @@ export const Admin_Login = () => {
                 transition: "background-color 0.3s ease"
               }}
             >
-              {loading ? <Spinner/> : "Login"}
+              {loading ? <Spinner /> : "Login"}
             </button>
             {error && (
               <p className="mt-3 text-danger" style={{ fontSize: "14px" }}>

@@ -50,7 +50,7 @@ export const Available_rooms = () => {
         id: doc.id,
         ...doc.data(),
       }));
-      console.log('Fetched Reservations: ', reservationsList); 
+      console.log('Fetched Reservations: ', reservationsList);
       setReservations(reservationsList);
     } catch (error) {
       console.error('Error fetching reservations: ', error);
@@ -65,7 +65,7 @@ export const Available_rooms = () => {
         id: doc.id,
         ...doc.data(),
       }));
-      console.log('Fetched Rooms: ', roomsArray); 
+      console.log('Fetched Rooms: ', roomsArray);
       setRooms(roomsArray);
     } catch (error) {
       console.error('Error fetching rooms: ', error);
@@ -92,7 +92,7 @@ export const Available_rooms = () => {
     const roomReservations = reservations.filter(
       (reservation) => reservation.roomId === roomId,
     );
-    console.log('Room Reservations: ', roomReservations); 
+    console.log('Room Reservations: ', roomReservations);
     setSelectedRoom(roomReservations);
   };
 
@@ -100,7 +100,6 @@ export const Available_rooms = () => {
     navigate(`/editroom/${roomId}`);
   };
 
- 
   const handleConfirmReservation = async () => {
     if (!selectedRoom || selectedRoom.length === 0) {
       setConfirmationMessage('No room selected for reservation.');
@@ -271,7 +270,7 @@ export const Available_rooms = () => {
           }}
         >
           <Modal size="lg" show={show} onHide={handleClose}>
-            <Modal.Header closeButton className='bg-primary'>
+            <Modal.Header closeButton className="bg-primary">
               <Modal.Title>
                 <h5 className="mb-0 text-white">
                   <i className="bi bi-pencil-square"></i> Add Room
@@ -299,124 +298,126 @@ export const Available_rooms = () => {
               </tr>
             </thead>
             <tbody>
-              {rooms.length > 0? (
-              rooms.map((room, index) => (
-                <tr key={room.id}>
-                  <th scope="row">{index + 1}.</th>
-                  <td style={{ maxWidth: '5px' }}>{room.roomname}</td>
-                  <td>
-                    {' '}
-                    <div
-                      id={`roomCarousel${index}`}
-                      className="carousel slide"
-                      data-bs-ride="carousel"
-                      style={{ width: '50%', height: 'auto' }}
-                    >
-                      <div className="carousel-inner">
-                        {room.images.map((image, i) => (
-                          <div
-                            key={i}
-                            className={`carousel-item ${
-                              i === 0 ? 'active' : ''
-                            }`}
-                          >
-                            <img
-                              src={image}
-                              className="d-block w-100"
-                              alt={`Room Image ${i + 1}`}
-                            />
-                          </div>
-                        ))}
+              {rooms.length > 0 ? (
+                rooms.map((room, index) => (
+                  <tr key={room.id}>
+                    <th scope="row">{index + 1}.</th>
+                    <td style={{ maxWidth: '5px' }}>{room.roomname}</td>
+                    <td>
+                      {' '}
+                      <div
+                        id={`roomCarousel${index}`}
+                        className="carousel slide"
+                        data-bs-ride="carousel"
+                        style={{ width: '50%', height: 'auto' }}
+                      >
+                        <div className="carousel-inner">
+                          {room.images.map((image, i) => (
+                            <div
+                              key={i}
+                              className={`carousel-item ${
+                                i === 0 ? 'active' : ''
+                              }`}
+                            >
+                              <img
+                                src={image}
+                                className="d-block w-100"
+                                alt={`Room Image ${i + 1}`}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                        <button
+                          className="carousel-control-prev"
+                          type="button"
+                          data-bs-target={`#roomCarousel${index}`}
+                          data-bs-slide="prev"
+                        >
+                          <span
+                            className="carousel-control-prev-icon"
+                            aria-hidden="true"
+                          ></span>
+                          <span className="visually-hidden">Previous</span>
+                        </button>
+                        <button
+                          className="carousel-control-next"
+                          type="button"
+                          data-bs-target={`#roomCarousel${index}`}
+                          data-bs-slide="next"
+                        >
+                          <span
+                            className="carousel-control-next-icon"
+                            aria-hidden="true"
+                          ></span>
+                          <span className="visually-hidden">Next</span>
+                        </button>
                       </div>
-                      <button
-                        className="carousel-control-prev"
-                        type="button"
-                        data-bs-target={`#roomCarousel${index}`}
-                        data-bs-slide="prev"
-                      >
-                        <span
-                          className="carousel-control-prev-icon"
-                          aria-hidden="true"
-                        ></span>
-                        <span className="visually-hidden">Previous</span>
-                      </button>
-                      <button
-                        className="carousel-control-next"
-                        type="button"
-                        data-bs-target={`#roomCarousel${index}`}
-                        data-bs-slide="next"
-                      >
-                        <span
-                          className="carousel-control-next-icon"
-                          aria-hidden="true"
-                        ></span>
-                        <span className="visually-hidden">Next</span>
-                      </button>
-                    </div>
-                  </td>
-                  <td>{room.description}</td>
-                  <td>
-                    <ul>
-                      {room.amenities.split(',').map((amenity, i) => (
-                        <li key={i}>{amenity}</li>
-                      ))}
-                    </ul>
-                  </td>
-                  <td>{room.price}</td>
-                  <td>
-                    {reservations.some(
-                      (reservation) => reservation.roomId === room.id,
-                    )
-                      ? reservations
-                          .filter(
-                            (reservation) => reservation.roomId === room.id,
-                          )
-                          .map((reservation) => (
-                            <div key={reservation.id}>{reservation.status}</div>
-                          ))
-                      : 'Available'}
-                  </td>
-                  <td>
-                    <div className="btn-group">
-                      <button
-                        type="button"
-                        className="btn"
-                        onClick={() => handleDelete(room.id)}
-                      >
-                        <FontAwesomeIcon
-                          icon={faTrashAlt}
-                          style={{ color: 'red' }}
-                        />
-                      </button>
-                      <button
-                        type="button"
-                        className="btn"
-                        onClick={() => handleEdit(room.id)}
-                      >
-                        <FontAwesomeIcon
-                          icon={faEdit}
-                          style={{ color: '#FFA500' }}
-                        />
-                      </button>
+                    </td>
+                    <td>{room.description}</td>
+                    <td>
+                      <ul>
+                        {room.amenities.split(',').map((amenity, i) => (
+                          <li key={i}>{amenity}</li>
+                        ))}
+                      </ul>
+                    </td>
+                    <td>{room.price}</td>
+                    <td>
+                      {reservations.some(
+                        (reservation) => reservation.roomId === room.id,
+                      )
+                        ? reservations
+                            .filter(
+                              (reservation) => reservation.roomId === room.id,
+                            )
+                            .map((reservation) => (
+                              <div key={reservation.id}>
+                                {reservation.status}
+                              </div>
+                            ))
+                        : 'Available'}
+                    </td>
+                    <td>
+                      <div className="btn-group">
+                        <button
+                          type="button"
+                          className="btn"
+                          onClick={() => handleDelete(room.id)}
+                        >
+                          <FontAwesomeIcon
+                            icon={faTrashAlt}
+                            style={{ color: 'red' }}
+                          />
+                        </button>
+                        <button
+                          type="button"
+                          className="btn"
+                          onClick={() => handleEdit(room.id)}
+                        >
+                          <FontAwesomeIcon
+                            icon={faEdit}
+                            style={{ color: '#FFA500' }}
+                          />
+                        </button>
 
-                      <button
-                        className="btn "
-                        data-bs-toggle="modal"
-                        data-bs-target="#exampleModalToggle"
-                        onClick={() => handleViewClick(room.id)}
-                      >
-                        <FontAwesomeIcon icon={faEye} />
-                      </button>
-                    </div>
+                        <button
+                          className="btn "
+                          data-bs-toggle="modal"
+                          data-bs-target="#exampleModalToggle"
+                          onClick={() => handleViewClick(room.id)}
+                        >
+                          <FontAwesomeIcon icon={faEye} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="9" className="text-center bg-warning">
+                    No Rooms
                   </td>
                 </tr>
-              ))
-            ) : (
-            <tr>
-              <td colSpan="9" className='text-center bg-warning'>
-                No Rooms
-              </td>
-            </tr>
               )}
             </tbody>
           </table>
