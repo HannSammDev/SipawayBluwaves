@@ -3,46 +3,46 @@ import React, { useState, useEffect } from 'react';
 import {
   Table,
   Button,
-  FormControl,
+  // FormControl,
   Form,
   Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  ModalTitle,
+  Image,
+  // ModalHeader,
+  // ModalBody,
+  // ModalFooter,
+  // ModalTitle,
 } from 'react-bootstrap';
+import AdminActivityForm from './AddActivity';
+import { collection, getDocs } from 'firebase/firestore';
+import { textDB } from '../../firebase';
 
 const BeachActivitiesTable = () => {
   const [activities, setActivities] = useState([]);
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    // Simulate fetching data from an API
-    const fetchActivities = async () => {
-      // Example static data, replace with your API call if needed
-      const data = [
-        {
-          title: 'Beach Volleyball',
-          description: 'Join a game of volleyball on the beach.',
-          time: '2024-11-26T10:00:00',
-        },
-        {
-          title: 'Snorkeling',
-          description: 'Explore the underwater world with snorkeling gear.',
-          time: '2024-11-26T13:00:00',
-        },
-        {
-          title: 'Sunset Yoga',
-          description: 'Relax and unwind with a sunset yoga session.',
-          time: '2024-11-26T17:00:00',
-        },
-      ];
-      setActivities(data);
-    };
+
+
 
     fetchActivities();
   }, []);
+  const fetchActivities = async () => {
+    try {
+      const activityCollection = collection(textDB, 'activity');
+      const snapshot = await getDocs(activityCollection);
 
+
+      const activityList = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      console.log(activityList, 'success');
+      setActivities(activityList);
+    } catch (error) {
+      console.error("Error fetching activities: ", error);
+    }
+  };
   const handleShow = () => setShow(true);
 
   const handleClose = () => setShow(false);
@@ -81,36 +81,44 @@ const BeachActivitiesTable = () => {
             <Modal.Title className='fs-5 text-white'>Add Activities</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <p>Insert your activity details here.</p>
+            <AdminActivityForm />
           </Modal.Body>
-          <Modal.Footer>
+          {/* <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
             <Button variant="primary">Submit</Button>
-          </Modal.Footer>
+          </Modal.Footer> */}
         </Modal>
         <Table responsive striped hover>
           <thead>
             <tr>
+            <th>#</th>
               <th>Activity</th>
               <th>Image</th>
               <th>Description</th>
-
-              <th>Time</th>
+              {/* <th>Time</th> */}
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {activities.map((activity, index) => (
-              <tr key={index}>
-                <td>{activity.title}</td>
-                <td></td>
-                <td>{activity.description}</td>
-                <td>
+              <tr key={index} className='justify-content-between'>
+                <td>{index + 1}.</td>
+                <td>{activity.activityName}</td>
+                <td><Image className='' style={{width:'15%'}} src={activity.images}/></td>
+                <td>{activity.writeAnything}</td>
+                {/* <td>
                   {new Date(activity.time).toLocaleTimeString([], {
                     hour: '2-digit',
                     minute: '2-digit',
                   })}
+                </td> */}
+                <td className=''>
+                <div className="d-flex align-items-center">
+                  <Button className='me-1' variant='danger' size='sm'>Delete</Button>
+                  <Button variant='warning' size='sm'>Edit</Button>
+                  </div>
                 </td>
               </tr>
             ))}

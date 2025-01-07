@@ -122,40 +122,40 @@ function Reservations() {
   };
 
  
-  // const handleDecline = async (pending) => {
-  //   if (!pending) {
-  //     console.error('No pending reservation selected.');
-  //     return;
-  //   }
+  const handleDecline = async (pending) => {
+    if (!pending) {
+      console.error('No pending reservation selected.');
+      return;
+    }
 
-  //   try {
-  //     await deleteDoc(doc(textDB, 'reservations', pending.id)),
-  //     await deleteDoc(doc(textDB, 'Pending', pending.id)); 
-  //     setPendings((prevPendings) =>
-  //       prevPendings.filter((item) => item.id !== pending.id),
-  //     ); 
-  //   } catch (error) {
-  //     console.error('Error deleting document:', error);
-  //   }
-  // };
-
-  const handleDecline = async () => {
-    const reservationCollection = collection(textDB, 'reservations');
-    const pendingCollection = collection(textDB, 'Pending');
-  
-    // Example query to get documents (modify the query based on your criteria)
-    const reservationQuerySnapshot = await getDocs(reservationCollection);
-    const pendingQuerySnapshot = await getDocs(pendingCollection);
-  
-    // Loop through the query results and delete the documents
-    reservationQuerySnapshot.forEach(async (docSnapshot) => {
-      await deleteDoc(docSnapshot.ref);
-    });
-  
-    pendingQuerySnapshot.forEach(async (docSnapshot) => {
-      await deleteDoc(docSnapshot.ref);
-    });
+    try {
+      await deleteDoc(doc(textDB, 'reservations', pending.id));
+      await deleteDoc(doc(textDB, 'Pending', pending.id)); 
+      setPendings((prevPendings) =>
+        prevPendings.filter((item) => item.id !== pending.id),
+      ); 
+    } catch (error) {
+      console.error('Error deleting document:', error);
+    }
   };
+
+  // const handleDecline = async () => {
+  //   const reservationCollection = collection(textDB, 'reservations');
+  //   const pendingCollection = collection(textDB, 'Pending');
+  
+  //   // Example query to get documents (modify the query based on your criteria)
+  //   const reservationQuerySnapshot = await getDocs(reservationCollection);
+  //   const pendingQuerySnapshot = await getDocs(pendingCollection);
+  
+  //   // Loop through the query results and delete the documents
+  //   reservationQuerySnapshot.forEach(async (docSnapshot) => {
+  //     await deleteDoc(docSnapshot.ref);
+  //   });
+  
+  //   pendingQuerySnapshot.forEach(async (docSnapshot) => {
+  //     await deleteDoc(docSnapshot.ref);
+  //   });
+  // };
   
   
 

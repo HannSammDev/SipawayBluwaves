@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 function Rooms() {
   const [rooms, setRooms] = useState([]);
   const [status, setStatus] = useState([]);
+  const [statustwo, setStatustwo] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,12 +26,27 @@ function Rooms() {
     };
 
     fetchRooms();
-    fetchStatus();
+    fetchStatusone();
+    fetchStatustwo();
   }, []);
 
-  const fetchStatus = async () => {
+  const fetchStatustwo = async () => {
     try {
-      const reservationCollection = collection(textDB, 'reservations');
+      const guestCollection = collection(textDB, 'guestData');
+      const guestSnapshot = await getDocs(guestCollection);
+      const guestData = guestSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setStatustwo(guestData);
+      console.log(guestData, 'succes feth peding  ');
+    } catch (error) {
+      console.log('Error to Fetch availability', error);
+    }
+  };
+  const fetchStatusone = async () => {
+    try {
+      const reservationCollection = collection(textDB, 'Pending');
       const statusSnapshot = await getDocs(reservationCollection);
       const statusData = statusSnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -125,16 +141,31 @@ function Rooms() {
                     (avail) => avail.roomname === room.roomname,
                   );
                   return (
-                    roomAvailability?.status && (
+                    roomAvailability?.availability && (
                       <h6>
                         <Badge bg="warning">
-                          {roomAvailability.status}
+                          {roomAvailability.availability}
                         </Badge>
                       </h6>
                     )
                   );
-                })()}
+                })() || // This "or" makes it fall back to the second condition if the first fails
+                  (() => {
+                    const room_availability = statustwo.find(
+                      (avail) => avail.roomname === room.roomname,
+                    );
+                    return (
+                      room_availability?.status && (
+                        <h6>
+                          <Badge bg="warning">
+                            {room_availability.status}
+                          </Badge>
+                        </h6>
+                      )
+                    );
+                  })()}
               </div>
+
 
               <h4 className="btn price  ">
                 <b className="me-2">₱ {room.price}</b>
@@ -169,6 +200,9 @@ function Rooms() {
                 onClick={() => handleReserve(room)}
                 disabled={
                   status.find((avail) => avail.roomname === room.roomname)
+                    ?.availability === 'Not Available'
+                  ||
+                  statustwo.find((avail) => avail.roomname === room.roomname)
                     ?.status === 'Not Available'
                 }
               >

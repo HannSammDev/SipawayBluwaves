@@ -68,7 +68,7 @@ const App = () => (
 
       {/* --------------Admin--------------------- */}
 
-      <Route path="/radmin" element={<Registeradmin />} />
+      <Route path="/createAdmin" element={<Registeradmin />} />
       <Route path="/adminlogin" element={<Admin_Login />} />
 
       <Route element={<Admin_layout />}>

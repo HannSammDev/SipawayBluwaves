@@ -165,10 +165,10 @@ export const Available_cottages = () => {
         });
 
         setTimeout(() => {
-          setIsLoading(false); // Stop loading spinner
+          setIsLoading(false); 
           setConfirmationMessage('Reservation confirmed successfully!');
-          setIsConfirmed(true); // Set confirmation state to true
-          document.getElementById('closeModalButton').click(); // Close the modal
+          setIsConfirmed(true); 
+          document.getElementById('closeModalButton').click();
           fetchReservations();
         }, 2000);
       } else {

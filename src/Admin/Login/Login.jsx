@@ -17,7 +17,7 @@ export const Admin_Login = () => {
     setLoading(true);
 
     try {
-      const normalizedEmail = email.trim().toLowerCase(); // Normalize email
+      const normalizedEmail = email.trim().toLowerCase();
       await signInWithEmailAndPassword(auth, normalizedEmail, password);
       navigate("/dash");
     } catch (error) {
@@ -45,7 +45,7 @@ export const Admin_Login = () => {
       }
       console.error("Error during login:", error.message);
     } finally {
-      setLoading(false); // Reset loading state
+      setLoading(false);
     }
   };
 
@@ -53,10 +53,11 @@ export const Admin_Login = () => {
     <div className="container-fluid d-flex align-items-center vh-100"
       // style={{ background: "linear-gradient(to right, #6a11cb, #2575fc)" }}
       style={{
-        backgroundImage: 'url(/bg.png)',
-        backgroundSize: 'cover',    
-        backgroundPosition: 'center', 
-        backgroundRepeat: 'no-repeat' 
+        // backgroundImage: 'url(/bg.png)',
+        // backgroundSize: 'cover',    
+        // backgroundPosition: 'center', 
+        // backgroundRepeat: 'no-repeat' 
+        background: "linear-gradient(to right,rgb(23, 6, 102), #2575fc)"
       }}
     >
       <div className="row w-100 justify-content-center">
@@ -67,10 +68,13 @@ export const Admin_Login = () => {
             className="img-fluid mb-4"
             style={{ maxWidth: "180px" }}
           />
-          <h1 className="mb-3 text-white" style={{ fontFamily: "'Poppins', sans-serif" }}>Blue Waves Resort</h1>
-          <p className="text-white" style={{ fontSize: "1.2rem" }}>
-            Welcome to the Admin Portal
+          {/* <p className="fs-1 text-white" style={{ fontFamily: "'Poppins', sans-serif", marginBottom: "0.5rem" }}>
+            Blue Waves Resort
+          </p> */}
+          <p className="text-white" style={{ fontSize: "1.2rem", marginTop: "0" }}>
+            Review your Administrator Dashboard
           </p>
+
         </div>
         <div className="col-md-7 d-flex justify-content-center align-items-center">
           <form
@@ -133,7 +137,8 @@ export const Admin_Login = () => {
                 padding: "12px",
                 fontSize: "18px",
                 borderRadius: "10px",
-                backgroundColor: "#6a11cb",
+                backgroundColor: 'rgb(23, 6, 102)',
+                // backgroundColor: "#6a11cb",
                 border: "none",
                 transition: "background-color 0.3s ease"
               }}

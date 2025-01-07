@@ -52,86 +52,80 @@ const AdminActivityForm = () => {
   };
 
   return (
-    <div className="container my-5">
-      <div className="card border border-none" style={{ boxShadow: "0px 0px 10px 5px rgba(0, 0, 0, 0.1)",}}>
-        <div className="card-header text-dark">
-          <h5 className="mb-0">Add Activity</h5>
+    <>
+
+      {successMessage && (
+        <div className="alert alert-success" role="alert">
+          {successMessage}
         </div>
-        <div className="card-body">
-          {successMessage && (
-            <div className="alert alert-success" role="alert">
-              {successMessage}
+      )}
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label htmlFor="activityName" className="form-label">
+            <i className="bi bi-clipboard"></i> Activity Name:
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="activityName"
+            placeholder="Enter activity name"
+            value={activityName}
+            onChange={(e) => setActivityName(e.target.value)} // Controlled input
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="activityDescription" className="form-label">
+            <i className="bi bi-pencil"></i> Write Anything:
+          </label>
+          <textarea
+            className="form-control"
+            id="activityDescription"
+            rows="3"
+            placeholder="Enter details about the activity"
+            value={writeAnything}
+            onChange={(e) => setWriteAnything(e.target.value)} // Controlled textarea
+          ></textarea>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="uploadImage" className="form-label">
+            <i className="bi bi-upload"></i> Upload Image
+          </label>
+          <input
+            type="file"
+            className="form-control"
+            id="uploadImage"
+            onChange={handleFileInput} // Handle file input
+          />
+        </div>
+        <div className="mb-3">
+          {files.map((file, index) => (
+            <div key={file.id}>
+              {file.preview && (
+                <img
+                  src={file.preview}
+                  alt={`Preview ${index + 1}`}
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    objectFit: "cover",
+                    marginBottom: "10px",
+                    borderRadius: "5px",
+                  }}
+                />
+              )}
             </div>
-          )}
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label htmlFor="activityName" className="form-label">
-                <i className="bi bi-clipboard"></i> Activity Name:
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                id="activityName"
-                placeholder="Enter activity name"
-                value={activityName}
-                onChange={(e) => setActivityName(e.target.value)} // Controlled input
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="activityDescription" className="form-label">
-                <i className="bi bi-pencil"></i> Write Anything:
-              </label>
-              <textarea
-                className="form-control"
-                id="activityDescription"
-                rows="3"
-                placeholder="Enter details about the activity"
-                value={writeAnything}
-                onChange={(e) => setWriteAnything(e.target.value)} // Controlled textarea
-              ></textarea>
-            </div>
-            <div className="mb-3">
-              <label htmlFor="uploadImage" className="form-label">
-                <i className="bi bi-upload"></i> Upload Image
-              </label>
-              <input
-                type="file"
-                className="form-control"
-                id="uploadImage"
-                onChange={handleFileInput} // Handle file input
-              />
-            </div>
-            <div className="mb-3">
-              {files.map((file, index) => (
-                <div key={file.id}>
-                  {file.preview && (
-                    <img
-                      src={file.preview}
-                      alt={`Preview ${index + 1}`}
-                      style={{
-                        width: "100px",
-                        height: "100px",
-                        objectFit: "cover",
-                        marginBottom: "10px",
-                        borderRadius: "5px",
-                      }}
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-            <div className="text-center">
-              <button type="submit" className="btn btn-primary">
-                <i className="bi bi-cloud-upload"></i> Submit
-              </button>
-              {/* <button type="reset" className="btn btn-secondary ms-2">
+          ))}
+        </div>
+        <div className="d-flex justify-content-end">
+          <button type="submit" className="btn btn-primary">
+            <i className="bi bi-cloud-upload"></i> Submit
+          </button>
+          {/* <button type="reset" className="btn btn-secondary ms-2">
                 <i className="bi bi-x-circle"></i> Reset
               </button> */}
-            </div>
-          </form>
         </div>
-      </div>
-    </div>
+      </form>
+    </>
   );
 };
 

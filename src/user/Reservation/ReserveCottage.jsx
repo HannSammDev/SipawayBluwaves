@@ -67,27 +67,27 @@ export const Guest = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // const reservationRef = await addDoc(collection(textDB, 'reservations'), {
-      //   cottageId: cottage.id,
-      //   cottagename: cottage.cottagename,
-      //   guests,
-      //   checkInDate,
-      //   checkOutDate,
-      //   specialCode,
-      //   cottagePrice: cottage.price,
-      //   fiftyPercentPrice:fiftyPercentPrice,
-      //   balance: cottage.price * 0.5,
-      //   paymentMethod: 'GCash',
+      const reservationRef = await addDoc(collection(textDB, 'reservations'), {
+        cottageId: cottage.id,
+        cottagename: cottage.cottagename,
+        guests,
+        checkInDate,
+        checkOutDate,
+        specialCode,
+        cottagePrice: cottage.price,
+        fiftyPercentPrice:fiftyPercentPrice,
+        balance: cottage.price * 0.5,
+        paymentMethod: 'GCash',
 
-      //   guestDetails,
+        guestDetails,
+      });
+      // const reservationRef = await addDoc(collection(textDB, 'reservations'), {
+      //   guestId: 0,
+      //   status: 'Not Available',
+      //   cottagename: cottage.cottagename,
+      //   checkInDate,
       // });
-            const reservationRef = await addDoc(collection(textDB, 'reservations'), {
-              guestId: 0,
-              status: 'Not Available',
-              cottagename: cottage.cottagename,
-              checkInDate,  
-            });
-      
+
 
       const pendingRef = await addDoc(collection(textDB, 'Pending'), {
         cottageId: cottage.id,
@@ -97,7 +97,7 @@ export const Guest = () => {
         checkOutDate,
         specialCode,
         cottagePrice: guestMultipyBy,
-        fiftyPercentPrice:fiftyPercentPrice,
+        fiftyPercentPrice: fiftyPercentPrice,
         balance: cottage.price * 0.5,
         paymentMethod: 'GCash',
         availability: 'Not Available',
@@ -124,9 +124,9 @@ export const Guest = () => {
     }
   };
 
- 
+
   const totalGuests = guests.adults + guests.children;
-  const guestMultipyBy = totalGuests * cottage.price ;
+  const guestMultipyBy = totalGuests * cottage.price;
   const fiftyPercentPrice = guestMultipyBy * 0.5;
   return (
     <>

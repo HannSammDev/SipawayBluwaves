@@ -11,7 +11,7 @@ export const Register = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate(); // Using useNavigate hook for programmatic navigation
+  const navigate = useNavigate(); 
 
   const createUser = async (e) => {
     e.preventDefault();
@@ -25,14 +25,14 @@ export const Register = () => {
       );
       const users = userCredential.user;
 
-      // Create user document in Firestore
+      
       await setDoc(doc(textDB, "user_role", users.uid), {
         name: name.trim(),
         email: normalizedEmail,
         role: "user",
       });
 
-      // Navigate to home after successful registration
+     
       navigate("/login");
     } catch (error) {
       switch (error.code) {
@@ -139,7 +139,7 @@ export const Register = () => {
             type="submit"
             className="btn btn-primary"
             style={{ width: "80%" }}
-            disabled={loading} // Disable button when loading
+            disabled={loading} 
           >
             {loading ? "Signing Up..." : "Sign Up"}
           </button>

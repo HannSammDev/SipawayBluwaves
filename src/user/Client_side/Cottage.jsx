@@ -6,6 +6,7 @@ import { Badge } from 'react-bootstrap';
 function Cottages() {
   const [cottages, setCottages] = useState([]);
   const [status, setStatus] = useState([]);
+  const [statustwo, setStatustwo] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,12 +25,27 @@ function Cottages() {
     };
 
     fetchcottages();
-    fetchPending();
+    fetchStatustwo()
+    fetchStatusone();
   }, []);
 
-  const fetchPending = async () => {
+  const fetchStatustwo = async () => {
     try {
-      const reservationCollection = collection(textDB, 'reservations');
+      const guestCollection = collection(textDB, 'guestData');
+      const guestSnapshot = await getDocs(guestCollection);
+      const guestData = guestSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setStatustwo(guestData);
+      console.log(guestData, 'succes feth peding  ');
+    } catch (error) {
+      console.log('Error to Fetch availability', error);
+    }
+  };
+  const fetchStatusone = async () => {
+    try {
+      const reservationCollection = collection(textDB, 'Pending');
       const statusnapshot = await getDocs(reservationCollection);
       const reservationList = statusnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -118,15 +134,29 @@ function Cottages() {
                       (avail) => avail.cottagename === cottage.cottagename,
                     );
                     return (
-                      cottageAvailability?.status && (
+                      cottageAvailability?.availability && (
                         <h6>
                           <Badge bg="warning">
-                            {cottageAvailability.status}
+                            {cottageAvailability.availability}
                           </Badge>
                         </h6>
                       )
                     );
-                  })()}
+                  })() ||
+                    (() => {
+                      const cottageAvailability = statustwo.find(
+                        (avail) => avail.cottagename === cottage.cottagename,
+                      );
+                      return (
+                        cottageAvailability?.status && (
+                          <h6>
+                            <Badge bg="warning">
+                              {cottageAvailability.status}
+                            </Badge>
+                          </h6>
+                        )
+                      );
+                    })()}
                 </div>
 
                 <h4 className="btn price">
@@ -141,7 +171,7 @@ function Cottages() {
                 >
                   {cottage.description}
                 </h5>
-                {cottage.amenities.split(',').map((amenity, i) => (
+                {cottage.amenities && cottage.amenities.split(',').map((amenity, i) => (
                   <li key={i}>{amenity}</li>
                 ))}
                 <button
@@ -150,6 +180,11 @@ function Cottages() {
                   onClick={() => handleReserve(cottage)}
                   disabled={
                     status.find(
+                      (available) =>
+                        available.cottagename === cottage.cottagename,
+                    )?.availability === 'Not Available'
+                    ||
+                    statustwo.find(
                       (available) =>
                         available.cottagename === cottage.cottagename,
                     )?.status === 'Not Available'
