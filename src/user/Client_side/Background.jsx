@@ -12,7 +12,7 @@ function Background() {
           style={{ overflow: "hidden" }}
         >
           {/* Carousel Indicators */}
-          <div className="carousel-indicators  d-sm-block d-none">
+          <div className="carousel-indicators d-flex  d-sm-block d-none">
             <button
               type="button"
               data-bs-target="#carouselExampleIndicators"

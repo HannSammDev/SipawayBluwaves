@@ -129,7 +129,7 @@ function Cottages() {
               >
                 <div>
                   <h4>{cottage.cottagename}</h4>
-                  {(() => {
+                  {/* {(() => {
                     const cottageAvailability = status.find(
                       (avail) => avail.cottagename === cottage.cottagename,
                     );
@@ -156,7 +156,7 @@ function Cottages() {
                           </h6>
                         )
                       );
-                    })()}
+                    })()} */}
                 </div>
 
                 <h4 className="btn price">
@@ -178,17 +178,17 @@ function Cottages() {
                   className="btn btn-primary"
                   style={{ float: 'right' }}
                   onClick={() => handleReserve(cottage)}
-                  disabled={
-                    status.find(
-                      (available) =>
-                        available.cottagename === cottage.cottagename,
-                    )?.availability === 'Not Available'
-                    ||
-                    statustwo.find(
-                      (available) =>
-                        available.cottagename === cottage.cottagename,
-                    )?.status === 'Not Available'
-                  }
+                  // disabled={
+                  //   status.find(
+                  //     (available) =>
+                  //       available.cottagename === cottage.cottagename,
+                  //   )?.availability === 'Not Available'
+                  //   ||
+                  //   statustwo.find(
+                  //     (available) =>
+                  //       available.cottagename === cottage.cottagename,
+                  //   )?.status === 'Not Available'
+                  // }
                 >
                   {cottage.availability === 'Reserved'
                     ? 'Not Available'

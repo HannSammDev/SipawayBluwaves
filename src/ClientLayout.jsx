@@ -18,9 +18,8 @@ function Layout() {
       <Header />
       <Outlet />
       <Background />
-      <Cottage />
-
       <Rooms />
+      <Cottage />
       {/* <DailyActivities/> */}
       <Contact />
       <Footer />
